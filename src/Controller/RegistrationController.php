@@ -43,6 +43,11 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setRoles(['ROLE_USER']);
+            $user->setFirstname($form->get('firstname')->getData());
+            $user->setLastname($form->get('lastname')->getData());
+            $user->setPseudo($form->get('username')->getData());
+
             $entityManager->persist($user);
             $entityManager->flush();
 

@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -23,6 +24,48 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
+                    ]),
+                ],
+            ])
+            ->add('firstname', TextType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your firstname',
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Your firstname should be at least {{ limit }} characters',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 255,
+                    ]),
+                ],
+            ])
+            ->add('lastname', TextType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your lastname',
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Your lastname should be at least {{ limit }} characters',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 255,
+                    ]),
+                ],
+            ])
+            ->add('username', TextType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your username',
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Your username should be at least {{ limit }} characters',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 255,
                     ]),
                 ],
             ])

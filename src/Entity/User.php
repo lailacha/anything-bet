@@ -48,13 +48,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
    #[ORM\Column(length: 128, nullable: true)]
     private ?string $avatar = null;
 
-    /*#[ORM\OneToMany(mappedBy: 'idUser', targetEntity: Role::class)]
-    private Collection $role;*/
-
-    public function __construct()
-    {
-        $this->role = new ArrayCollection();
-    }
 
     #[ORM\ManyToMany(targetEntity: BettingGroup::class, mappedBy: 'administrators')]
     #[ORM\JoinTable(name: 'betting_group_administrators')]
@@ -219,28 +212,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->role;
     }
-
-/*    public function addRole(Role $role): self
-    {
-        if (!$this->role->contains($role)) {
-            $this->role->add($role);
-            $role->setIdUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRole(Role $role): self
-    {
-        if ($this->role->removeElement($role)) {
-            // set the owning side to null (unless already changed)
-            if ($role->getIdUser() === $this) {
-                $role->setIdUser(null);
-            }
-        }
-
-        return $this;
-    }*/
 
 
 }

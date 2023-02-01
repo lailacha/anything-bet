@@ -16,8 +16,6 @@ class Bet
     #[ORM\Column(length: 255)]
     private ?string $label = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $amount = null;
 
     #[ORM\ManyToOne]
     private ?Event $idEvent = null;
@@ -39,17 +37,6 @@ class Bet
         return $this;
     }
 
-    public function getAmount(): ?int
-    {
-        return $this->amount;
-    }
-
-    public function setAmount(?int $amount): self
-    {
-        $this->amount = $amount;
-
-        return $this;
-    }
 
     public function getIdEvent(): ?Event
     {

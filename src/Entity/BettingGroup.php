@@ -22,6 +22,31 @@ class BettingGroup
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: "bettingAdminGroups")]
+    #[ORM\JoinTable(name: 'betting_group_administrators')]
+    private $administrators = null;
+
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: "bettingGroups")]
+    #[ORM\JoinTable(name: 'betting_group_members')]
+    private $members = null;
+
+    // create a unique code for each group
+    #[ORM\Column(type: 'string', length: 23, unique: true)]
+    private ?string $code = null;
+
+    #[ORM\OneToMany(mappedBy: 'bettingGroup', targetEntity: GroupRequest::class)]
+    private $groupRequests = null;
+
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->administrators = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->members = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->code = uniqid('', true);
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,5 +86,46 @@ class BettingGroup
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function getAdministrators()
+    {
+        return $this->administrators;
+    }
+
+    public function addAdministrator($administrator): self
+    {
+        $this->administrators[] = $administrator;
+
+        return $this;
+    }
+
+    public function getMembers()
+    {
+        return $this->members;
+    }
+
+    public function addMember($member): self
+    {
+        $this->members[] = $member;
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getGroupRequests()
+    {
+        return $this->groupRequests;
     }
 }

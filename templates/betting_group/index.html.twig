@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<title>BettingGroup index</title>
+
+{% block body %}
+    {% if app.session.flashBag.has('error') %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for message in app.session.flashBag.get('error') %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <h1>BettingGroup index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for betting_group in betting_groups %}
+            <tr>
+                <td>{{ betting_group.id }}</td>
+                <td>{{ betting_group.name }}</td>
+                <td>{{ betting_group.createdAt ? betting_group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('front_app_betting_group_show', {'id': betting_group.id}) }}">show</a>
+                    <a href="{{ path('front_app_betting_group_edit', {'id': betting_group.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('front_app_betting_group_new') }}">Create new</a>
+{% endblock %}

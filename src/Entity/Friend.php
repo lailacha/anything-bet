@@ -16,8 +16,6 @@ class Friend
     #[ORM\ManyToOne]
     private ?User $idUser = null;
 
-    #[ORM\ManyToOne]
-    private ?User $idUserTwo = null;
 
     public function getId(): ?int
     {
@@ -36,15 +34,4 @@ class Friend
         return $this;
     }
 
-    public function getIdUserTwo(): ?User
-    {
-        return $this->idUserTwo;
-    }
-
-    public function setIdUserTwo(?User $idUserTwo): self
-    {
-        $this->idUserTwo = $idUserTwo;
-
-        return $this;
-    }
 }

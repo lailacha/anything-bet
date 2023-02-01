@@ -5,7 +5,12 @@
 $black: #0e0202;
 $white: #ffffff;
 body {
-    background-color: $white;
-    color: $black;
+    background-color: $black;
+    color: $white;
     height: 100vh;
+}
+
+// text in input color
+input {
+    color: $black;
 }

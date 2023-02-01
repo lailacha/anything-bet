@@ -20,7 +20,10 @@ class Betting
     private ?Bet $idBet = null;
 
     #[ORM\Column]
-    private ?int $score = null;
+    private ?int $amount = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isWon = null;
 
     public function getId(): ?int
     {
@@ -51,14 +54,26 @@ class Betting
         return $this;
     }
 
-    public function getScore(): ?int
+    public function getAmount(): ?int
     {
-        return $this->score;
+        return $this->amount;
     }
 
-    public function setScore(int $score): self
+    public function setAmount(int $amount): self
     {
-        $this->score = $score;
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function isIsWon(): ?bool
+    {
+        return $this->isWon;
+    }
+
+    public function setIsWon(?bool $isWon): self
+    {
+        $this->isWon = $isWon;
 
         return $this;
     }

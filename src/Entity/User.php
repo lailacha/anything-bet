@@ -44,14 +44,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(length: 128, nullable: true)]
+   #[ORM\Column(length: 128, nullable: true)]
     private ?string $avatar = null;
 
-    #[ORM\OneToMany(mappedBy: 'idUser', targetEntity: Role::class)]
-    private Collection $role;
+    /*#[ORM\OneToMany(mappedBy: 'idUser', targetEntity: Role::class)]
+    private Collection $role;*/
 
     public function __construct()
     {
@@ -176,18 +174,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getAvatar(): ?string
     {
         return $this->avatar;
@@ -200,6 +186,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     /**
      * @return Collection<int, Role>
      */
@@ -208,7 +195,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->role;
     }
 
-    public function addRole(Role $role): self
+/*    public function addRole(Role $role): self
     {
         if (!$this->role->contains($role)) {
             $this->role->add($role);
@@ -228,17 +215,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
-    }
+    }*/
 
-    public function getRoles(): array
-    {
-        $roles = $this->role->map(function ($role) {
-            return $role->getRole();
-        })->toArray();
-
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
 
 }

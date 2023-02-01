@@ -18,16 +18,12 @@ class UserFixtures extends Fixture
             ->setPassword($pwd)
             ->setPseudo('User1')
             ->setAvatar('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
-            ->setCreatedAt(new \DateTime())
             ->setIsVerified(true)
             ->setRoles(['ROLE_USER'])
             ->setFirstName('User')
             ->setLastName('User')
         ;
         $manager->persist($object);
-
-
-        
 
         $object = (new User())
             ->setEmail('admin@user.fr')
@@ -38,7 +34,6 @@ class UserFixtures extends Fixture
             ->setFirstName('GroupAdministrator')
             ->setLastName('GroupAdministrator')
             ->setAvatar('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
-            ->setCreatedAt(new \DateTime())
         ;
         $manager->persist($object);
 
@@ -52,7 +47,6 @@ class UserFixtures extends Fixture
                 ->setLastName('User')
                 ->setPseudo('user' . $i)
                 ->setAvatar('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
-                ->setCreatedAt(new \DateTime())
             ;
             $manager->persist($object);
         }

@@ -2,12 +2,6 @@
 
 {% block title %}Log in!{% endblock %}
 
-{% block stylesheets %}
-
-{{ parent() }}
-    {{ encore_entry_link_tags('login') }}
-{% endblock %}
-
 {% block body %}
 <form method="post">
     {% if error %}
@@ -20,11 +14,17 @@
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    {# <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1> #}
+    <img src="{{ asset('build/images/logo-betthings.png') }}" alt="logo" class="logo" />
+    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
     <label for="inputEmail">Email</label>
     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
     <label for="inputPassword">Password</label>
     <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    <div class="row">
+        <input type="checkbox" name="remember_me" id="remember_me">
+        <label for="remember_me">Rester connecté</label>
+    </div>
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
@@ -41,8 +41,20 @@
         </div>
     #}
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
+    <button class="btn" type="submit">
+        Envoyer
     </button>
+    <a href="{{ path('app_forgotten_password') }}">Mot de passe oublié ?</a>
+    <div class="row">
+        <p>Première fois?</p>
+        <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.4791 3.79163H5C2.79086 3.79163 1 5.58248 1 7.79162V18.7498C1 20.9589 2.79086 22.7498 5 22.7498H15.9582C18.1673 22.7498 19.9582 20.9589 19.9582 18.7498V13.2707" stroke="black" stroke-width="2"/>
+            <rect x="8.28698" y="14.2775" width="14.1665" height="4.30829" transform="rotate(-52.1202 8.28698 14.2775)" stroke="black"/>
+            <path d="M11.0793 17.5266L7.31304 19.0378L7.85139 15.0156L11.0793 17.5266Z" stroke="black" stroke-width="0.7"/>
+            <path d="M8.28341 17.7904L8.10334 19.0915L7.35217 18.9875L7.06662 18.285L8.28341 17.7904Z" fill="black"/>
+            <path d="M17.5993 2.30655L18.5408 1.09631C18.7104 0.878348 19.0245 0.839107 19.2425 1.00866L21.8537 3.03997C22.0717 3.20952 22.1109 3.52367 21.9413 3.74163L20.9999 4.95187L17.5993 2.30655Z" stroke="black"/>
+        </svg>
+        <a href="{{ path('app_register') }}">Inscrivez-vous ici</a>
+    </div>
 </form>
 {% endblock %}

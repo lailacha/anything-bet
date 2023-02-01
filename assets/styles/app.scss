@@ -2,15 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'login.scss';
+
+
+
+$primary: #090AE1;
 $black: #0e0202;
 $white: #ffffff;
+$gray: #F5F5F5;
 body {
-    background-color: $white;
+    background-color: $gray;
     color: $black;
     height: 100vh;
 }
 
-// text in input color
-input {
-    color: $black;
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    background-color: $black;
+    color: $white;
+    margin-top: 4rem;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
+
+footer ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+}
+
+footer ul li a{
+    text-decoration: none;
+    margin: 0 1rem 0 0;
+    color: $white;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+footer ul li a:hover{
+    color: $primary;
+    transition: 0.5s;
+}
+
+@media screen and (max-width: 768px) {
+    footer {
+        flex-direction: column;
+    }
+    footer ul {
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 1rem 0;
+    }
+    footer ul li a {
+        margin: 0 0 0 0;
+    }
+    
+}
+

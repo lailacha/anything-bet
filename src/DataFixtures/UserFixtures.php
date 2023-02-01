@@ -13,46 +13,15 @@ class UserFixtures extends Fixture
         // pwd = test
         $pwd = '$2y$13$r/sNDkWI9w4h0XHSIYqYJusHu3JYZTFwEOxTCkXG31rL9Dy1Tncba';
 
-
-
-        $object = (new User())
-            ->setEmail('Administrator@user.fr')
-            ->setPseudo('Administrator1')
-            ->setFirstname('Administrator')
-            ->setLastname('Administrator')
-            ->setIsVerified(true)
-            ->setRoles(['ROLE_ADMIN'])
-            ->setPassword($pwd);
-        $manager->persist($object);
-
-
         $object = (new User())
             ->setEmail('user@user.fr')
-            ->setIsVerified(true)
-            ->setFirstname('User')
-            ->setLastname('User')
+            ->setPassword($pwd)
             ->setPseudo('User1')
-            ->setRoles([])
-            ->setPassword($pwd)
-        ;
-        $manager->persist($object);
-
-        $object = (new User())
-            ->setEmail('GroupAdministrator@user.fr')
-            ->setPseudo('GroupAdministrator1')
-            ->setFirstname('GroupAdministrator')
-            ->setLastname('GroupAdministrator')
+            ->setAvatar('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
             ->setIsVerified(true)
-            ->setRoles(['ROLE_GROUP_ADMIN'])
-            ->setPassword($pwd)
-        ;
-        $manager->persist($object);
-
-
-/*        $object = (new User())
-            ->setEmail('client@user.fr')
-            ->setRoles(['ROLE_CLIENT'])
-            ->setPassword($pwd)
+            ->setRoles(['ROLE_USER'])
+            ->setFirstName('User')
+            ->setLastName('User')
         ;
         $manager->persist($object);
 
@@ -60,18 +29,24 @@ class UserFixtures extends Fixture
             ->setEmail('admin@user.fr')
             ->setRoles(['ROLE_ADMIN'])
             ->setPassword($pwd)
+            ->setIsVerified(true)
+            ->setPseudo('admin')
+            ->setFirstName('GroupAdministrator')
+            ->setLastName('GroupAdministrator')
+            ->setAvatar('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
         ;
         $manager->persist($object);
-*/
+
         for ($i=0; $i<50; $i++) {
             $object = (new User())
                 ->setEmail('user' . $i . '@user.fr')
-                ->setRoles([])
-                ->setIsVerified(true)
-                ->setFirstname('User' . $i)
-                ->setLastname('User' . $i)
-                ->setPseudo('User' . $i)
                 ->setPassword($pwd)
+                ->setIsVerified(true)
+                ->setRoles(['ROLE_USER'])
+                ->setFirstName('User')
+                ->setLastName('User')
+                ->setPseudo('user' . $i)
+                ->setAvatar('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
             ;
             $manager->persist($object);
         }

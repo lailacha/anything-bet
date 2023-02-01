@@ -14,10 +14,7 @@ class GroupRequest
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
-
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
@@ -27,22 +24,30 @@ class GroupRequest
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'groupRequests')]
     private $user = null;
 
+    #[ORM\ManyToOne(targetEntity: BettingGroup::class, inversedBy: 'groupRequests')]
+    private $bettingGroup = null;
+
+    /**
+     * @return null
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param null $user
+     */
+    public function setUser($user): void
+    {
+        $this->user = $user;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
@@ -64,6 +69,18 @@ class GroupRequest
     public function setIsApproved(bool $isApproved): self
     {
         $this->isApproved = $isApproved;
+
+        return $this;
+    }
+
+    public function getBettingGroup(): ?BettingGroup
+    {
+        return $this->bettingGroup;
+    }
+
+    public function setBettingGroup(?BettingGroup $bettingGroup): self
+    {
+        $this->bettingGroup = $bettingGroup;
 
         return $this;
     }

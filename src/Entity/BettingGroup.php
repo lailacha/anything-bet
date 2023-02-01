@@ -35,6 +35,9 @@ class BettingGroup
     #[ORM\Column(type: 'string', length: 23, unique: true)]
     private ?string $code = null;
 
+    #[ORM\OneToMany(mappedBy: 'bettingGroup', targetEntity: GroupRequest::class)]
+    private $groupRequests = null;
+
 
     public function __construct()
     {
@@ -112,5 +115,17 @@ class BettingGroup
     public function getCode(): ?string
     {
         return $this->code;
+    }
+
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getGroupRequests()
+    {
+        return $this->groupRequests;
     }
 }

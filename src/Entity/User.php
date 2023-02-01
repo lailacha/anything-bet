@@ -56,6 +56,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->role = new ArrayCollection();
     }
 
+    #[ORM\ManyToMany(targetEntity: BettingGroup::class, mappedBy: 'administrators')]
+    #[ORM\JoinTable(name: 'betting_group_administrators')]
+    private ?\Doctrine\Common\Collections\Collection $bettingAdminGroups = null;
+
+    #[ORM\ManyToMany(targetEntity: BettingGroup::class, mappedBy: 'members')]
+    #[ORM\JoinTable(name: 'betting_group_members')]
+    private ?\Doctrine\Common\Collections\Collection $bettingGroups = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: GroupRequest::class)]
+    private ?\Doctrine\Common\Collections\Collection $groupRequests = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -148,6 +159,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->pseudo = $pseudo;
 
         return $this;
+    }
+
+
+    /**
+     * @return Collection|BettingGroup[]
+     */
+    public function getBettingGroups(): \Doctrine\Common\Collections\Collection
+    {
+        return $this->bettingGroups;
+    }
+
+    public function getBettingAdminGroups(): \Doctrine\Common\Collections\Collection
+    {
+        return $this->bettingAdminGroups;
     }
 
     public function getFirstName(): ?string

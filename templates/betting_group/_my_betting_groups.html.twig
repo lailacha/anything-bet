@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<title>My bettings groups</title>
+
+{% block body %}
+
+    <h1>BettingGroup</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>CreatedAt</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for betting_group in betting_groups %}
+            <tr>
+                <td>{{ betting_group.id }}</td>
+                <td>{{ betting_group.name }}</td>
+                <td>{{ betting_group.createdAt ? betting_group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('front_app_betting_group_show', {'id': betting_group.id}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

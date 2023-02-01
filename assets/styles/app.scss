@@ -6,6 +6,11 @@ $black: #0e0202;
 $white: #ffffff;
 body {
     background-color: $black;
-    color: $black;
+    color: $white;
     height: 100vh;
+}
+
+// text in input color
+input {
+    color: $black;
 }

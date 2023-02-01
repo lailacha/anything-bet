@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230201093231 extends AbstractMigration
+final class Version20230201110202 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -48,6 +48,20 @@ final class Version20230201093231 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_27BA8E29FB181B63 ON points (id_betting_group_id)');
         $this->addSql('CREATE TABLE role (id INT NOT NULL, id_user_id INT DEFAULT NULL, label VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_57698A6A79F37AE5 ON role (id_user_id)');
+        $this->addSql('CREATE TABLE "user" (id INT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, is_verified BOOLEAN NOT NULL, pseudo VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, avatar VARCHAR(128) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON "user" (email)');
+        $this->addSql('CREATE TABLE messenger_messages (id BIGSERIAL NOT NULL, body TEXT NOT NULL, headers TEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_75EA56E0FB7336F0 ON messenger_messages (queue_name)');
+        $this->addSql('CREATE INDEX IDX_75EA56E0E3BD61CE ON messenger_messages (available_at)');
+        $this->addSql('CREATE INDEX IDX_75EA56E016BA31DB ON messenger_messages (delivered_at)');
+        $this->addSql('CREATE OR REPLACE FUNCTION notify_messenger_messages() RETURNS TRIGGER AS $$
+            BEGIN
+                PERFORM pg_notify(\'messenger_messages\', NEW.queue_name::text);
+                RETURN NEW;
+            END;
+        $$ LANGUAGE plpgsql;');
+        $this->addSql('DROP TRIGGER IF EXISTS notify_trigger ON messenger_messages;');
+        $this->addSql('CREATE TRIGGER notify_trigger AFTER INSERT OR UPDATE ON messenger_messages FOR EACH ROW EXECUTE PROCEDURE notify_messenger_messages();');
         $this->addSql('ALTER TABLE bet ADD CONSTRAINT FK_FBF0EC9B212C041E FOREIGN KEY (id_event_id) REFERENCES event (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE betting ADD CONSTRAINT FK_5EDD2FE279F37AE5 FOREIGN KEY (id_user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE betting ADD CONSTRAINT FK_5EDD2FE2FE4669CB FOREIGN KEY (id_bet_id) REFERENCES bet (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -57,11 +71,6 @@ final class Version20230201093231 extends AbstractMigration
         $this->addSql('ALTER TABLE points ADD CONSTRAINT FK_27BA8E2979F37AE5 FOREIGN KEY (id_user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE points ADD CONSTRAINT FK_27BA8E29FB181B63 FOREIGN KEY (id_betting_group_id) REFERENCES betting_group (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE role ADD CONSTRAINT FK_57698A6A79F37AE5 FOREIGN KEY (id_user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE "user" ADD is_verified BOOLEAN NOT NULL');
-        $this->addSql('ALTER TABLE "user" ADD pseudo VARCHAR(255) NOT NULL');
-        $this->addSql('ALTER TABLE "user" ADD first_name VARCHAR(255) NOT NULL');
-        $this->addSql('ALTER TABLE "user" ADD last_name VARCHAR(255) NOT NULL');
-        $this->addSql('ALTER TABLE "user" ADD avatar VARCHAR(128) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
@@ -93,10 +102,7 @@ final class Version20230201093231 extends AbstractMigration
         $this->addSql('DROP TABLE friend');
         $this->addSql('DROP TABLE points');
         $this->addSql('DROP TABLE role');
-        $this->addSql('ALTER TABLE "user" DROP is_verified');
-        $this->addSql('ALTER TABLE "user" DROP pseudo');
-        $this->addSql('ALTER TABLE "user" DROP first_name');
-        $this->addSql('ALTER TABLE "user" DROP last_name');
-        $this->addSql('ALTER TABLE "user" DROP avatar');
+        $this->addSql('DROP TABLE "user"');
+        $this->addSql('DROP TABLE messenger_messages');
     }
 }

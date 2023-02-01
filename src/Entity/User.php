@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
    #[ORM\Column(length: 128, nullable: true)]
-    private ?string $avatar = null;
+    private ?string $avatar = 'default.svg';
 
 
     #[ORM\ManyToMany(targetEntity: BettingGroup::class, mappedBy: 'administrators')]

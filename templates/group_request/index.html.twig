@@ -23,6 +23,16 @@
                 <td>
 {#                    <a href="{{ path('app_group_request_show', {'id': group_request.id}) }}">show</a>#}
 {#                    <a href="{{ path('app_group_request_edit', {'id': group_request.id}) }}">edit</a>#}
+                  <form action="{{ path('front_app_group_request_delete', {'id': group_request.id}) }}" method="post">
+                       <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ group_request.id) }}">
+                      <input type="submit" value="Delete">
+                  </form>
+                    <form action="{{ path('front_app_group_request_approve', {'id': group_request.id}) }}" method="post">
+                        <input type="hidden" name="_method" value="POST">
+                        <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ group_request.id) }}">
+                        <input type="submit" value="Approve">
+                    </form>
                 </td>
             </tr>
         {% else %}

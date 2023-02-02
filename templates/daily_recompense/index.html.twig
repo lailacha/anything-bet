@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<title>DailyRecompense index</title>
+
+{% block body %}
+    <h1>DailyRecompense index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for daily_recompense in daily_recompenses %}
+            <tr>
+                <td>{{ daily_recompense.id }}</td>
+                <td>{{ daily_recompense.date ? daily_recompense.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_daily_recompense_show', {'id': daily_recompense.id}) }}">show</a>
+                    <a href="{{ path('app_daily_recompense_edit', {'id': daily_recompense.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_daily_recompense_new') }}">Create new</a>
+{% endblock %}

@@ -38,6 +38,9 @@ class BettingGroup
     #[ORM\OneToMany(mappedBy: 'bettingGroup', targetEntity: GroupRequest::class)]
     private $groupRequests = null;
 
+    #[ORM\OneToMany(mappedBy: 'bettingGroup', targetEntity: Event::class)]
+    private $events = null;
+
 
     public function __construct()
     {
@@ -128,4 +131,16 @@ class BettingGroup
     {
         return $this->groupRequests;
     }
+
+    public function removeMember(User $user)
+    {
+        $this->members->removeElement($user);
+    }
+
+
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
 }

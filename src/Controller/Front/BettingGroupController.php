@@ -8,6 +8,7 @@ use App\Form\BettingGroupType;
 use App\Form\JoinBettingGroupType;
 use App\Repository\BettingGroupRepository;
 use App\Repository\GroupRequestRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -96,7 +97,7 @@ class BettingGroupController extends AbstractController
     #[Route('/{id}', name: 'app_betting_group_delete', methods: ['POST'])]
     public function delete(Request $request, BettingGroup $bettingGroup, BettingGroupRepository $bettingGroupRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$bettingGroup->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $bettingGroup->getId(), $request->request->get('_token'))) {
             $bettingGroupRepository->remove($bettingGroup, true);
         }
 
@@ -114,11 +115,11 @@ class BettingGroupController extends AbstractController
 
 
             //check if the code is the same as the one in the database
-            if($form->get('code')->getData() === $bettingGroup->getCode()){
+            if ($form->get('code')->getData() === $bettingGroup->getCode()) {
                 //add user as member
 
                 //verifiy if the user is already a member
-                if($bettingGroup->getMembers()->contains($this->getUser())){
+                if ($bettingGroup->getMembers()->contains($this->getUser())) {
                     $this->addFlash('error', 'You are already a member of this group');
                     return $this->redirectToRoute('front_app_betting_group_index', [], Response::HTTP_SEE_OTHER);
                 }
@@ -133,8 +134,7 @@ class BettingGroupController extends AbstractController
                 $groupRequestRepository->save($groupRequest, true);
 
                 $this->addFlash('success', 'You have joined the group');
-            }
-            else{
+            } else {
                 $this->addFlash('error', 'The code is not correct');
             }
 
@@ -148,29 +148,100 @@ class BettingGroupController extends AbstractController
     }
 
 
-    #[Route('/{id}/group-requests', name: 'app_betting_group_group_requests', methods: ['GET'])]
+    #[Route('/group-requests/{id}', name: 'app_betting_group_group_requests', methods: ['GET'])]
     public function getGroupRequests(BettingGroup $bettingGroup): Response
     {
+
         $groupRequests = $bettingGroup->getGroupRequests();
 
-        if(!$bettingGroup->getAdministrators()->contains($this->getUser())){
-            $this->addFlash('error', 'You are not an administrator of this group');
-            return $this->redirectToRoute('front_app_betting_group_index', [], Response::HTTP_SEE_OTHER);
+        if ($groupRequests) {
+            $groupRequests = $groupRequests->filter(function ($groupRequest) {
+                return $groupRequest->getIsApproved() === false;
+            });
+
+            if (!$bettingGroup->getAdministrators()->contains($this->getUser())) {
+                $this->addFlash('error', 'You are not an administrator of this group');
+                return $this->redirectToRoute('front_app_betting_group_index', [], Response::HTTP_SEE_OTHER);
+            }
+
+            if (!$groupRequests) {
+                $this->addFlash('error', 'No requests for this group');
+            }
+
+            return $this->render('group_request/index.html.twig', [
+                'group_requests' => $groupRequests,
+            ]);
         }
 
-        if(!$groupRequests){
-            $this->addFlash('error', 'No requests for this group');
-        }
-
-        return $this->render('group_request/index.html.twig', [
-            'group_requests' => $groupRequests,
-        ]);
     }
 
 
+    #[Route('/members/{id}', name: 'app_betting_group_members', methods: ['GET'])]
+    public function getMembers(BettingGroup $bettingGroup): Response
+    {
+
+        $members = $bettingGroup->getMembers();
 
 
+        if ($members) {
+            return $this->render('betting_group/members.html.twig', [
+                'members' => $members,
+                'bettingGroup' => $bettingGroup,
+            ]);
+        }
 
 
+    }
 
+
+    #[Route('/delete/members/{id}', name: 'app_betting_group_delete_member', methods: ['POST'])]
+    public function deleteMember(BettingGroup $bettingGroup, Request $request, UserRepository $userRepository)
+    {
+
+        if ($this->isCsrfTokenValid('delete' . $bettingGroup->getId(), $request->request->get('_token'))) {
+
+            $user = $userRepository->find($request->request->get('user_id'));
+
+            if (!$user) {
+                $this->addFlash('error', 'User not found');
+                return new Response('User not found', Response::HTTP_NOT_FOUND);
+            }
+
+            if (!$bettingGroup->getAdministrators()->contains($this->getUser())) {
+                $this->addFlash('error', 'You are not an administrator of this group');
+                return new Response('You are not an administrator of this group', Response::HTTP_UNAUTHORIZED);
+
+            }
+
+            if ($bettingGroup->getAdministrators()->contains($user)) {
+                $this->addFlash('error', 'You cannot delete an administrator of the group');
+                return new Response('You cannot delete an administrator of the group', Response::HTTP_UNAUTHORIZED);
+
+
+            }
+
+            $bettingGroup->removeMember($user);
+            $userRepository->save($user, true);
+
+        }
+
+        $this->addFlash('success', 'User deleted');
+        return $this->redirectToRoute('front_app_betting_group_members', ['id' => $bettingGroup->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+
+    #[Route('/bets/{id}', name: 'app_betting_group_events', methods: ['GET'])]
+    public function getEventsByGroup(bettingGroup $bettingGroup, BettingGroupRepository $bettingGroupRepository): Response
+    {
+
+      $events = $bettingGroup->getEvents();
+
+        if ($events) {
+            return $this->render('betting_group/events.html.twig', [
+                'events' => $events,
+                'bettingGroup' => $bettingGroup,
+            ]);
+        }
+
+    }
 }

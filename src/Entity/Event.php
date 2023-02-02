@@ -24,6 +24,10 @@ class Event
     #[ORM\Column]
     private ?\DateTimeImmutable $finishAt = null;
 
+    #[ORM\ManyToOne(targetEntity: BettingGroup::class, inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?BettingGroup $bettingGroup = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $startAt = null;
 

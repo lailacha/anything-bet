@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Front;
 
 use App\Entity\BettingGroup;
 use App\Entity\GroupRequest;
 use App\Form\GroupRequestType;
+use App\Repository\BettingGroupRepository;
 use App\Repository\GroupRequestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -74,7 +75,33 @@ class GroupRequestController extends AbstractController
             $groupRequestRepository->remove($groupRequest, true);
         }
 
-        return $this->redirectToRoute('app_group_request_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('front_app_group_request_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/accept', name: 'app_group_request_approve', methods: ['POST'])]
+    public function approve(Request $request, GroupRequest $groupRequest, GroupRequestRepository $groupRequestRepository, BettingGroupRepository $bettingGroupRepository): Response
+        {
+
+            if (!$this->isCsrfTokenValid('approve'.$groupRequest->getId(), $request->request->get('_token'))) {
+                $this->addFlash('error', 'Invalid token');
+                return $this->redirectToRoute('front_app_group_request_index', [], Response::HTTP_SEE_OTHER);
+            }
+
+            $groupRequest->setIsApproved(true);
+            $groupRequestRepository->save($groupRequest, true);
+
+            //add user to group
+            $group = $groupRequest->getGroup();
+
+            if(!$group instanceof BettingGroup){
+               $this->addFlash('error', 'Group not found');
+                return $this->redirectToRoute('front_app_group_request_index', [], Response::HTTP_SEE_OTHER);
+            }
+
+            $group->addMember($groupRequest->getUser());
+            $bettingGroupRepository->save($group, true);
+
+            return $this->redirectToRoute('front_app_group_request_index', [], Response::HTTP_SEE_OTHER);
+        }
 
 }

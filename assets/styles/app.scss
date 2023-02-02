@@ -4,38 +4,34 @@
 
 @import 'login.scss';
 
-
+@font-face {
+    font-family: 'Montserrat';
+    src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    font-style: normal;
+}
 
 $primary: #090AE1;
 $black: #0e0202;
 $white: #ffffff;
 $gray: #F5F5F5;
 body {
+    font-family: 'Montserrat', sans-serif;
     background-color: $gray;
     color: $black;
-    // height: 100vh;
 }
 
 footer {
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    background-color: $black;
-    color: $white;
-    margin-top: 4rem;
+    margin-top: 6rem;
     padding: 1.5rem 2rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
 }
 
-footer ul{
-    list-style: none;
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    margin: 0;
-}
+// footer ul{
+//     list-style: none;
+//     display: flex;
+//     flex-direction: row;
+//     padding: 0;
+//     margin: 0;
+// }
 
 footer ul li a{
     text-decoration: none;
@@ -48,23 +44,8 @@ footer ul li a{
     transition: 0.5s;
 }
 
-footer ul li a:hover{
-    color: $primary;
-    transition: 0.5s;
-}
-
-@media screen and (max-width: 768px) {
-    footer {
-        flex-direction: column;
-    }
-    footer ul {
-        flex-direction: column;
-        justify-content: flex-start;
-        margin: 1rem 0;
-    }
-    footer ul li a {
-        margin: 0 0 0 0;
-    }
-    
-}
+// footer ul li a:hover{
+//     color: $primary;
+//     transition: 0.5s;
+// }
 

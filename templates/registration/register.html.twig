@@ -1,4 +1,7 @@
 {% extends 'base_home.html.twig' %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('register') }}
+{% endblock %}
 
 {% block title %}!{% endblock %}
 
@@ -17,21 +20,29 @@
     {{ form_row(registrationForm.email, {
         label: 'Email'
     }) }}
+    <span class="errormsg" id="erroremail"></span>
     {{ form_row(registrationForm.firstname, {
         label: 'Prénom'
     }) }}
+    <span class="errormsg" id="errorfirstname"></span>
     {{ form_row(registrationForm.lastname, {
         label: 'Nom'
     }) }}
-        {{ form_row(registrationForm.username, {
+    <span class="errormsg" id="errorlastname"></span>
+    {{ form_row(registrationForm.username, {
         label: 'Pseudo'
     }) }}
+    <span class="errormsg" id="errorusername"></span>
     {{ form_row(registrationForm.plainPassword, {
         label: 'Mot de passe'
     }) }}
+    <span class="errormsg" id="errorpassword"></span>
+
+    
     {{ form_row(registrationForm.confirmPassword, {
         label: 'Confirmation du mot de passe'
     }) }}
+    <span class="errormsg" id="errorconfirmpassword"></span>
     <button type="submit" class="btn">Register</button>
       <div class="row">
         <p>Déjà inscrit ?</p>
@@ -45,5 +56,6 @@
         <a href="{{ path('app_login') }}">Connectez-vous ici</a>
     </div>
     {{ form_end(registrationForm) }}
+
    
 {% endblock %}

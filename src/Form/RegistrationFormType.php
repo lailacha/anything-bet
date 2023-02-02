@@ -20,7 +20,10 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('email', TextType::class, [
                 'mapped' => false,
-                'constraints' => [
+                'attr' => [
+                    'id' => 'email',
+                ],
+                    'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter your email',
                     ]),
@@ -34,6 +37,9 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('firstname', TextType::class, [
                 'mapped' => false,
+                'attr' => [
+                    'id' => 'firstname',
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter your firstname',

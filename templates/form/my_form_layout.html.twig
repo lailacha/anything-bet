@@ -107,7 +107,7 @@
             {{- form_widget(form.time) -}}
         </div>
     {%- endif -%}
-{%- endblock datetime_widget -%}
+{%- endblock datetime_widget -%} 
 
 {%- block date_widget -%}
     {%- if widget == 'single_text' -%}
@@ -213,11 +213,6 @@
     {%- set type = type|default('email') -%}
     {{ block('form_widget_simple') }}
 {%- endblock email_widget -%}
-
-{%- block range_widget -%}
-    {% set type = type|default('range') %}
-    {{- block('form_widget_simple') -}}
-{%- endblock range_widget %}
 
 {%- block button_widget -%}
     {%- if label is empty -%}

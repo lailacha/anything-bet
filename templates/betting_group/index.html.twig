@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+{% extends 'base_front.html.twig' %}
 
-<title>BettingGroup index</title>
+{% block title %}Betting group{% endblock %}
+
 
 {% block body %}
     {% if app.session.flashBag.has('error') %}

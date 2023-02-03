@@ -51,7 +51,7 @@ class BettingGroupController extends AbstractController
         ]);
     }
 
-    #[Route('/my-bettings-groups', name: 'app_betting_group_test', methods: ['GET', 'POST'])]
+    #[Route('/my-bettings-groups', name: 'app_betting_group_by_user', methods: ['GET', 'POST'])]
     public function getMyBettingGroups(BettingGroupRepository $bettingGroupRepository): Response
     {
         $user = $this->getUser();

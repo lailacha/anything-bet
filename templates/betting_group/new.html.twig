@@ -1,11 +1,13 @@
-<!DOCTYPE html>
+{% extends 'base_front.html.twig' %}
 
-<title>New BettingGroup</title>
+{% block title %}Betting group{% endblock %}
+
 
 {% block body %}
-    <h1>Create new BettingGroup</h1>
+        <h1>Créer un groupe</h1>
 
-    {{ include('betting_group/_form.html.twig') }}
+        {{ include('betting_group/_form.html.twig') }}
 
-    <a href="{{ path('front_app_betting_group_index') }}">back to list</a>
+        <a href="{{ path('front_app_betting_group_by_user') }}">Voir mes groupes</a>
+
 {% endblock %}

@@ -1,0 +1,60 @@
+
+.navbar {
+
+  background-color: $mainBlue;
+  padding: 8px;
+  color: white;
+
+  display: flex;
+  justify-content: space-between;
+
+  a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+
+    &:hover {
+      color: rgba(19, 1, 145, 0.56);
+      transition: all 0.8s ease-in-out;
+    }
+
+  }
+
+  ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    justify-content: center ;
+
+    li {
+      margin: 0 8px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  }
+
+  img {
+    border-radius: 50%;
+  }
+
+  .profile{
+
+      display: flex;
+      align-items: center;
+        justify-content: center;
+    font-weight: normal;
+    background-color: white;
+    padding: 8px;
+    border-radius: 8px;
+    color: $mainBlue;
+    margin-left: 2rem;
+
+
+    img {
+      margin-left: 24px;
+      width: 50px;
+      height: 50px;
+    }
+  }
+}

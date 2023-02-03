@@ -7,14 +7,10 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.scss';
-<<<<<<< HEAD
 import './js/profile.js';
-=======
 import './login.js';
 
 
-alert("test");
->>>>>>> 3bdcf11 (js form)
 
 // console.log("Hello Webpack Encore! Edit me in assets/app.js");
 // let icon1 = document.getElementById("icon1");

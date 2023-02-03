@@ -5,7 +5,13 @@
 {% block body %}
     <h1>Create new Event</h1>
 
+    {% for label, messages in app.session.flashBag.all %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
     {{ include('event/_form.html.twig') }}
 
-    <a href="{{ path('app_event_index') }}">back to list</a>
+    <a href="{{ path('front_app_event_index') }}">back to list</a>
 {% endblock %}

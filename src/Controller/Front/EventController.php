@@ -3,8 +3,11 @@
 namespace App\Controller\Front;
 
 use App\Entity\BettingGroup;
+use App\Entity\Bet;
 use App\Entity\Event;
+use App\Form\BetType;
 use App\Form\EventType;
+use App\Repository\BetRepository;
 use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,16 +36,31 @@ class EventController extends AbstractController
     }
 
     #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EventRepository $eventRepository): Response
+    public function new(Request $request, EventRepository $eventRepository, BetRepository $betRepository): Response
     {
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
+        $form->get('startAt')->setData(new \DateTimeImmutable());
+        $form->get('finishAt')->setData(new \DateTimeImmutable( '+1 day' ));
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $eventRepository->save($event, true);
+        $bet = new Bet();
+        $formBet = $this->createForm(BetType::class, $bet);
+        $formBet->handleRequest($request);
 
-            return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+        if ($form->isSubmitted() && $form->isValid() && $formBet->isSubmitted() && $formBet->isValid()) {
+            if ($event->getFinishAt() < $event->getStartAt()) {
+                $this->addFlash('danger', 'La date de fin doit être supérieure à la date de début');
+                return $this->redirectToRoute('front_app_event_new');
+            }else{
+                $event->setCreatedAt(new \DateTimeImmutable());
+                $event->setTheUser($this->getUser());
+                $eventRepository->save($event, true);
+                $bet->setEvent($event);
+                $betRepository->save($bet, true);
+
+                return $this->redirectToRoute('front_app_event_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->renderForm('event/new.html.twig', [
@@ -86,6 +104,5 @@ class EventController extends AbstractController
 
         return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
     }
-
 
 }

@@ -12,6 +12,8 @@
                 <th>Name</th>
                 <th>CreatedAt</th>
                 <th>FinishAt</th>
+                <th>Créateur</th>
+                <th>Name</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -22,18 +24,21 @@
                 <td>{{ event.name }}</td>
                 <td>{{ event.createdAt ? event.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ event.finishAt ? event.finishAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ event.theUser.firstname }} {{ event.theUser.firstname }}</td>
+                <td>{{ event.name }}</td>
                 <td>
-                    <a href="{{ path('app_event_show', {'id': event.id}) }}">show</a>
-                    <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
+                    <a href="{{ path('front_app_event_show', {'id': event.id}) }}">show</a>
+                    <a href="{{ path('front_app_event_edit', {'id': event.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="9">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
     <a href="{{ path('app_event_new') }}">Create new</a>
+    <a href="{{ path('front_app_event_new') }}">Create new</a>
 {% endblock %}

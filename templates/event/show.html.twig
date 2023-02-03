@@ -23,6 +23,17 @@
                 <th>FinishAt</th>
                 <td>{{ event.finishAt ? event.finishAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+                <th>FinishAt</th>
+                <td>{{ event.finishAt ? event.finishAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>StartAt</th>
+                <td>{{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Result</th>
+                <td>{{ event.result }}</td>
+            </tr>
         </tbody>
     </table>
 

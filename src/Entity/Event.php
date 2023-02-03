@@ -37,6 +37,9 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Participate::class)]
     private Collection $participates;
 
+    #[ORM\ManyToOne]
+    private ?User $theUser = null;
+
     public function __construct()
     {
         $this->participates = new ArrayCollection();
@@ -133,6 +136,18 @@ class Event
                 $participate->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTheUser(): ?User
+    {
+        return $this->theUser;
+    }
+
+    public function setTheUser(?User $theUser): self
+    {
+        $this->theUser = $theUser;
 
         return $this;
     }

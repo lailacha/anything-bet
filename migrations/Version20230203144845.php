@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230202135415 extends AbstractMigration
+final class Version20230203144845 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,8 +20,6 @@ final class Version20230202135415 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP SEQUENCE role_id_seq CASCADE');
-        $this->addSql('CREATE SEQUENCE participate_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE bet (id INT NOT NULL, id_event_id INT DEFAULT NULL, label VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_FBF0EC9B212C041E ON bet (id_event_id)');
         $this->addSql('CREATE TABLE betting (id INT NOT NULL, id_user_id INT DEFAULT NULL, id_bet_id INT DEFAULT NULL, amount INT NOT NULL, is_won BOOLEAN DEFAULT NULL, PRIMARY KEY(id))');
@@ -40,8 +38,9 @@ final class Version20230202135415 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_E3783DBDA76ED395 ON daily_recompense (user_id)');
         $this->addSql('CREATE INDEX IDX_E3783DBD18924EB2 ON daily_recompense (betting_group_id)');
         $this->addSql('COMMENT ON COLUMN daily_recompense.date IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE event (id INT NOT NULL, betting_group_id INT NOT NULL, name VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, finish_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, start_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, result VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE event (id INT NOT NULL, betting_group_id INT NOT NULL, the_user_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, finish_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, start_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, result VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_3BAE0AA718924EB2 ON event (betting_group_id)');
+        $this->addSql('CREATE INDEX IDX_3BAE0AA747BCFD73 ON event (the_user_id)');
         $this->addSql('COMMENT ON COLUMN event.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN event.finish_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN event.start_at IS \'(DC2Type:datetime_immutable)\'');
@@ -81,6 +80,7 @@ final class Version20230202135415 extends AbstractMigration
         $this->addSql('ALTER TABLE daily_recompense ADD CONSTRAINT FK_E3783DBDA76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE daily_recompense ADD CONSTRAINT FK_E3783DBD18924EB2 FOREIGN KEY (betting_group_id) REFERENCES betting_group (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE event ADD CONSTRAINT FK_3BAE0AA718924EB2 FOREIGN KEY (betting_group_id) REFERENCES betting_group (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE event ADD CONSTRAINT FK_3BAE0AA747BCFD73 FOREIGN KEY (the_user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE friend ADD CONSTRAINT FK_55EEAC6179F37AE5 FOREIGN KEY (id_user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_request ADD CONSTRAINT FK_BD97DB93A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_request ADD CONSTRAINT FK_BD97DB9318924EB2 FOREIGN KEY (betting_group_id) REFERENCES betting_group (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -94,8 +94,6 @@ final class Version20230202135415 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('DROP SEQUENCE participate_id_seq CASCADE');
-        $this->addSql('CREATE SEQUENCE role_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('ALTER TABLE bet DROP CONSTRAINT FK_FBF0EC9B212C041E');
         $this->addSql('ALTER TABLE betting DROP CONSTRAINT FK_5EDD2FE279F37AE5');
         $this->addSql('ALTER TABLE betting DROP CONSTRAINT FK_5EDD2FE2FE4669CB');
@@ -106,6 +104,7 @@ final class Version20230202135415 extends AbstractMigration
         $this->addSql('ALTER TABLE daily_recompense DROP CONSTRAINT FK_E3783DBDA76ED395');
         $this->addSql('ALTER TABLE daily_recompense DROP CONSTRAINT FK_E3783DBD18924EB2');
         $this->addSql('ALTER TABLE event DROP CONSTRAINT FK_3BAE0AA718924EB2');
+        $this->addSql('ALTER TABLE event DROP CONSTRAINT FK_3BAE0AA747BCFD73');
         $this->addSql('ALTER TABLE friend DROP CONSTRAINT FK_55EEAC6179F37AE5');
         $this->addSql('ALTER TABLE group_request DROP CONSTRAINT FK_BD97DB93A76ED395');
         $this->addSql('ALTER TABLE group_request DROP CONSTRAINT FK_BD97DB9318924EB2');

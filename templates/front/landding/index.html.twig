@@ -1,27 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Accueil</title>
-    </head>
-    <body>
-        <header>
-            <img src="build/images/logo-betthings.png" alt="">
+{% extends 'base_home.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+
+{% block body %}
+
+    <header>
+    <div class="img-logo">
+      <a href="{{ path('front_default_index') }}"><img src="{{ asset('build/images/logo-betthings.png') }}" alt=""></a>
+    </div>
             <nav>
-                <a href="">Connexion</a>
-                <a href="">À propos</a>
-                <a href="">Contact</a>
-                <a href="">Mentions légales</a>
-                <a href="">Réglement</a>
+            <ul>
+                <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                <li><a href="">À propos</a></li>
+                <li><a href="">Contact</a></li>
+                <li><a href="">Mentions légales</a></li>
+                <li><a href="">Réglement</a></li>
             </nav>
         </header>
         <main>
-            <h1>Bet-Anythings</h1>
-            <p>Bienvenue sur Bet-Anythings ! Rejoignez notre communauté de parieurs passionnés et amusants. Avec notre plateforme simple et facile à utiliser, vous pouvez organiser des paris avec vos amis sur tout, des événements sportifs aux paris amicaux. Inscrivez-vous maintenant en cliquant sur le bouton ci-dessous pour accéder à toutes les fonctionnalités et commencer à parier avec vos amis dès aujourd'hui!</p>
-            <button>Inscription</button>
-            <img src="build/images/ladding-img.png" alt="">
+        <div class="container">
+            <div class="text">
+                <h1>Bet-Anythings</h1>
+                <p>Bienvenue sur Bet-Anythings ! Rejoignez notre communauté de parieurs passionnés et amusants. Avec notre plateforme simple et facile à utiliser, vous pouvez organiser des paris avec vos amis sur tout, des événements sportifs aux paris amicaux. Inscrivez-vous maintenant en cliquant sur le bouton ci-dessous pour accéder à toutes les fonctionnalités et commencer à parier avec vos amis dès aujourd'hui!</p>
+                <a href="{{ path('app_register') }}">Inscription</a>
+            </div>
+            <img src="{{ asset('build/images/ladding-img.png') }}" alt="">
+        </div>
         </main>
-    </body>
-</html>
+
+
+{% endblock %}

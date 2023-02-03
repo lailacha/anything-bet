@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "components/alert";
+
 @import 'login.scss';
 
 @font-face {

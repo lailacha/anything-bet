@@ -41,7 +41,7 @@
             height: 1px;
             background-color: #090AE1;
         }
-        main > span{
+        main > #alert{
             display: none;
             background-color: red;
             color: white;
@@ -49,6 +49,20 @@
         }
     </style>
     <main>
+        {% for message in app.session.flashBag.get('success')%}
+            <span class="alert">
+                <strong>Succès !</strong> {{message}}
+                <div class="load"></div>
+            </span>
+        {% endfor %}
+
+        {% for message in app.session.flashBag.get('error')%}
+            <span class="alert alert--error">
+                <strong>Succès !</strong> {{message}}
+                <div class="load load--error"></div>
+            </span>
+        {% endfor %}
+
         <span id="alert">Merci de ne pas envoyer le formulaire si bous n'avez rien changé</span>
         <h1>Profile</h1>
         <section class="top">

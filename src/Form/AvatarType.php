@@ -24,7 +24,7 @@ class AvatarType extends AbstractType
                             'image/jpeg',
                             'image/png',
                         ],
-                        'mimeTypesMessage' => 'Please upload a valid image file',
+                        'mimeTypesMessage' => 'Formats autorisés : jpeg, png',
                     ])
                 ],
             ])

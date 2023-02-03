@@ -19,7 +19,7 @@ class ProfileController extends AbstractController
     {
         $currentUser = $this->getUser();
         $user = new User();
-        $formAvatar = $this->createForm(AvatarType::class, [
+        $formAvatar = $this->createForm(AvatarType::class, $user, [
             'action' => $this->generateUrl('front_change_avatar'),
         ]);
 
@@ -61,6 +61,12 @@ class ProfileController extends AbstractController
             $tUser->setAvatar($imageName);
 
             $userRepository->save($tUser, true);
+            $this->addFlash("success", "Vous avez bien mis à jour votre profile !");
+        }else{
+            foreach ($form->getErrors(true) as $error) {
+                $erreur = $error->getMessage();
+            }
+            $this->addFlash("error", $erreur);
         }
 
         return $this->redirectToRoute("front_profile");
@@ -83,6 +89,12 @@ class ProfileController extends AbstractController
                 }
             }
             $userRepository->save($tUser, true);
+            $this->addFlash("success", "Vous avez bien mis à jour votre profile !");
+        }else{
+            foreach ($form->getErrors(true) as $error) {
+                $erreur = $error->getMessage();
+            }
+            $this->addFlash("error", $erreur);
         }
 
         return $this->redirectToRoute("front_profile");

@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "components/alert";
+
 $black: #0e0202;
 $white: #ffffff;
 body {

@@ -17,6 +17,7 @@ $gray: #F5F5F5;
 
 @import 'login.scss';
 @import 'typography.scss';
+@import 'landing.scss';
 
 @font-face {
   font-family: 'Montserrat';
@@ -24,11 +25,15 @@ $gray: #F5F5F5;
   font-style: normal;
 }
 
+* {
+    padding: 0;
+    margin: 0;
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: #F5F5F5;
     color: $black;
-  height: 100vh;
 
 }
 

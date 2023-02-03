@@ -11,6 +11,7 @@ import './js/profile.js';
 import './login.js';
 
 
+alert("test");
 
 // console.log("Hello Webpack Encore! Edit me in assets/app.js");
 // let icon1 = document.getElementById("icon1");
@@ -91,41 +92,41 @@ import './login.js';
     // }
     // });
 
-  $("#lastname").blur(function lnverif() {
-    var lastname = $(this).val();
-    if (lastname == "") {
-      $(this).addClass("error");
-      document.getElementById('errorlastname').innerHTML = "Veuillez remplir ce champ";
-    } else {
-      $(this).removeClass("error");
-      document.getElementById('errorlastname').innerHTML = "";
-    }
-  });
+  // $("#lastname").blur(function lnverif() {
+  //   var lastname = $(this).val();
+  //   if (lastname == "") {
+  //     $(this).addClass("error");
+  //     document.getElementById('errorlastname').innerHTML = "Veuillez remplir ce champ";
+  //   } else {
+  //     $(this).removeClass("error");
+  //     document.getElementById('errorlastname').innerHTML = "";
+  //   }
+  // });
 
-  $("#firstname").blur(function fnverif() {
-    var firstname = $(this).val();
-    if (firstname == "") {
-      $(this).addClass("error");
-      document.getElementById('errorfirstname').innerHTML = "Veuillez remplir ce champ";
-    } else {
-      $(this).removeClass("error");
-      document.getElementById('errorfirstname').innerHTML = "";
-    }
-  });
+  // $("#firstname").blur(function fnverif() {
+  //   var firstname = $(this).val();
+  //   if (firstname == "") {
+  //     $(this).addClass("error");
+  //     document.getElementById('errorfirstname').innerHTML = "Veuillez remplir ce champ";
+  //   } else {
+  //     $(this).removeClass("error");
+  //     document.getElementById('errorfirstname').innerHTML = "";
+  //   }
+  // });
 
-    document.addEventListener("DOMContentLoaded", function() {
+  //   document.addEventListener("DOMContentLoaded", function() {
         
-        // if input is empty
-        let password = document.getElementById("plainPassword");
-        let passwordConfirm = document.getElementById("confirmPassword");
+  //       // if input is empty
+  //       let password = document.getElementById("plainPassword");
+  //       let passwordConfirm = document.getElementById("confirmPassword");
 
-        if (password.value != passwordConfirm.value){
-            password.style.border = "1px solid red";
-            passwordConfirm.style.border = "1px solid red";
-            console.log("test");
-            return false;
-        }
+  //       if (password.value != passwordConfirm.value){
+  //           password.style.border = "1px solid red";
+  //           passwordConfirm.style.border = "1px solid red";
+  //           console.log("test");
+  //           return false;
+  //       }
 
 
-    });
+  //   });
 

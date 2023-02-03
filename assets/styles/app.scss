@@ -4,15 +4,63 @@
 
 @import "components/alert";
 
-$black: #0e0202;
-$white: #ffffff;
-body {
-    background-color: $white;
-    color: $black;
-    height: 100vh;
+@import 'login.scss';
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    font-style: normal;
 }
 
-// text in input color
-input {
+$primary: #090AE1;
+$black: #0e0202;
+$white: #ffffff;
+$gray: #F5F5F5;
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: $gray;
     color: $black;
 }
+
+footer {
+    margin-top: 5rem;
+    padding: 1.5rem 2rem;
+}
+
+.error {
+    border-color: #cc0000;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+.errormsg{
+    margin-top: 0.5em;
+    color: #cc0000;
+    font-size: 12px;
+}
+
+// footer ul{
+//     list-style: none;
+//     display: flex;
+//     flex-direction: row;
+//     padding: 0;
+//     margin: 0;
+// }
+
+footer ul li a{
+    text-decoration: none;
+    margin: 0 1rem 0 0;
+    color: $white;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+// footer ul li a:hover{
+//     color: $primary;
+//     transition: 0.5s;
+// }
+

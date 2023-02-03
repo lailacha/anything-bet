@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<title>My daily recompenses</title>
+
+{% block body %}
+    <h1>DailyRecompense</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for betting_group in betting_groups %}
+            <tr>
+                <td>{{ betting_group.id }}</td>
+                <td>{{ betting_group.name }}</td>
+                <td>
+                    <form action="{{ path('front_app_daily_recompense_new') }}" method="post">
+                        <input type="hidden" name="_token" value="{{ csrf_token('new') }}">
+                        <input type="submit" value="Get my recompenses">
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

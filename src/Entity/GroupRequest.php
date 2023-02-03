@@ -25,7 +25,7 @@ class GroupRequest
     private $user = null;
 
     #[ORM\ManyToOne(targetEntity: BettingGroup::class, inversedBy: 'groupRequests')]
-    private $bettingGroup = null;
+    private ?BettingGroup $bettingGroup = null;
 
     /**
      * @return null
@@ -83,5 +83,10 @@ class GroupRequest
         $this->bettingGroup = $bettingGroup;
 
         return $this;
+    }
+
+    public function getGroup()
+    {
+        return $this->bettingGroup;
     }
 }

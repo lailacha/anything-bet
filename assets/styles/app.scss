@@ -1,8 +1,108 @@
+$black: #0e0202;
+$white: #ffffff;
+$mainBlue: #9d91ff;
+$black: #0e0202;
+$white: #ffffff;
+$primary: #090AE1;
+$gray: #F5F5F5;
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'navbar.scss';
+@import 'sidebar.scss';
+@import 'group.scss';
 
-$red: #ff0000;
-body {
-    background-color: $red;
+@import "components/alert";
+
+@import 'login.scss';
+@import 'typography.scss';
+@import 'landing.scss';
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+  font-style: normal;
 }
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #F5F5F5;
+    color: $black;
+
+}
+
+footer {
+    margin-top: 5rem;
+    padding: 1.5rem 2rem;
+}
+
+
+table th {
+    color: $white;
+    background-color: $mainBlue;
+}
+table tr td{
+
+    background-color: $white !important;
+}
+
+.error {
+    border-color: #cc0000;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    height: 100%;
+    display: flex;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    padding: 1rem;
+
+    // first h1 of .content
+    h1{
+       margin-bottom: 2rem;
+    }
+}
+
+.errormsg{
+    margin-top: 0.5em;
+    color: #cc0000;
+    font-size: 12px;
+}
+
+// footer ul{
+//     list-style: none;
+//     display: flex;
+//     flex-direction: row;
+//     padding: 0;
+//     margin: 0;
+// }
+
+footer ul li a{
+    text-decoration: none;
+    margin: 0 1rem 0 0;
+    color: $white;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+// footer ul li a:hover{
+//     color: $primary;
+//     transition: 0.5s;
+// }
+

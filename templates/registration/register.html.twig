@@ -1,21 +1,61 @@
-<!DOCTYPE html>
+{% extends 'base_home.html.twig' %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('register') }}
+{% endblock %}
 
-<title>Register</title>
+{% block title %}!{% endblock %}
 
 {% block body %}
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
 
-    <h1>Register</h1>
+
+        
+
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+    <img src="{{ asset('build/images/logo-betthings.png') }}" alt="logo" class="logo" />
+        <h1>Inscription</h1>
+    {{ form_row(registrationForm.email, {
+        label: 'Email'
+    }) }}
+    <span class="errormsg" id="erroremail"></span>
+    {{ form_row(registrationForm.firstname, {
+        label: 'Prénom'
+    }) }}
+    <span class="errormsg" id="errorfirstname"></span>
+    {{ form_row(registrationForm.lastname, {
+        label: 'Nom'
+    }) }}
+    <span class="errormsg" id="errorlastname"></span>
+    {{ form_row(registrationForm.username, {
+        label: 'Pseudo'
+    }) }}
+    <span class="errormsg" id="errorusername"></span>
+    {{ form_row(registrationForm.plainPassword, {
+        label: 'Mot de passe'
+    }) }}
+    <span class="errormsg" id="errorpassword"></span>
 
-        <button type="submit" class="btn">Register</button>
+    
+    {{ form_row(registrationForm.confirmPassword, {
+        label: 'Confirmation du mot de passe'
+    }) }}
+    <span class="errormsg" id="errorconfirmpassword"></span>
+    <button type="submit" class="btn">Register</button>
+      <div class="row">
+        <p>Déjà inscrit ?</p>
+        <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.4791 3.79163H5C2.79086 3.79163 1 5.58248 1 7.79162V18.7498C1 20.9589 2.79086 22.7498 5 22.7498H15.9582C18.1673 22.7498 19.9582 20.9589 19.9582 18.7498V13.2707" stroke="black" stroke-width="2"/>
+            <rect x="8.28698" y="14.2775" width="14.1665" height="4.30829" transform="rotate(-52.1202 8.28698 14.2775)" stroke="black"/>
+            <path d="M11.0793 17.5266L7.31304 19.0378L7.85139 15.0156L11.0793 17.5266Z" stroke="black" stroke-width="0.7"/>
+            <path d="M8.28341 17.7904L8.10334 19.0915L7.35217 18.9875L7.06662 18.285L8.28341 17.7904Z" fill="black"/>
+            <path d="M17.5993 2.30655L18.5408 1.09631C18.7104 0.878348 19.0245 0.839107 19.2425 1.00866L21.8537 3.03997C22.0717 3.20952 22.1109 3.52367 21.9413 3.74163L20.9999 4.95187L17.5993 2.30655Z" stroke="black"/>
+        </svg>
+        <a href="{{ path('app_login') }}">Connectez-vous ici</a>
+    </div>
     {{ form_end(registrationForm) }}
+
+   
 {% endblock %}

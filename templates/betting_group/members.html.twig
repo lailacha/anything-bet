@@ -1,0 +1,41 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Members{% endblock %}
+
+{% block body %}
+<h1>Members</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Pseudo</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in members %}
+            <tr>
+                <td>{{ user.email }}</td>
+                <td>{{ user.pseudo }}</td>
+                <td>
+                     {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('back_app_user_show', {'id': user.id}) }}">show</a>
+                         <form method="post" action="{{ path('front_app_betting_group_delete_member', {'id': bettingGroup.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                             <input type="hidden" name="_method" value="DELETE">
+                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bettingGroup.id) }}">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                             <input type="submit" value="Delete" class="text-stone-50">
+                            </form>
+                     {% endif %}
+         {#           <a href="{{ path('front_app_user_show', {'id': user.id}) }}">show</a>
+                    <a href="{{ path('front_app_user_edit', {'id': user.id}) }}">edit</a>#}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+</table>
+{% endblock %}

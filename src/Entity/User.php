@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -32,6 +34,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
+
+    #[ORM\Column(length: 255)]
+    private ?string $pseudo = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lastName = null;
+
+
+   #[ORM\Column(length: 128, nullable: true)]
+    private ?string $avatar = 'default.svg';
+
+
+    #[ORM\ManyToMany(targetEntity: BettingGroup::class, mappedBy: 'administrators')]
+    #[ORM\JoinTable(name: 'betting_group_administrators')]
+    private ?\Doctrine\Common\Collections\Collection $bettingAdminGroups = null;
+
+    #[ORM\ManyToMany(targetEntity: BettingGroup::class, mappedBy: 'members')]
+    #[ORM\JoinTable(name: 'betting_group_members')]
+    private ?\Doctrine\Common\Collections\Collection $bettingGroups = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: GroupRequest::class)]
+    private ?\Doctrine\Common\Collections\Collection $groupRequests = null;
 
     public function getId(): ?int
     {
@@ -114,4 +141,77 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): self
+    {
+        $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|BettingGroup[]
+     */
+    public function getBettingGroups(): \Doctrine\Common\Collections\Collection
+    {
+        return $this->bettingGroups;
+    }
+
+    public function getBettingAdminGroups(): \Doctrine\Common\Collections\Collection
+    {
+        return $this->bettingAdminGroups;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection<int, Role>
+     */
+    public function getRole(): Collection
+    {
+        return $this->role;
+    }
+
+
 }

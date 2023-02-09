@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %} 
+    </head>
+    <body class="flex flex-col bg-gray">
+    <div class="flex-grow">
+        {% block body %}{% endblock %}
+    </div>
+
+        <footer class="w-full p-4 bg-black shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800">
+    <ul class="flex flex-wrap items-center mt-3 text-sm text-white-500 dark:text-white-400 sm:mt-0">
+        <li>
+            <a href="#" class="mr-4 hover:underline md:mr-6 ">Accueil</a>
+        </li>
+        <li>
+            <a href="#" class="mr-4 hover:underline md:mr-6">A propos</a>
+        </li>
+        <li>
+            <a href="#" class="mr-4 hover:underline md:mr-6">Contactez-nous</a>
+        </li>
+        <li>
+            <a href="#" class="mr-4 hover:underline md:mr-6">Mentions légales</a>
+        </li>
+        <li>
+            <a href="#" class="mr-4 hover:underline md:mr-6">Politique de confidentialité</a>
+        </li>
+    </ul>
+     <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© All Rights Reserved by Bet-Anythings
+    </span>
+</footer>
+       {# <footer>
+            <ul>
+                <li><a href="{{ path('front_default_index') }}">Accueil</a></li>
+                <li><a href="{{ path('front_default_index') }}">A propos</a></li>
+                <li><a href="{{ path('front_default_index') }}">Contactez-nous</a></li>
+                <li><a href="{{ path('front_default_index') }}">Mentions légales</a></li>
+                <li><a href="{{ path('front_default_index') }}">Politique de confidentialité</a></li>
+            </ul>
+            <p>© All Rights Reserved by Bet-Anythings</p>
+        </footer> #}
+    </body>
+
+</html>

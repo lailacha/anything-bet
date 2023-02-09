@@ -4,6 +4,8 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <script src="https://kit.fontawesome.com/abaaf4d322.js" crossorigin="anonymous"></script>
+
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -14,12 +16,76 @@
         {% endblock %}
     </head>
     <body>
-        <nav>
+        <nav class="navbar">
             <ul>
-                <li><a href="{{ path('front_default_index') }}">Accueil</a></li>
+                <li><img src="{{ asset('build/images/logo-betthings.png') }}" alt="logo" class="w-20 h-20"></li>
                 {% if (is_granted('ROLE_ADMIN')) %} <li><a href="{{ path('back_default_index') }}">Panel d'admin</a></li>{% endif %}
             </ul>
+            <ul>
+                <li><a href="">Parier</a></li>
+                <li><a href="">Groupes</a></li>
+                <li><a href="">Mes paris</a></li>
+                <li class="profile">
+                    <i class="mr-4 ml-2 fas fa-regular fa-caret-down"></i>
+
+                    <p>Edouard Petit</p>
+                    <img src="https://i.pravatar.cc/150?img=56&u=fake@pravatar.com" alt="logo" class="w-20 h-20">
+
+                </li>
+            </ul>
         </nav>
-        {% block body %}{% endblock %}
+        <div class="container">
+            <div class="sidebar">
+                <ul>
+                    <li>
+                        <h2>Vos paris en cours</h2></li>
+                    <li class="bet-item">
+                        <img src="https://loremflickr.com/320/240?random=1" />
+                        <a href="#">Qui va gagner la coupe du monde ?</a>
+                    </li>
+                </ul>
+                <div class="logout">
+                    <svg width="31" height="38" viewBox="0 0 31 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g filter="url(#filter0_d_35_170)">
+                            <path d="M24 0H25C26.1046 0 27 0.895431 27 2V28C27 29.1046 26.1046 30 25 30H24V0Z" fill="black"/>
+                            <rect x="7" width="17" height="3" fill="black"/>
+                            <rect x="7" y="27" width="17" height="3" fill="black"/>
+                            <path d="M21 14C21.5523 14 22 14.4477 22 15C22 15.5523 21.5523 16 21 16V14ZM6.29289 15.7071C5.90237 15.3166 5.90237 14.6834 6.29289 14.2929L12.6569 7.92893C13.0474 7.53841 13.6805 7.53841 14.0711 7.92893C14.4616 8.31946 14.4616 8.95262 14.0711 9.34315L8.41421 15L14.0711 20.6569C14.4616 21.0474 14.4616 21.6805 14.0711 22.0711C13.6805 22.4616 13.0474 22.4616 12.6569 22.0711L6.29289 15.7071ZM21 16H7V14L21 14V16Z" fill="black"/>
+                            <path d="M4 1.66667C4 0.746192 4.74619 0 5.66667 0H7V8.5C7 9.32843 6.32843 10 5.5 10C4.67157 10 4 9.32843 4 8.5V1.66667Z" fill="black"/>
+                            <path d="M4 21.5C4 20.6716 4.67157 20 5.5 20C6.32843 20 7 20.6716 7 21.5V30H5.66667C4.74619 30 4 29.2538 4 28.3333V21.5Z" fill="black"/>
+                        </g>
+                        <defs>
+                            <filter id="filter0_d_35_170" x="0" y="0" width="31" height="38" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                <feOffset dy="4"/>
+                                <feGaussianBlur stdDeviation="2"/>
+                                <feComposite in2="hardAlpha" operator="out"/>
+                                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_35_170"/>
+                                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_35_170" result="shape"/>
+                            </filter>
+                        </defs>
+                    </svg>
+                </div>
+
+
+            </div>
+            <div class="content">
+                    {% block body %}{% endblock %}
+            </div>
+
+        </div>
+        <footer>
+            <ul>
+                <li><a href="{{ path('front_default_index') }}">Accueil</a></li>
+                <li><a href="{{ path('front_default_index') }}">A propos</a></li>
+                <li><a href="{{ path('front_default_index') }}">Contactez-nous</a></li>
+                <li><a href="{{ path('front_default_index') }}">Mentions légales</a></li>
+                <li><a href="{{ path('front_default_index') }}">Politique de confidentialité</a></li>
+            </ul>
+            <p>© All Rights Reserved by Bet-Anythings</p>
+        </footer>
     </body>
+
 </html>

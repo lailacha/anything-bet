@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<title>DailyRecompense</title>
+
+{% block body %}
+    <h1>DailyRecompense</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ daily_recompense.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ daily_recompense.date ? daily_recompense.date|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_daily_recompense_index') }}">back to list</a>
+
+    <a href="{{ path('app_daily_recompense_edit', {'id': daily_recompense.id}) }}">edit</a>
+
+    {{ include('daily_recompense/_delete_form.html.twig') }}
+{% endblock %}

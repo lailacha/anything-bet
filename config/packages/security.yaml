@@ -35,6 +35,8 @@ security:
         - { path: ^/admin, roles: ROLE_COACH }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/forgotten-password, roles: PUBLIC_ACCESS }
+        - { path: ^/accueil, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: ROLE_USER }
 
     role_hierarchy:

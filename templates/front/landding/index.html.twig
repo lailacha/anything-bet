@@ -1,0 +1,33 @@
+{% extends 'base_home.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+
+{% block body %}
+
+    <header>
+    <div class="img-logo">
+      <a href="{{ path('front_default_index') }}"><img src="{{ asset('build/images/logo-betthings.png') }}" alt=""></a>
+    </div>
+            <nav>
+            <ul>
+                <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                <li><a href="">À propos</a></li>
+                <li><a href="">Contact</a></li>
+                <li><a href="">Mentions légales</a></li>
+                <li><a href="">Réglement</a></li>
+            </nav>
+        </header>
+        <main>
+        <div class="container">
+            <div class="text">
+                <h1>Bet-Anythings</h1>
+                <p>Bienvenue sur Bet-Anythings ! Rejoignez notre communauté de parieurs passionnés et amusants. Avec notre plateforme simple et facile à utiliser, vous pouvez organiser des paris avec vos amis sur tout, des événements sportifs aux paris amicaux. Inscrivez-vous maintenant en cliquant sur le bouton ci-dessous pour accéder à toutes les fonctionnalités et commencer à parier avec vos amis dès aujourd'hui!</p>
+                <a href="{{ path('app_register') }}">Inscription</a>
+            </div>
+            <img src="{{ asset('build/images/ladding-img.png') }}" alt="">
+        </div>
+        </main>
+
+
+{% endblock %}

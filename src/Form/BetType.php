@@ -2,25 +2,24 @@
 
 namespace App\Form;
 
-use App\Entity\BettingGroup;
+use App\Entity\Bet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BettingGroupType extends AbstractType
+class BetType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('userMax')
+            ->add('label')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => BettingGroup::class,
+            'data_class' => Bet::class,
         ]);
     }
 }

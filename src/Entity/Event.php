@@ -30,7 +30,7 @@ class Event
     #[ORM\Column]
     private ?\DateTimeImmutable $startAt = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable:true)]
     private ?string $result = null;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Participate::class)]
@@ -149,5 +149,22 @@ class Event
         $this->theUser = $theUser;
 
         return $this;
+    }
+
+    public function getBettingGroup(): ?BettingGroup
+    {
+        return $this->bettingGroup;
+    }
+
+    public function setBettingGroup(?BettingGroup $bettingGroup): self
+    {
+        $this->bettingGroup = $bettingGroup;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/bet')]
 class BetController extends AbstractController
 {
-    #[Route('/', name: 'front_front_app_bet_index', methods: ['GET'])]
+    #[Route('/', name: 'app_bet_index', methods: ['GET'])]
     public function index(BetRepository $betRepository): Response
     {
         return $this->render('bet/index.html.twig', [
@@ -21,7 +21,7 @@ class BetController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'front_app_bet_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_bet_new', methods: ['GET', 'POST'])]
     public function new(Request $request, BetRepository $betRepository): Response
     {
         $bet = new Bet();
@@ -31,7 +31,7 @@ class BetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $betRepository->save($bet, true);
 
-            return $this->redirectToRoute('front_app_bet_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_bet_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('bet/new.html.twig', [
@@ -40,7 +40,7 @@ class BetController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'front_app_bet_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_bet_show', methods: ['GET'])]
     public function show(Bet $bet): Response
     {
         return $this->render('bet/show.html.twig', [
@@ -48,7 +48,7 @@ class BetController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'front_app_bet_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_bet_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Bet $bet, BetRepository $betRepository): Response
     {
         $form = $this->createForm(BetType::class, $bet);
@@ -57,7 +57,7 @@ class BetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $betRepository->save($bet, true);
 
-            return $this->redirectToRoute('front_app_bet_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_bet_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('bet/edit.html.twig', [
@@ -66,13 +66,13 @@ class BetController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'front_app_bet_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_bet_delete', methods: ['POST'])]
     public function delete(Request $request, Bet $bet, BetRepository $betRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$bet->getId(), $request->request->get('_token'))) {
             $betRepository->remove($bet, true);
         }
 
-        return $this->redirectToRoute('front_app_bet_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_bet_index', [], Response::HTTP_SEE_OTHER);
     }
 }

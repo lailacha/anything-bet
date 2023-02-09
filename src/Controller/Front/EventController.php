@@ -44,9 +44,16 @@ class EventController extends AbstractController
         $form->get('finishAt')->setData(new \DateTimeImmutable( '+1 day' ));
         $form->handleRequest($request);
 
-        $bet = new Bet();
-        $formBet = $this->createForm(BetType::class, $bet);
-        $formBet->handleRequest($request);
+        $bets = [];
+        for ($i = 0; $i < 5; $i++) {
+            $bet = new Bet();
+            $formBet = $this->createForm(BetType::class, $bet);
+            $formBet->handleRequest($request);
+            $bets[] = [
+                'bet' => $bet,
+                'formBet' => $formBet->createView(),
+            ];
+        }
 
         if ($form->isSubmitted() && $form->isValid() && $formBet->isSubmitted() && $formBet->isValid()) {
             if ($event->getFinishAt() < $event->getStartAt()) {
@@ -56,16 +63,17 @@ class EventController extends AbstractController
                 $event->setCreatedAt(new \DateTimeImmutable());
                 $event->setTheUser($this->getUser());
                 $eventRepository->save($event, true);
-                $bet->setEvent($event);
+                $bet->setIdEvent($event);
                 $betRepository->save($bet, true);
 
                 return $this->redirectToRoute('front_app_event_index', [], Response::HTTP_SEE_OTHER);
             }
         }
 
-        return $this->renderForm('event/new.html.twig', [
+        return $this->render('event/new.html.twig', [
             'event' => $event,
-            'form' => $form,
+            'form' => $form->createView(),
+            'bets' => $bets,
         ]);
     }
 

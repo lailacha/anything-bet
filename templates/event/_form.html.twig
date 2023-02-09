@@ -1,4 +1,42 @@
+{#<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var formBetIndex = 0;
+        $('.addFormBet').click(function () {
+            formBetIndex++;
+            $('#formBetsContainer').append(
+                '<div class="formBet">' +
+                '{{ form_widget(formBet) }}' +
+                '</div>'
+            );
+        });
+    });
+</script>
+
+<div id="formBetsContainer">
+    <div class="formBet" style="display: none;">
+    </div>
+</div>
+
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<h1>SEP</h1>
+<div id="formBetsContainer">
+    <div class="formBet" style="display: none;">
+    </div>
+</div>
+<button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+<button class="addFormBet">Add Bet</button>#}
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+
+
+{% for bet in bets %}
+    {{ form_widget(bet.formBet) }}
+{% endfor %}
+
+<button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+

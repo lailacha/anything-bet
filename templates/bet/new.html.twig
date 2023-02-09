@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<title>New Bet</title>
+
+{% block body %}
+    <h1>Create new Bet</h1>
+
+    {{ include('bet/_form.html.twig') }}
+
+    <a href="{{ path('front_app_bet_index') }}">back to list</a>
+{% endblock %}

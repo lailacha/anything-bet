@@ -16,10 +16,8 @@ class EventType extends AbstractType
             ->add('name')
             ->add('createdAt')
             ->add('finishAt')
-            ->add('bettingGroup')
             ->add('startAt')
             ->add('finishAt')
-            ->add('result')
         ;
     }
 

@@ -21,6 +21,13 @@
 
   }
 
+  .dropdown {
+    a {
+      color: $black;
+      font-weight: lighter;
+    }
+  }
+
   ul {
     display: flex;
     align-items: center;

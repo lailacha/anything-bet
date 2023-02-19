@@ -75,4 +75,32 @@ class BetController extends AbstractController
 
         return $this->redirectToRoute('app_bet_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+
+    public function showBets(Event $event, BetRepository $betRepository)
+    {
+
+
+
+
+        //gets bets by Event
+
+        $bets = $betRepository->findBy(['Event' => 'equal event ']);
+
+
+        //calculate cote
+
+
+
+        //for each bet, calculate cote
+
+
+
+
+
+
+
+    }
 }

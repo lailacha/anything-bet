@@ -77,4 +77,5 @@ class Betting
 
         return $this;
     }
+
 }

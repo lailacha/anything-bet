@@ -14,10 +14,17 @@ class BettingGroup
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private string $name = "";
 
     #[ORM\Column]
     private ?int $userMax = null;
+
+    #@ORM\Column(type="text")
+    private string $description;
+
+    #[ORM\Column(length: 128, nullable: true)]
+    private ?string $cover = 'default-cover.svg';
+
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -143,4 +150,32 @@ class BettingGroup
         return $this->events;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    public function setCover(?string $cover): self
+    {
+        $this->cover = $cover;
+
+        return $this;
+    }
+
+
+    public function __toString(){
+        return $this->name;
+    }
 }

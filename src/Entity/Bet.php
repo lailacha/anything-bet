@@ -17,8 +17,8 @@ class Bet
     private ?string $label = null;
 
 
-    #[ORM\ManyToOne]
-    private ?Event $idEvent = null;
+    #[ORM\ManyToOne(targetEntity: Event::class, cascade: ['persist'], inversedBy: 'bets')]
+    private ?Event $event = null;
 
     public function getId(): ?int
     {
@@ -40,13 +40,19 @@ class Bet
 
     public function getIdEvent(): ?Event
     {
-        return $this->idEvent;
+        return $this->event;
     }
 
     public function setIdEvent(?Event $idEvent): self
     {
-        $this->idEvent = $idEvent;
+        $this->event = $idEvent;
 
         return $this;
     }
+
+    public function setEvent(Event $param): void
+    {
+        $this->event = $param;
+    }
+
 }

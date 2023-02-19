@@ -1,0 +1,43 @@
+form {
+
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  background: white;
+  border-radius: 25px;
+  padding: 2rem;
+  font-weight: lighter;
+  align-items: center;
+
+  input, select {
+    background-color: $white;
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 5px;
+  }
+
+  button {
+    margin: 2rem;
+  }
+
+  & > div {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin-top: 10px;
+  }
+
+
+}
+
+.custom-flex-wrapper {
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+

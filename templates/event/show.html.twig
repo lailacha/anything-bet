@@ -6,16 +6,36 @@
 
 {% block body %}
 
-    <article class="event-card rounded-xl bg-white p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 w-3/4 flex flex-col justify-center items-center">
-        <h1 >{{ event.name }}</h1>
+    <article class="event-card rounded-xl bg-white p-3 shadow-lg w-3/4 flex flex-col justify-center items-center">
 
-        <a href="#">
-            <div class="relative flex items-end overflow-hidden rounded-xl justify-center w-full">
+        <div class="flex items-center mb-4">
+            <div class="dropdown dropdown-left hover:text-violet-800">
+                <label tabindex="0" > <i class="mr-4 ml-2 fas fa-regular fa-cog"></i>
+                </label>
+                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a class="text-gray-400"> {{ include('event/_delete_form.html.twig') }}
+                        </a></li>
+
+                    <li><a class="text-yellow-400" href="{{ path('front_app_event_edit', {'id': event.id}) }}">   <div class="flex items-center space-x-1.5 rounded-lg bg-yellow-500 px-4 py-1.5 text-white duration-100 hover:bg-yellow-600">
+
+                                <span class="fa fa-pen"></span>
+
+                                <button class="text-sm m-0">Edit</button>
+                            </div></a></li>
+
+                    {#{{ include('betting_group/_delete_form.html.twig') }}#}
+                </ul>
+            </div>
+            <h1>{{ event.name }}</h1>
+
+
+        </div>
+
                 {% if  event.coverImage is not null %}
-                    <img src="{{ asset('cover/' ~ event.coverImage) }}"  alt="Cover Image" class="w-fullobject-cover">
+                    <img src="{{ asset('cover/' ~ event.coverImage) }}"  alt="Cover Image" class="w-3/4 object-cover h-96">
                 {% else %}
-                    <img src="https://picsum.photos/seed/picsum/200/300" alt="cover" class="w-full  object-cover">
-                {% endif %}            </div>
+                    <img src="https://picsum.photos/seed/picsum/200/300" alt="cover" class="w-3/4 object-cover h-96">
+                {% endif %}
 
             <div class="mt-1 p-2 justify-center flex flex-col w-3/4 mx-auto">
                 <h2 class="text-slate-700">{{ event.name }}</h2>
@@ -26,55 +46,19 @@
                     <p class="mt-1 text-sm text-slate-500">Résultat: {{ event.result }}</p>
                 {% endif %}
                 {%  if event.bets is not null %}
-                    <div class="bets-box flex flex-wrap justify-between">
+                    <div class="bets-box flex flex-wrap justify-between bg-white">
 
                 {% for bet in event.bets %}
-                    <label for="bet-modal" class="btn" class="mt-1 text-sm text-slate-500 bets-item">{{ bet.label }}</label>
+                    <label for="bet-modal" class="mt-1 text-sm text-slate-500 bets-item bg-white">{{ bet.label }}</label>
                 {% endfor %}
                     </div>
 
                 {% endif %}
 
-                <div class="mt-3 flex items-end justify-end">
 
-                    <a href="{{ path('front_app_event_edit', {'id': event.id}) }}">
-                        <div class="flex items-center space-x-1.5 rounded-lg bg-yellow-500 px-4 py-1.5 text-white duration-100 hover:bg-yellow-800 mr-4">
-
-                            <span class="fa fa-eye"></span>
-
-                            <button class="text-sm">Edit</button>
-                        </div>
-                    </a>
-                    {{ include('event/_delete_form.html.twig') }}
-
-                </div>
             </div>
-        </a>
     </article>
 
-    <div class="flex justify-center flex-wrap">
-        <button type="button" class="
-          px-7
-          py-3
-          bg-red-600
-          text-white
-          font-medium
-          text-sm
-          leading-snug
-          uppercase
-          rounded
-          shadow-md
-          hover:bg-red-700 hover:shadow-lg
-          focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0
-          active:bg-red-800 active:shadow-lg
-          transition
-          duration-150
-          ease-in-out
-        " data-bs-toggle="popover" data-bs-title="Popover title"
-                data-bs-content="And here's some amazing content. It's very engaging. Right?">
-            Click to toggle popover
-        </button>
-    </div>
     <input type="checkbox" id="bet-modal" class="modal-toggle" />
     <div class="modal">
         <div class="modal-box">

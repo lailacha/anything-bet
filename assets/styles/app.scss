@@ -89,7 +89,6 @@ table th, table td {
 }
 
 .container{
-    height: 100%;
     display: flex;
     max-width: 100%;
 }
@@ -103,10 +102,6 @@ table th, table td {
     min-height: 70vh;
 
 
-    // first h1 of .content
-    h1{
-       margin-bottom: 2rem;
-    }
 }
 
 .errormsg{

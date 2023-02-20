@@ -9,6 +9,7 @@ use App\Form\BetType;
 use App\Form\EventType;
 use App\Repository\BetRepository;
 use App\Repository\EventRepository;
+use App\Security\Voter\GroupAdminVoter;
 use App\Service\FileUploader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -122,9 +123,12 @@ class EventController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EventRepository $eventRepository, BetRepository $betRepository, EntityManagerInterface $entityManager): Response
+    #[Route('/new/{group}', name: 'app_event_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EventRepository $eventRepository, BetRepository $betRepository, BettingGroup $group = null): Response
     {
+
+
+
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
         $form->get('startAt')->setData(new \DateTimeImmutable());
@@ -147,6 +151,10 @@ class EventController extends AbstractController
                     $event->setCreatedAt(new \DateTimeImmutable());
                     $event->setTheUser($this->getUser());
                     $event->setName($form->get('name')->getData());
+                    if($group){
+                        $this->denyAccessUnlessGranted(GroupAdminVoter::EDIT, $group);
+                        $event->setBettingGroup($group);
+                    }
                     $coverImage = $form->get('coverImage')->getData();
                     if ($coverImage) {
                         $fileUploader = new FileUploader($this->getParameter('cover_image_directory'));
@@ -259,7 +267,7 @@ class EventController extends AbstractController
             $eventRepository->remove($event, true);
         }
 
-        return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('front_app_event_index', [], Response::HTTP_SEE_OTHER);
     }
 
 }

@@ -60,23 +60,17 @@
         <h1>Paris</h1>
 
         <div class=" mx-auto grid grid-cols-1 gap-6 sm:grid-cols-2 bg-white  ">
-                <div class=" p-1 md:p-2 flex-col  rounded-lg w-full flex justify-center items-center border-2 border-black-500  ">
-                        <img alt="gallery" class="block object-cover object-center w-full h-full rounded-lg"
-                             src=https://picsum.photos/500/300?random=1">
-                       <p class="mt-2">Quand le Roi Charles va t-il déceder ? </p>
-                </div>
-            <div class=" p-1 md:p-2 flex-col  rounded-lg w-full flex justify-center items-center border-2 border-black-500  ">
-                <img alt="gallery" class="block object-cover object-center w-full h-full rounded-lg"
-                     src=https://picsum.photos/500/300?random=1">
-                <p class="mt-2">Quand le Roi Charles va t-il déceder ? </p>
-            </div>
+            {% for event in betting_group.events %}
 
             <div class=" p-1 md:p-2 flex-col  rounded-lg w-full flex justify-center items-center border-2 border-black-500  ">
-                <img alt="gallery" class="block object-cover object-center w-full h-full rounded-lg"
-                     src=https://picsum.photos/500/300?random=1">
-                <p class="mt-2">Quand le Roi Charles va t-il déceder ? </p>
+                {% if  event.coverImage is not null %}
+                    <img src="{{ asset('cover/' ~ event.coverImage) }}"  alt="Cover Image" class="block object-cover object-center w-full h-full rounded-lg">
+                {% else %}
+                    <img src="https://picsum.photos/seed/picsum/200/300" alt="cover" class="w-full h-64 object-cover">
+                {% endif %}
+                    <p class="mt-2">{{ event.name }}</p>
             </div>
-
+            {% endfor %}
         </div>
     </section>
 

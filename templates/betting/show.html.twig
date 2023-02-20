@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<title>Betting</title>
+
+{% block body %}
+    <h1>Betting</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ betting.id }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>{{ betting.amount }}</td>
+            </tr>
+            <tr>
+                <th>IsWon</th>
+                <td>{{ betting.isWon ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('front_betting_index') }}">back to list</a>
+
+    <a href="{{ path('front_betting_edit', {'id': betting.id}) }}">edit</a>
+
+    {{ include('betting/_delete_form.html.twig') }}
+{% endblock %}

@@ -20,11 +20,13 @@
                 <td><img src="{{ asset('logos/' ~ betting_group.cover) }}"  class="w-24 h-24 object-cover rounded-full"
                         alt="cover"></td>
                 <td>{{ betting_group.name }}</td>
-                <td>
+                <td class="text-center">
                     {% if is_granted('EDIT', betting_group) %}
-                        <a href="{{ path('front_app_betting_group_edit', {'id': betting_group.id}) }}">Modifier</a>
+                        <a href="{{ path('front_app_betting_group_edit', {'id': betting_group.id}) }}"><span class="fa fa-pen"></span></a>
+                        <a href="{{ path('front_app_betting_group_delete', {'id': betting_group.id}) }}"><span class="fa fa-trash"></span></a>
+                        <a href="{{ path('front_app_event_new', {'group': betting_group.id}) }}"><span class="fa fa-plus"></span></a>
                     {% endif %}
-                    <a href="{{ path('front_app_betting_group_show', {'id': betting_group.id}) }}">Voir</a>
+                    <a href="{{ path('front_app_betting_group_show', {'id': betting_group.id}) }}"><span class="fa fa-eye"></span></a>
                 </td>
             </tr>
         {% else %}

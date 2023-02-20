@@ -22,10 +22,10 @@
                 {% if (is_granted('ROLE_ADMIN')) %} <li><a href="{{ path('back_default_index') }}">Panel d'admin</a></li>{% endif %}
             </ul>
             <ul>
-                <li><a href="{{ path('front_app_event_index') }}">Events</a></li>
+                <li><a href="{{ path('front_app_event_my_groups') }}">Events</a></li>
                 <li><a href="{{ path('back_default_index') }}">Parier</a></li>
                 <li><a href="{{ path('front_app_betting_group_by_user') }}">Groupes</a></li>
-                <li><a href="{{ path('back_default_index') }}">Mes paris</a></li>
+                <li><a href="{{ path('front_app_betting_my_bettings') }}">Mes paris</a></li>
                 <li class="profile">
                     <div class="dropdown dropdown-left">
                         <label tabindex="0" > <i class="mr-4 ml-2 fas fa-regular fa-caret-down"></i>
@@ -48,17 +48,14 @@
                     <li>
                         <h2>Vos paris en cours</h2></li>
 
-                    {% for bet in globals.groups%}
-
+                    {% for event in globals.events%}
                     <li class="bet-item">
-                        <img src="https://loremflickr.com/320/240?random=1" />
+                        <img src="{{ asset('cover/' ~ event.coverImage) }}"  alt="Cover Image" class=" object-cover">
+                        <p>{{ event.name }}</p>
                     </li>
+
 
                     {% endfor %}
-                    <li class="bet-item">
-                        <img src="https://loremflickr.com/320/240?random=1" />
-                        <a href="#">Qui va gagner la coupe du monde ?</a>
-                    </li>
                 </ul>
                 <div class="logout">
                     <svg width="31" height="38" viewBox="0 0 31 38" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -18,7 +18,7 @@ class Bet
 
 
     #[ORM\ManyToOne(targetEntity: Event::class, cascade: ['persist'], inversedBy: 'bets')]
-    private ?Event $event = null;
+    private Event $event;
 
     public function getId(): ?int
     {
@@ -38,7 +38,7 @@ class Bet
     }
 
 
-    public function getIdEvent(): ?Event
+    public function getEvent(): Event
     {
         return $this->event;
     }

@@ -1,0 +1,58 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Bettings{% endblock %}
+
+{% block body %}
+    <!-- This is an example component -->
+    <div class=" sm:w-full lg:w-3/4 mx-auto ">
+
+        <div class="p-4  bg-white rounded-lg border shadow-md sm:p-8 ">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold leading-none text-gray-900 light:text-white">Mes derniers paris</h3>
+                <a href="{{ path('front_app_betting_index') }}" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+                    View all
+                </a>
+            </div>
+            <div class="flow-root">
+                <ul role="list" class="divide-gray-200 light:divide-gray-700">
+                    {% for betting in bettings %}
+                    <li class="mb-2 p-4 border {% if betting.isWon == true %} border-green-400 {% endif %}  {% if betting.isWon == false and betting.isWon != null %} border-red-400 {% endif %}rounded-lg ">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <a href="{{  path('front_app_event_show', {id :betting.bet.event.id} ) }}">
+                                <img class="w-8 h-8 rounded-full" src="{{ asset('cover/' ~ betting.bet.event.coverImage) }}" alt="Neil image">
+                                </a>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate light:text-white">
+                                    {{ betting.bet.label }}
+                                </p>
+                                <p class="text-sm text-gray-500 truncate light:text-gray-400">
+                                    {{ betting.bet.event.name }}
+                                </p>
+
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold text-gray-900 light:text-white">
+                                {{ betting.isWon == true ? 'Gagné' : '' }}
+                                {{ betting.isWon == false and betting.isWon != null ? 'Perdu' : '' }}
+                                {{ betting.isWon == null ? 'En cours' : '' }}
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold text-gray-900 light:text-white">
+                                {{ betting.amount }} pts
+                            </div>
+                            {% if  betting.bet.event.bettingGroup is not null %}
+                            <div class="flex-shrink-0">
+                                <img class="w-8 h-8 rounded-full" src="{{ asset('logos/' ~ betting.bet.event.bettingGroup) }}" alt="Neil image">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    {{ knp_pagination_render(bettings) }}
+
+{% endblock %}

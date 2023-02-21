@@ -1,38 +1,32 @@
-<!DOCTYPE html>
+{% extends 'base_front.html.twig' %}
 
-<title>Event index</title>
 
 {% block body %}
-    <h1>Event index</h1>
+    <h1>Les paris publics</h1>
+
+    {% for label, messages in app.session.flashBag.all %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
 
     <table class="table">
         <thead>
             <tr>
-                <th>Groupe</th>
-                <th>Id</th>
-                <th>Name</th>
-                <th>CreatedAt</th>
-                <th>FinishAt</th>
+                <th>Question</th>
+                <th>Date de fin</th>
                 <th>Créateur</th>
-                <th>Name</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for event in events %}
-            <tr>
-                <td>{{ event.bettingGroup ? event.bettingGroup : "Public" }}</td>
-                <td>{{ event.id }}</td>
-                <td>{{ event.name }}</td>
-                <td>{{ event.createdAt ? event.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ event.finishAt ? event.finishAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ event.theUser.firstname }} {{ event.theUser.firstname }}</td>
-                <td>{{ event.name }}</td>
-                <td>
-                    <a href="{{ path('front_app_event_show', {'id': event.id}) }}">show</a>
-                    <a href="{{ path('front_app_event_edit', {'id': event.id}) }}">edit</a>
-                </td>
-            </tr>
+            {% if event.finishAt >= date() %}
+                <tr>
+                    <td><a href="{{ path('front_app_event_show', {'id': event.id}) }}">{{ event.name }}</a></td>
+                    <td>{{ event.finishAt ? event.finishAt|date('d-m-Y H:i:s') : '' }}</td>
+                    <td>{{ event.theUser.pseudo }}</td>
+                </tr>
+            {% endif %}
         {% else %}
             <tr>
                 <td colspan="9">no records found</td>

@@ -19,7 +19,7 @@ class Betting
     #[ORM\ManyToOne]
     private ?Bet $idBet = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $amount = null;
 
     #[ORM\Column(nullable: true)]

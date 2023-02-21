@@ -4,10 +4,12 @@ namespace App\Controller\Front;
 
 use App\Entity\BettingGroup;
 use App\Entity\Bet;
+use App\Entity\Betting;
 use App\Entity\Event;
 use App\Form\BetType;
 use App\Form\EventType;
 use App\Repository\BetRepository;
+use App\Repository\BettingRepository;
 use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,7 +57,7 @@ class EventController extends AbstractController
             ];
         }
 
-        if ($form->isSubmitted() && $form->isValid() && $formBet->isSubmitted() && $formBet->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             if ($event->getFinishAt() < $event->getStartAt()) {
                 $this->addFlash('danger', 'La date de fin doit être supérieure à la date de début');
                 return $this->redirectToRoute('front_app_event_new');
@@ -63,8 +65,23 @@ class EventController extends AbstractController
                 $event->setCreatedAt(new \DateTimeImmutable());
                 $event->setTheUser($this->getUser());
                 $eventRepository->save($event, true);
-                $bet->setIdEvent($event);
-                $betRepository->save($bet, true);
+                $betObjects = [];
+                foreach ($bets as $betData) {
+                    $formBet = $this->createForm(BetType::class, $betData['bet']);
+                    $formBet->handleRequest($request);
+
+                    if ($formBet->isSubmitted() && $formBet->isValid()) {
+                        $bet = $betData['bet'];
+                        $bet->setIdEvent($event);
+                        $betObjects[] = $bet; // Ajouter l'objet Bet créé dans le tableau
+                    }
+                }
+
+                // Enregistrer chaque objet Bet dans la base de données
+                foreach ($betObjects as $bet) {
+                    $betRepository->save($bet, true);
+                }
+
 
                 return $this->redirectToRoute('front_app_event_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -78,10 +95,23 @@ class EventController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_event_show', methods: ['GET'])]
-    public function show(Event $event): Response
+    public function show(Event $event, BetRepository $betRepository): Response
     {
+        $bets = $betRepository->findBy(['idEvent' => $event->getId()]);
+
         return $this->render('event/show.html.twig', [
             'event' => $event,
+            'bets' => $bets,
+        ]);
+    }
+
+    //mybets
+    #[Route('/mybets', name: 'app_event_test', methods: ['GET'])]
+    public function mybets(BettingRepository $bettingRepository): Response
+    {
+        dd('haha');
+
+        return $this->render('event/mybets.html.twig', [
         ]);
     }
 
@@ -111,6 +141,27 @@ class EventController extends AbstractController
         }
 
         return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/bet/submit', name: 'app_event_bet', methods: ['POST'])]
+    public function submitBet(Request $request, BetRepository $betRepository, BettingRepository $bettingRepository): Response
+    {
+        //l'ulisateur connecté
+        $user = $this->getUser();
+
+        //le choix de l'utilisateur
+        $bet = $betRepository->find($request->request->get('bet'));
+
+        //creation betting
+        $betting = new Betting();
+        $betting->setIdUser($user);
+        $betting->setIdBet($bet);
+
+        //sauvegarde betting
+        $bettingRepository->save($betting, true);
+
+
+        return $this->redirectToRoute('front_app_event_index', [], Response::HTTP_SEE_OTHER);
     }
 
 }

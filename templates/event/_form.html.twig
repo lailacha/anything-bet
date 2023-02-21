@@ -32,8 +32,8 @@
 {{ form_start(form) }}
 {{ form_widget(form) }}
 
-
 {% for bet in bets %}
+    <h2>Paris {{ loop.index }}</h2>
     {{ form_widget(bet.formBet) }}
 {% endfor %}
 

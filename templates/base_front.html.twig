@@ -84,7 +84,17 @@
 
 
             </div>
-            <div class="content">
+            <div class="content {{ app.session.flashbag.peek('success')|length > 0 ? '' : 'mb-5'}}">
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success shadow-lg">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {% for message in app.flashes('danger') %}
+                    <div class="alert alert-error shadow-lg">
+                        {{ message }}
+                    </div>
+                {% endfor %}
                     {% block body %}{% endblock %}
             </div>
 

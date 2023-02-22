@@ -7,16 +7,18 @@ use App\Entity\GroupRequest;
 use App\Form\BettingGroupType;
 use App\Form\JoinBettingGroupType;
 use App\Repository\BettingGroupRepository;
+use App\Repository\DailyRecompenseRepository;
 use App\Repository\GroupRequestRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\GroupAdminVoter;
 use App\Service\FileUploader;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/betting/group')]
+#[Route('/betting-group')]
 class BettingGroupController extends AbstractController
 {
 
@@ -66,7 +68,7 @@ class BettingGroupController extends AbstractController
     }
 
     #[Route('/my-bettings-groups', name: 'app_betting_group_by_user', methods: ['GET', 'POST'])]
-    public function getMyBettingGroups(BettingGroupRepository $bettingGroupRepository): Response
+    public function getMyBettingGroups(DailyRecompenseRepository $dailyRecompenseRepository, BettingGroupRepository $bettingGroupRepository, Request $request, PaginatorInterface $paginator): Response
     {
         $user = $this->getUser();
 
@@ -74,12 +76,26 @@ class BettingGroupController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $bettingGroups = $user->getBettingGroups();
+        $hasNotAlreadyRecompenseToday = $dailyRecompenseRepository->getGroupCanReceiveRecompenses($this->getUser());
 
+       $scores = $bettingGroupRepository->getGroupsByUserWithScore($this->getUser());
+
+        // get ids of groups has not already recompense today
+        $ids = [];
+        foreach($hasNotAlreadyRecompenseToday as $group) {
+            $ids[] = $group['id'];
+        }
+
+        $pagination = $paginator->paginate(
+            $scores,
+            $request->query->getInt('page', 1),
+            10
+        );
 
         return $this->render('betting_group/_my_betting_groups.html.twig', [
-            'betting_groups' => $bettingGroups,
-        ]);
+            'betting_groups' => $pagination,
+            'hasNotAlreadyRecompenseToday' => $ids
+       ]);
     }
 
     #[Route('/my-bettings-groups-admin', name: 'app_betting_group_by_user_admin', methods: ['GET', 'POST'])]
@@ -99,7 +115,7 @@ class BettingGroupController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_betting_group_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_betting_group_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(BettingGroup $bettingGroup): Response
     {
 
@@ -112,16 +128,30 @@ class BettingGroupController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_betting_group_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_betting_group_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, BettingGroup $bettingGroup, BettingGroupRepository $bettingGroupRepository): Response
     {
         $form = $this->createForm(BettingGroupType::class, $bettingGroup);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $coverImage = $form->get('cover')->getData();
+
+            if ($coverImage) {
+                $fileUploader = new FileUploader($this->getParameter('logo_image_directory'));
+                $newFilename = $fileUploader->upload($coverImage);
+                if($newFilename) {
+                    $bettingGroup->setCover($newFilename);
+                } else {
+                    $this->addFlash('danger',$newFilename );
+                    return $this->redirectToRoute('front_app_betting_group_edit', ['id' => $bettingGroup->getId()], Response::HTTP_SEE_OTHER);
+                }
+            }
+
             $bettingGroupRepository->save($bettingGroup, true);
 
-            return $this->redirectToRoute('front_app_betting_group_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_app_betting_group_show', ['id' => $bettingGroup->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('betting_group/edit.html.twig', [
@@ -137,7 +167,7 @@ class BettingGroupController extends AbstractController
             $bettingGroupRepository->remove($bettingGroup, true);
         }
 
-        return $this->redirectToRoute('front_app_betting_group_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('front_app', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/join', name: 'app_betting_group_join', methods: ['GET', 'POST'])]

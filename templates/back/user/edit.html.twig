@@ -2,12 +2,25 @@
 
 <title>Edit User</title>
 
+{% form_theme form 'tailwind_2_layout.html.twig' %}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+
 {% block body %}
+<div class="login back_admin">
+<form>
     <h1>Edit User</h1>
 
     {{ include('back/user/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('back_app_user_index') }}">back to list</a>
+
+<div class="back-link">
+    <a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" href="{{ path('back_app_user_index') }}">back to list</a>
+</div>
 
     {{ include('back/user/_delete_form.html.twig') }}
+
+</div>
 {% endblock %}

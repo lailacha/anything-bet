@@ -43,6 +43,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setEmail($form->get('email')->getData());
             $user->setRoles(['ROLE_USER']);
             $user->setFirstname($form->get('firstname')->getData());
             $user->setLastname($form->get('lastname')->getData());

@@ -9,6 +9,8 @@ use App\Form\JoinBettingGroupType;
 use App\Repository\BettingGroupRepository;
 use App\Repository\GroupRequestRepository;
 use App\Repository\UserRepository;
+use App\Security\Voter\GroupAdminVoter;
+use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,9 +42,21 @@ class BettingGroupController extends AbstractController
             //add user as member
             $bettingGroup->addMember($this->getUser());
 
+            $coverImage = $form->get('cover')->getData();
+
+            if ($coverImage) {
+                $fileUploader = new FileUploader($this->getParameter('logo_image_directory'));
+                $newFilename = $fileUploader->upload($coverImage);
+                if($newFilename) {
+                    $bettingGroup->setCover($newFilename);
+                } else {
+                    $this->addFlash('danger', 'Une erreur est survenue lors de l\'upload de l\'image');
+                }
+            }
+
             $bettingGroupRepository->save($bettingGroup, true);
 
-            return $this->redirectToRoute('front_app_betting_group_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_app_betting_group_by_user', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('betting_group/new.html.twig', [
@@ -68,11 +82,33 @@ class BettingGroupController extends AbstractController
         ]);
     }
 
+    #[Route('/my-bettings-groups-admin', name: 'app_betting_group_by_user_admin', methods: ['GET', 'POST'])]
+    public function getMyBettingGroupsAdmin(BettingGroupRepository $bettingGroupRepository): Response
+    {
+
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $bettingGroups = $user->getBettingAdminGroups();
+
+        return $this->render('betting_group/_my_betting_groups.html.twig', [
+            'betting_groups' => $bettingGroups,
+        ]);
+    }
+
     #[Route('/{id}', name: 'app_betting_group_show', methods: ['GET'])]
     public function show(BettingGroup $bettingGroup): Response
     {
+
+        $members = $bettingGroup->getMembers();
+        $events = $bettingGroup->getEvents();
         return $this->render('betting_group/show.html.twig', [
             'betting_group' => $bettingGroup,
+            'members' => $members,
+            'events' => $events,
         ]);
     }
 

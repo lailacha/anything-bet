@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\BettingGroup;
 use App\Entity\Event;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @extends ServiceEntityRepository<Event>
@@ -37,6 +40,22 @@ class EventRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function search(string $query, ?User $user): array
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->andWhere('e.name LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('e.createdAt', 'DESC');
+
+
+        if ($user) {
+            $qb->andWhere('e.theUser = :user')
+                ->setParameter('user', $user);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

@@ -1,4 +1,58 @@
+{% form_theme form 'tailwind_2_layout.html.twig' %}
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+{{ form_errors(form) }}
+
+
+{{ form_row(form.name) }}
+{{ form_row(form.startAt) }}
+{{ form_row(form.finishAt) }}
+{{ form_row(form.coverImage) }}
+<div data-prototype="{{ form_widget(form.bets.vars.prototype)|e('html_attr') }}" class="row js-bets-wrapper"
+     data-index="{{ form.bets|length }}"
+>
+    {% for bet in form.bets %}
+
+        {{ form_label(bet.label) }}
+        {{ form_widget(bet.label) }}
+    {% endfor %}
+    <a href="#" class="js-bets-add mt-5">
+        <span class="fa fa-plus-circle"></span>
+        Add Another option
+    </a>
+</div>
+<button class="btn">{{ button_label|default('Save') }}</button>
+{% for genusScientistForm in form.bets %}
+    <div class="col-xs-8">
+        {{ form_errors(genusScientistForm) }}
+    </div>
+{% endfor %}
 {{ form_end(form) }}
+
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const wrapper = document.querySelector('.js-bets-wrapper');
+
+            if (wrapper) {
+                wrapper.addEventListener('click', function(e) {
+                    const addLink = e.target.closest('.js-bets-add');
+                    if (addLink) {
+                        e.preventDefault();
+                        const prototype = wrapper.dataset.prototype;
+
+
+                        const index = wrapper.dataset.index;
+                        const newForm = prototype.replace(/__name__/g, index);
+                        wrapper.dataset.index = parseInt(index) + 1;
+                        addLink.insertAdjacentHTML('beforebegin', newForm);
+
+
+                    }
+                });
+            }
+        });
+
+    </script>
+{% endblock %}

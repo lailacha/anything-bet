@@ -12,11 +12,17 @@ $gray: #F5F5F5;
 @import 'navbar.scss';
 @import 'sidebar.scss';
 @import 'group.scss';
+@import "form.scss";
+@import "components/form_bet.scss";
+@import "components/event_card.scss";
+@import "components/bets.scss";
+@import "back-admin.scss";
 
 @import "components/alert";
 
 @import 'login.scss';
 @import 'typography.scss';
+@import 'landing.scss';
 
 @font-face {
   font-family: 'Montserrat';
@@ -24,16 +30,39 @@ $gray: #F5F5F5;
   font-style: normal;
 }
 
+* {
+    padding: 0;
+    margin: 0;
+}
+
+
+.custom-table-render {
+    a {
+
+        color: $black;
+    }
+
+    .inline-block {
+        display: inline-block;
+        padding: 10px;
+
+        > div {
+            border: 0;
+        }
+    }
+}
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: #F5F5F5;
     color: $black;
     height: 100vh;
 }
+.login {
+    footer {
+        margin-top: 5rem;
+        padding: 1.5rem 2rem;
+    }
 
-footer {
-    margin-top: 5rem;
-    padding: 1.5rem 2rem;
 }
 
 
@@ -46,6 +75,12 @@ table tr td{
     background-color: $white !important;
 }
 
+table th, table td {
+    max-width: 10rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 .error {
     border-color: #cc0000;
     font-size: 12px;
@@ -54,8 +89,8 @@ table tr td{
 }
 
 .container{
-    height: 100%;
     display: flex;
+    max-width: 100%;
 }
 .content{
     display: flex;
@@ -63,11 +98,10 @@ table tr td{
     width: 100%;
     align-items: center;
     padding: 1rem;
+    overflow: hidden;
+    min-height: 70vh;
 
-    // first h1 of .content
-    h1{
-       margin-bottom: 2rem;
-    }
+
 }
 
 .errormsg{

@@ -62,6 +62,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: GroupRequest::class)]
     private ?\Doctrine\Common\Collections\Collection $groupRequests = null;
 
+    #[ORM\OneToMany(mappedBy: 'theUser', targetEntity: Participate::class)]
+    private ?\Doctrine\Common\Collections\Collection $participates = null;
+
+    #[ORM\OneToMany(mappedBy: 'idUser', targetEntity: Betting::class)]
+    private ?\Doctrine\Common\Collections\Collection $bets = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -225,6 +231,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRole(): Collection
     {
         return $this->role;
+    }
+
+
+    public function getParticipates(): Collection
+    {
+        return $this->participates;
+    }
+
+
+    public function getBets(): Collection
+    {
+        return $this->bets;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getPseudo();
     }
 
 

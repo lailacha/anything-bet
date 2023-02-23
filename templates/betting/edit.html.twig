@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Betting</title>
+
+{% block body %}
+    <h1>Edit Betting</h1>
+
+    {{ include('betting/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('front_betting_index') }}">back to list</a>
+
+    {{ include('betting/_delete_form.html.twig') }}
+{% endblock %}

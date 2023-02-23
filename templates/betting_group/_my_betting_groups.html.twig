@@ -5,24 +5,28 @@
 
 {% block body %}
 
-    <h1>Mes groupes de paris</h1>
-    <table class="table">
+    <h1>Mes groupes</h1>
+    <table class="table w-3/4">
         <thead>
         <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>CreatedAt</th>
-            <th>actions</th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         {% for betting_group in betting_groups %}
             <tr>
-                <td>{{ betting_group.id }}</td>
+                <td><img src="{{ asset('logos/' ~ betting_group.cover) }}"  class="w-24 h-24 object-cover rounded-full"
+                        alt="cover"></td>
                 <td>{{ betting_group.name }}</td>
-                <td>{{ betting_group.createdAt ? betting_group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('front_app_betting_group_show', {'id': betting_group.id}) }}">Voir</a>
+                <td class="text-center">
+                    {% if is_granted('EDIT', betting_group) %}
+                        <a href="{{ path('front_app_betting_group_edit', {'id': betting_group.id}) }}"><span class="fa fa-pen"></span></a>
+                        <a href="{{ path('front_app_betting_group_delete', {'id': betting_group.id}) }}"><span class="fa fa-trash"></span></a>
+                        <a href="{{ path('front_app_event_new', {'group': betting_group.id}) }}"><span class="fa fa-plus"></span></a>
+                    {% endif %}
+                    <a href="{{ path('front_app_betting_group_show', {'id': betting_group.id}) }}"><span class="fa fa-eye"></span></a>
                 </td>
             </tr>
         {% else %}
@@ -32,5 +36,7 @@
         {% endfor %}
         </tbody>
     </table>
+
+
 
 {% endblock %}

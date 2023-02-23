@@ -1,15 +1,15 @@
 const lastname = document.querySelector("input[name='registration_form[lastname]']");
-console.log(lastname);
+// console.log(lastname);
 const firstname = document.querySelector("input[name='registration_form[firstname]']");
-console.log(firstname);
+// console.log(firstname);
 const email = document.querySelector("input[name='registration_form[email]']");
-console.log(email);
+// console.log(email);
 const username = document.querySelector("input[name='registration_form[username]']");
-console.log(username);
+// console.log(username);
 const password = document.querySelector("input[name='registration_form[plainPassword]']");
-console.log(password);
+// console.log(password);
 const passwordConfirm = document.querySelector("input[name='registration_form[confirmPassword]']");
-console.log(passwordConfirm);
+// console.log(passwordConfirm);
 
 lastname.addEventListener("keyup", function lnverif() {
     let lastnameval = lastname.value;

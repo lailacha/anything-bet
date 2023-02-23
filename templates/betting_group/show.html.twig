@@ -4,9 +4,42 @@
 
 
 {% block body %}
-    <h1>BettingGroup</h1>
+    <div class="flex p-12 bg-white rounded-xl border-2 border-black-500 w-full ">
 
-    <table class="table">
+        <div class=" flex flex-col">
+            <div class="flex flex-col px-24 py-12 bg-white rounded-xl border-2 border-black-500 items-center justify-center">
+                <div class="avatar mb-5">
+                    <div class="w-48 rounded-full ">
+                        {% if  betting_group.cover is not null %}
+                            <img src="{{ asset('logos/' ~ betting_group.cover) }}"  alt="Cover Image">
+                        {% else %}
+                            <img src="https://picsum.photos/seed/picsum/200/300" alt="cover" class="w-full  object-cover">
+                        {% endif %}
+                    </div>
+                </div>
+                <h1>{{ betting_group.name }}</h1>
+            </div>
+
+
+            <div class=" flex flex-col mt-5">
+                <div class="flex flex-col px-24 py-12 bg-white rounded-xl border-2 border-black-500  justify-center">
+                <h1>Classement</h1>
+
+                    {% for member in members %}
+                        <div class="flex justify-center mb-5">
+                            <img class="  rounded-full mr-12 object-cover w-10 h-10" src="{{member.avatar }}" alt="avatar" />
+                            <p class="w-4/6">{{ member.pseudo }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+{#    <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -21,11 +54,40 @@
                 <td>{{ betting_group.createdAt ? betting_group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
-    </table>
+    </table>#}
 
+    <section class="overflow-hidden text-gray-700 p-5  rounded-xl border-2 border-black-500 ml-5 ">
+        <h1>Paris</h1>
+
+        <div class=" mx-auto grid grid-cols-1 gap-6 sm:grid-cols-2 bg-white  ">
+            {% for event in betting_group.events %}
+
+            <div class=" p-1 md:p-2 flex-col  rounded-lg w-full flex justify-center items-center border-2 border-black-500  ">
+                {% if  event.coverImage is not null %}
+                    <img src="{{ asset('cover/' ~ event.coverImage) }}"  alt="Cover Image" class="block object-cover object-center w-full h-full rounded-lg">
+                {% else %}
+                    <img src="https://picsum.photos/seed/picsum/200/300" alt="cover" class="w-full h-64 object-cover">
+                {% endif %}
+                    <p class="mt-2">{{ event.name }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    </div>
+
+    <div class="dropdown dropdown-left">
+        <label tabindex="0" > Administration <i class="mr-4 ml-2 fas fa-regular fa-caret-down"></i>
+        </label>
+        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+            <li><a class="text-gray-400">Delete</a></li>
+            <li><a>Item 2</a></li>
+
+
+            <a href="{{ path('front_app_betting_group_edit', {'id': betting_group.id}) }}">edit</a>
+
+            {#{{ include('betting_group/_delete_form.html.twig') }}#}
+        </ul>
+    </div>
     <a href="{{ path('front_app_betting_group_index') }}">back to list</a>
-
-    <a href="{{ path('front_app_betting_group_edit', {'id': betting_group.id}) }}">edit</a>
-
-    {{ include('betting_group/_delete_form.html.twig') }}
 {% endblock %}

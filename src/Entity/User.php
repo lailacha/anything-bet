@@ -45,9 +45,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
 
-   #[ORM\Column(length: 128, nullable: true)]
+    #[ORM\Column(length: 128, nullable: true)]
     private ?string $avatar = 'default.svg';
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $resetToken = null;
 
     #[ORM\ManyToMany(targetEntity: BettingGroup::class, mappedBy: 'administrators')]
     #[ORM\JoinTable(name: 'betting_group_administrators')]
@@ -206,6 +208,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar(?string $avatar): self
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
 
         return $this;
     }

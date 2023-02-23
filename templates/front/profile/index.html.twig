@@ -58,7 +58,7 @@
 
         {% for message in app.session.flashBag.get('error')%}
             <span class="alert alert--error">
-                <strong>Succès !</strong> {{message}}
+                <strong>Erreur !</strong> {{message}}
                 <div class="load load--error"></div>
             </span>
         {% endfor %}

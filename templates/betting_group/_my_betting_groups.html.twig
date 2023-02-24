@@ -3,9 +3,7 @@
 {% block title %}Daily recompenses{% endblock %}
 
 {% block body %}
-    <link
-            href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-            rel="stylesheet">
+
     <div class="flex items-center justify-center ">
         <div class="col-span-12">
             <div class="overflow-auto lg:overflow-visible ">
@@ -29,15 +27,17 @@
                             <td class="p-3">
                                 Technology
                             </td>
+                            {% if betting_group.score is defined %}
                             <td class="p-3 font-bold">
                                 {{ betting_group.score }}pts
                             </td>
+                            {% endif %}
                             <td class="p-3">
                                         <form action="{{ path('front_app_daily_recompense_my_daily_recompense_receive', {
                                             'id': betting_group.id
                                         }) }}" method="post">
                         <input type="hidden" name="_token" value="{{ csrf_token('new') }}">
-                                            {% if betting_group.id in hasNotAlreadyRecompenseToday %}
+                                            {% if  hasNotAlreadyRecompenseToday is defined and betting_group.id in hasNotAlreadyRecompenseToday %}
                                             <input type="submit" value="Récupérer ma récompense">
                                             {% else %}
                                                 <input type="submit" value="Récupérer ma récompense" class=" opacity-50 cursor-not-allowed disabled:bg-grey-50 disabled:text-slate-500 disabled:border-slate-200" disabled>
@@ -47,7 +47,9 @@
                             </td>
                             <td class="p-3 ">
                                 {% if is_granted('EDIT', betting_group) %}
-
+                                    <a href="{{ path('front_app_event_new', {'group': betting_group.id}) }}" class="text-gray-400 hover:text-gray-100  mr-2">
+                                        <i class="material-icons-round text-base">add</i>
+                                    </a>
                                 <a href="{{ path('front_app_betting_group_show', {'id': betting_group.id}) }}" class="text-gray-400 hover:text-gray-100 mr-2">
                                     <i class="material-icons-outlined text-base">visibility</i>
                                 </a>
@@ -57,6 +59,7 @@
                                 <a href="{{ path('front_app_betting_group_delete', {'id': betting_group.id}) }}" class="text-gray-400 hover:text-gray-100  ml-2">
                                     <i class="material-icons-round text-base">delete_outline</i>
                                 </a>
+
                                 {% endif %}
 
                             </td>

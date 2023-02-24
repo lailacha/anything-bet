@@ -4,15 +4,19 @@ $mainBlue: #9d91ff;
 $black: #0e0202;
 $white: #ffffff;
 $primary: #090AE1;
+$deep-primary: #403DBD;
 $gray: #F5F5F5;
+$light-violet: #9747FF;
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'login.scss';
 @import 'navbar.scss';
 @import 'sidebar.scss';
 @import 'group.scss';
 @import "form.scss";
+@import "components/button.scss";
 @import "components/form_bet.scss";
 @import "components/event_card.scss";
 @import "components/bets.scss";
@@ -55,7 +59,8 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: #F5F5F5;
     color: $black;
-    height: 100vh;
+  height: 100vh;
+
 }
 .login {
     footer {

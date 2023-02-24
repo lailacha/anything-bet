@@ -99,7 +99,7 @@ class BettingGroupController extends AbstractController
     }
 
     #[Route('/my-bettings-groups-admin', name: 'app_betting_group_by_user_admin', methods: ['GET', 'POST'])]
-    public function getMyBettingGroupsAdmin(BettingGroupRepository $bettingGroupRepository): Response
+    public function getMyBettingGroupsAdmin(Request $request, PaginatorInterface $paginator ): Response
     {
 
         $user = $this->getUser();
@@ -110,8 +110,15 @@ class BettingGroupController extends AbstractController
 
         $bettingGroups = $user->getBettingAdminGroups();
 
+
+        $pagination = $paginator->paginate(
+            $bettingGroups,
+            $request->query->getInt('page', 1),
+            10
+        );
+
         return $this->render('betting_group/_my_betting_groups.html.twig', [
-            'betting_groups' => $bettingGroups,
+            'betting_groups' => $pagination,
         ]);
     }
 

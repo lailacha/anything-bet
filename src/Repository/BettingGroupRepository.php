@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\BettingGroup;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Points;
 
 /**
  * @extends ServiceEntityRepository<BettingGroup>
@@ -37,6 +39,18 @@ class BettingGroupRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function getGroupsByUserWithScore(User $user)
+    {
+        $qb = $this->createQueryBuilder('b');
+        $qb->select('p.score, b.name, b.id, b.cover')
+            ->innerJoin(Points::class, 'p', 'WITH', 'p.idBettingGroup = b.id')
+            ->where('p.idUser = :user')
+            ->andWhere('p.idBettingGroup = b.id')
+            ->setParameter('user', $user->getId());
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

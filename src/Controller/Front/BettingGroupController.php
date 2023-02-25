@@ -250,10 +250,18 @@ class BettingGroupController extends AbstractController
 
 
     #[Route('/members/{id}', name: 'app_betting_group_members', methods: ['GET'])]
-    public function getMembers(BettingGroup $bettingGroup): Response
+    public function getMembers(BettingGroup $bettingGroup, Request $request, PaginatorInterface $paginator): Response
     {
 
         $members = $bettingGroup->getMembers();
+
+        $this->denyAccessUnlessGranted(GroupAdminVoter::SHOW, $bettingGroup);
+
+        $members = $paginator->paginate(
+            $members,
+            $request->query->getInt('page', 1),
+            10
+        );
 
 
         if ($members) {
@@ -282,14 +290,12 @@ class BettingGroupController extends AbstractController
 
             if (!$bettingGroup->getAdministrators()->contains($this->getUser())) {
                 $this->addFlash('error', 'You are not an administrator of this group');
-                return new Response('You are not an administrator of this group', Response::HTTP_UNAUTHORIZED);
-
+                return $this->redirectToRoute('front_app_betting_group_members', ['id' => $bettingGroup->getId()]);
             }
 
             if ($bettingGroup->getAdministrators()->contains($user)) {
                 $this->addFlash('error', 'You cannot delete an administrator of the group');
-                return new Response('You cannot delete an administrator of the group', Response::HTTP_UNAUTHORIZED);
-
+                return $this->redirectToRoute('front_app_betting_group_members', ['id' => $bettingGroup->getId()]);
 
             }
 

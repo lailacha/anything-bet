@@ -1,0 +1,16 @@
+{% extends 'base_home.html.twig' %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('login') }}
+{% endblock %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <section class="error-page">
+        <img src="{{ asset('build/images/logo-betthings.png') }}" alt="logo" class="logo-error">
+        <h1>404</h1>
+        <p>Vous vous êtes perdue ?</p>
+        <a href="{{ path('app_login') }}">retournons en lieu sûr !</a>
+    </section>
+
+{% endblock %}

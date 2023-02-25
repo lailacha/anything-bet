@@ -15,6 +15,8 @@ class EventVoter extends Voter
     public const SHOW = 'SHOW';
     public const DELETE = 'DELETE';
 
+    public const END = 'END';
+
     protected function supports(string $attribute, $subject): bool
     {
 
@@ -48,6 +50,9 @@ class EventVoter extends Voter
                 break;
             case self::SHOW:
                 return true;
+                break;
+            case self::END:
+                return $subject->getBettingGroup()->getAdministrators()->contains($user);
                 break;
         }
 

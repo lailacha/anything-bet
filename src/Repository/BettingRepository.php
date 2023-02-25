@@ -9,6 +9,11 @@ use App\Entity\Points;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\BettingGroup;
+use App\Entity\User;
+use App\Entity\Points;
+use App\Entity\Event;
+use App\Entity\Bet;
 
 /**
  * @extends ServiceEntityRepository<Betting>
@@ -42,6 +47,74 @@ class BettingRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function findAmountByEventId(int $eventId): ?int
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->select('SUM(b.amount) as totalAmount')
+            ->innerJoin('b.idUser', 'u')
+            ->innerJoin('b.idBet', 'bet')
+            ->innerJoin('bet.event', 'e')
+            ->where('e.id = :eventId')
+            ->setParameter('eventId', $eventId);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result ? (int) $result['totalAmount'] : null;
+    }
+
+    public function findAmountOfEachUser(int $eventId): ?array
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->select('SUM(b.amount) as totalAmount, u.id')
+            ->innerJoin('b.idUser', 'u')
+            ->innerJoin('b.idBet', 'bet')
+            ->innerJoin('bet.event', 'e')
+            ->where('e.id = :eventId')
+            ->groupBy('u.id')
+            ->setParameter('eventId', $eventId);
+
+        return $qb->getQuery()->getResult();
+    }
+
+
+    public function findUsersScores(int $eventId, int $betId): array
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->select('u.id, p.score, b.amount')
+            ->innerJoin(Bet::class, 'bet', 'WITH', 'bet.id = b.idBet')
+            ->innerJoin(Event::class, 'e', 'WITH', 'e.id = bet.event')
+            ->innerJoin(User::class, 'u', 'WITH', 'u.id = b.idUser')
+            ->innerJoin(Points::class, 'p', 'WITH', 'p.idUser = u.id')
+            ->where('e.id = :event')
+            ->andWhere('bet.id = :bet')
+            ->setParameter('event', $eventId)
+            ->setParameter('bet', $betId);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findUsersByEvent(int $eventId, int $userId): array
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->select('u.id, p.score, b.amount')
+            ->innerJoin(Bet::class, 'bet', 'WITH', 'bet.id = b.idBet')
+            ->innerJoin(Event::class, 'e', 'WITH', 'e.id = bet.event')
+            ->innerJoin(User::class, 'u', 'WITH', 'u.id = b.idUser')
+            ->innerJoin(Points::class, 'p', 'WITH', 'p.idUser = u.id')
+            ->where('e.id = :event')
+            ->andWhere('u.id = :user')
+            ->setParameter('event', $eventId)
+            ->setParameter('user', $userId);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    //requete sql de findUsersByEvent =
+    // SELECT u.id FROM betting b INNER JOIN user u ON b.id_user = u.id INNER JOIN bet bet ON b.id_bet = bet.id INNER JOIN event e ON bet.id_event = e.id WHERE e.id = 1 AND bet.id = 1 GROUP BY u.id
+
+
+
 
 //    /**
 //     * @return Betting[] Returns an array of Betting objects

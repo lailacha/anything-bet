@@ -7,6 +7,7 @@ use App\Entity\GroupRequest;
 use App\Entity\Points;
 use App\Form\BettingGroupType;
 use App\Form\JoinBettingGroupType;
+use App\Form\PointsType;
 use App\Repository\BettingGroupRepository;
 use App\Repository\DailyRecompenseRepository;
 use App\Repository\GroupRequestRepository;
@@ -201,6 +202,7 @@ class BettingGroupController extends AbstractController
             //check if the code is the same as the one in the database
             if ($form->get('code')->getData() === $bettingGroup->getCode()) {
                 //add user as member
+
 
                 //verifiy if the user is already a member
                 if ($bettingGroup->getMembers()->contains($this->getUser())) {

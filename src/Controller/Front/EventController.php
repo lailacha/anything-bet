@@ -4,16 +4,20 @@ namespace App\Controller\Front;
 
 use App\Entity\BettingGroup;
 use App\Entity\Bet;
+use App\Entity\Betting;
 use App\Entity\Event;
 use App\Entity\Notification;
+use App\Entity\Points;
 use App\Form\BetType;
 use App\Form\EventType;
 use App\Repository\BetRepository;
+use App\Repository\BettingGroupRepository;
 use App\Repository\BettingRepository;
 use App\Repository\EventRepository;
 use App\Repository\NotificationRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\EventVoter;
+use App\Repository\PointsRepository;
 use App\Security\Voter\GroupAdminVoter;
 use App\Service\FileUploader;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,7 +43,9 @@ class EventController extends AbstractController
 
         $query = $eventRepository->createQueryBuilder('e')
             ->where('e.bettingGroup IN (:groups)')
+            ->andWhere('e.finishAt > :now')
             ->setParameter('groups', $this->getUser()->getBettingGroups())
+            ->setParameter('now', new \DateTimeImmutable())
             ->orderBy('e.createdAt', 'DESC')
             ->getQuery();
 
@@ -62,6 +68,8 @@ class EventController extends AbstractController
 
         $query = $eventRepository->createQueryBuilder('e')
             ->where('e.bettingGroup IS NULL')
+            ->andWhere('e.finishAt > :now')
+            ->setParameter('now', new \DateTimeImmutable())
             ->orderBy('e.createdAt', 'DESC')
             ->getQuery();
 
@@ -90,7 +98,10 @@ class EventController extends AbstractController
     public function index(EventRepository $eventRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
+        //les events où finiAt est passé
         $query = $eventRepository->createQueryBuilder('e')
+            ->where('e.finishAt > :now')
+            ->setParameter('now', new \DateTimeImmutable())
             ->orderBy('e.createdAt', 'DESC')
             ->getQuery();
 
@@ -232,6 +243,8 @@ class EventController extends AbstractController
     #[Route('/{id}', name: 'app_event_show', methods: ['GET'])]
     public function show(Event $event): Response
     {
+
+
         return $this->render('event/show.html.twig', [
             'event' => $event,
         ]);
@@ -300,5 +313,122 @@ class EventController extends AbstractController
 
         return $this->redirectToRoute('front_app_event_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/bet/submit', name: 'app_event_bet', methods: ['POST'])]
+
+    public function submitBet(Request $request, BetRepository $betRepository, BettingRepository $bettingRepository, PointsRepository $pointsRepository ): Response
+    {
+        //l'ulisateur connecté
+        $user = $this->getUser();
+
+        //points de l'utilisateur
+        $points = $pointsRepository->findOneBy(['idUser' => $user->getId()]);
+
+        $scoreAfterBet = $points->getScore() - $request->request->get('somme');
+
+
+        $thisEventId = $betRepository->findOneBy(['id' => $request->request->get('bet')])->getEvent()->getId();
+
+
+        $usersEvent = $bettingRepository->findUsersByEvent($thisEventId, $user->getId());
+
+        //si le score de l'utilisateur est inférieur à la somme qu'il veut miser
+        if($scoreAfterBet < 0) {
+            $this->addFlash('error', 'Vous n\'avez pas assez de points pour miser cette somme');
+        }else if ($request->request->get('somme') < 0) {
+            $this->addFlash('error', 'Vous ne pouvez pas miser une somme négative');
+        }
+        //si l'utilisateur a déjà parié sur cet event
+        else if($usersEvent){
+            $this->addFlash('error', 'Vous avez déjà parié sur cet événement');
+        }
+
+        else{
+            //le choix de l'utilisateur
+            $bet = $betRepository->find($request->request->get('bet'));
+
+
+            $points->setScore($scoreAfterBet);
+            $pointsRepository->save($points, true);
+
+
+
+            //creation betting
+            $betting = new Betting();
+            $betting->setIdUser($user);
+            $betting->setIdBet($bet);
+            $betting->setAmount($request->request->get('somme'));
+
+
+            //sauvegarde betting
+            $bettingRepository->save($betting, true);
+            $this->addFlash('success', 'Votre pari a bien été pris en compte');
+        }
+
+
+
+        return $this->redirectToRoute('front_app_event_index', [], Response::HTTP_SEE_OTHER);
+
+    }
+
+    //route end event
+    #[Route('/event/end/{id}', name: 'app_event_endevent', methods: ['GET', 'POST'])]
+    public function endEvent(Request$request, Event $event, EventRepository $eventRepository, BetRepository $betRepository, BettingRepository $bettingRepository, PointsRepository $pointsRepository, UserRepository $userRepository, BettingGroupRepository $bettingGroupRepository, ): Response
+    {
+
+        $amountAllBets = $bettingRepository->findAmountByEventId($event->getId());
+
+
+        $thisEvent = $eventRepository->find($event->getId());
+        if ($goodBetId = intval($thisEvent->getResult())){
+            $winners = $bettingRepository->findUsersScores($event->getId(), $goodBetId);
+            $nbWinners = count($winners);
+
+
+            $now = new \DateTimeImmutable();
+
+
+
+            //pour chaque winner, augmenté son score en se basant sur le montant total des mises et le montant de sa mise et le nombre de gagnants
+            foreach ($winners as $winner) {
+                $points=$pointsRepository->findOneBy(['idUser' => $winner['id']]);
+                $gain = ($amountAllBets / $nbWinners) * ($winner['amount'] / $amountAllBets * $nbWinners);
+                $points->setScore($points->getScore() + $gain);
+                $pointsRepository->save($points, true);
+            }
+            $bettingsWon = $bettingRepository->findBy(['idBet'=>$goodBetId]);
+            foreach ($bettingsWon as $betting) {
+                $betting->setIsWon(true); // Modifier la valeur de la propriété "isWon"
+                $bettingRepository->save($betting, true);
+            }
+
+            //bettings lost
+            $queryBettingsLost = $bettingRepository->createQueryBuilder('b')
+                ->innerJoin('b.idBet', 'bet')
+                ->where('b.idBet != :idBet')
+                ->andWhere('bet.event = :idEvent')
+                ->setParameter('idBet', $goodBetId)
+                ->setParameter('idEvent', $event->getId())
+                ->getQuery()
+                ->getResult();
+
+            foreach ($queryBettingsLost as $betting) {
+                $betting->setIsWon(false); // Modifier la valeur de la propriété "isWon"
+                $bettingRepository->save($betting, true);
+            }
+
+
+            $this->addFlash('succes','les gains ont été ajoutés au score de l\'utilisateur');
+            $thisEvent->setFinishAt($now);
+            $eventRepository->save($thisEvent, true);
+            $this->addFlash('success', 'L\'événement est terminé');
+        }else{
+            $this->addFlash('error', 'Vous devez d\'abord définir le résultat de l\'événement');
+        }
+
+
+
+        return $this->redirectToRoute('front_app_event_index', [], Response::HTTP_SEE_OTHER);
+    }
+
 
 }

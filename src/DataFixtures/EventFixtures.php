@@ -24,7 +24,6 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
                 ->setStartAt(new \DateTimeImmutable())
                 ->setFinishAt(new \DateTimeImmutable('2023-12-31 23:59:59'))
                 ->setCreatedAt(new \DateTimeImmutable())
-                ->setResult('Result 1')
             ;
             $manager->persist($object);
         }

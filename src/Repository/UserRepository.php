@@ -81,4 +81,31 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function search(mixed $data)
+    {
+        // can have firstname, lastname, email
+        $query = $this->createQueryBuilder('u');
+
+        if(isset($data['firstName'])) {
+            $query = $query
+                ->andWhere('u.firstName LIKE :firstname')
+                ->setParameter('firstname', '%'.$data['firstName'].'%');
+        }
+
+        if(isset($data['lastName'])) {
+            $query = $query
+                ->andWhere('u.lastName LIKE :lastname')
+                ->setParameter('lastname', '%'.$data['lastName'].'%');
+        }
+
+        if(isset($data['email'])) {
+            $query = $query
+                ->andWhere('u.email LIKE :email')
+                ->setParameter('email', '%'.$data['email'].'%');
+        }
+
+        return $query->getQuery()->getResult();
+
+
+    }
 }

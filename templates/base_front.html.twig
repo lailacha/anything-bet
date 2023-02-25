@@ -16,7 +16,7 @@
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
 </head>
-<body>
+<body class="front">
 <link
         href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
         rel="stylesheet">
@@ -82,10 +82,13 @@
 
             {% for event in globals.events %}
                 <li class="bet-item">
-                    <img src="{{ asset('cover/' ~ event.coverImage) }}" alt="Cover Image" class=" object-cover">
+                    {% if event.coverImage is not null %}
+                        <img src="{{ asset('cover/' ~ event.coverImage) }}" alt="Cover Image" class=" object-cover">
+                    {% else %}
+                        <img src="http://placehold.it/300x300" alt="Cover Image" class=" object-cover">
+                    {% endif %}
                     <p>{{ event.name }}</p>
                 </li>
-
 
             {% endfor %}
         </ul>

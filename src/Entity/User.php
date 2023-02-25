@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     #[ORM\Column(length: 128, nullable: true)]
-    private ?string $avatar = 'default.svg';
+    private ?string $avatar = 'default.png';
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $resetToken = null;

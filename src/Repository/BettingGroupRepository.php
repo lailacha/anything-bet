@@ -77,5 +77,17 @@ class BettingGroupRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function search(mixed $data)
+    {
+        $query = $this->createQueryBuilder('b')
+            ->orderBy('b.id', 'DESC');
+
+        if(isset($data['name'])) {
+            $query->andWhere('b.name LIKE :name')
+                ->setParameter('name', '%'.$data['name'].'%');
+        }
+
+        return $query->getQuery()->getResult();
+    }
 
 }

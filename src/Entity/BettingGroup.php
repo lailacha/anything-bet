@@ -19,8 +19,6 @@ class BettingGroup
     #[ORM\Column]
     private ?int $userMax = null;
 
-    #@ORM\Column(type="text")
-    private string $description;
 
     #[ORM\Column(length: 128, nullable: true)]
     private ?string $cover = 'default-cover.svg';
@@ -47,6 +45,9 @@ class BettingGroup
 
     #[ORM\OneToMany(mappedBy: 'bettingGroup', targetEntity: Event::class)]
     private $events = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
 
 
     public function __construct()

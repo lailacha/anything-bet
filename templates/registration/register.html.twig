@@ -6,6 +6,19 @@
 {% block title %}!{% endblock %}
 
 {% block body %}
+{% for message in app.session.flashBag.get('success')%}
+    <span class="alert">
+        <strong>Succès !</strong> {{message}}
+        <div class="load"></div>
+    </span>
+{% endfor %}
+
+{% for message in app.session.flashBag.get('error')%}
+    <span class="alert alert--error">
+        <strong>Erreur !</strong> {{message}}
+        <div class="load load--error"></div>
+    </span>
+{% endfor %}
 <div class="login">
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>

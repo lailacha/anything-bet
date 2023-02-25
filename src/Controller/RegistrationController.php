@@ -67,6 +67,14 @@ class RegistrationController extends AbstractController
                 $authenticator,
                 $request
             );
+        }else{
+            //retrieve error message
+            foreach ($form->getErrors(true) as $error) {
+                $error = $error->getMessage();
+            }
+            if(isset($error)){
+                $this->addFlash("error", $error);
+            }
         }
 
         return $this->render('registration/register.html.twig', [

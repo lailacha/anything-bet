@@ -1,5 +1,5 @@
 {
-  email example@example.com
+  email simon.farnault@gmail.com
   #acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
   # Comment the line above and uncomment the line below to use the production Let's Encrypt endpoint
   acme_ca https://acme-v02.api.letsencrypt.org/directory

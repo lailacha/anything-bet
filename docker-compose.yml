@@ -62,7 +62,7 @@ services:
     volumes:
       - certbot_data:/var/lib/certbot
       - ./Caddyfile:/etc/caddy/Caddyfile
-    command: certonly --webroot --webroot-path=/srv/app --email simon.farnault@gmail.com --agree-tos --no-eff-email -d www.anything-bet.fr
+    command: certonly --webroot --webroot-path=/srv/app --email simon.farnault@gmail.com --agree-tos --no-eff-email -d anything-bet.fr
     depends_on:
       - caddy
 

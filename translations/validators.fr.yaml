@@ -1,0 +1,12 @@
+forms:
+  constraints:
+    email: "L'adresse email n'est pas valide."
+    not_blank: "Ce champ ne peut pas être vide."
+    not_null: "Ce champ ne peut pas être vide."
+    unique: "Cette valeur existe déjà."
+    url: "L'URL n'est pas valide."
+    labels: "Ce champ n'est pas valide."
+    date: "La date n'est pas valide."
+    time: "L'heure n'est pas valide."
+    datetime: "La date et l'heure ne sont pas valides."
+    dateinterval: "L'intervalle de date n'est pas valide."

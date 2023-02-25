@@ -8,6 +8,11 @@ parameters:
     cover_image_directory: '%kernel.project_dir%/public/cover'
     logo_image_directory: '%kernel.project_dir%/public/logos'
 services:
+    app.notification:
+        class: App\Service\NotificationService
+        arguments: [ "@doctrine.orm.entity_manager" ]
+    notifier.flash_message_importance_mapper:
+        class: Symfony\Component\Notifier\FlashMessage\BootstrapFlashMessageImportanceMapper
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

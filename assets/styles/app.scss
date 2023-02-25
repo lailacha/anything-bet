@@ -4,15 +4,19 @@ $mainBlue: #9d91ff;
 $black: #0e0202;
 $white: #ffffff;
 $primary: #090AE1;
+$deep-primary: #403DBD;
 $gray: #F5F5F5;
+$light-violet: #9747FF;
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'login.scss';
 @import 'navbar.scss';
 @import 'sidebar.scss';
 @import 'group.scss';
 @import "form.scss";
+@import "components/button.scss";
 @import "components/form_bet.scss";
 @import "components/event_card.scss";
 @import "components/bets.scss";
@@ -55,7 +59,8 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: #F5F5F5;
     color: $black;
-    height: 100vh;
+  height: 100vh;
+
 }
 .login {
     footer {
@@ -65,21 +70,21 @@ body {
 
 }
 
-
-table th {
-    color: $white;
-    background-color: $mainBlue;
-}
-table tr td{
-
-    background-color: $white !important;
-}
-
-table th, table td {
-    max-width: 10rem;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
+//
+//table th {
+//    color: $white;
+//    background-color: $mainBlue;
+//}
+//table tr td{
+//
+//    background-color: $white !important;
+//}
+//
+//table th, table td {
+//    max-width: 10rem;
+//    text-overflow: ellipsis;
+//    overflow: hidden;
+//}
 
 .error {
     border-color: #cc0000;
@@ -108,6 +113,28 @@ table th, table td {
     margin-top: 0.5em;
     color: #cc0000;
     font-size: 12px;
+}
+
+.table {
+    border-spacing: 0 15px;
+}
+
+i {
+    font-size: 1rem !important;
+}
+
+.table tr {
+    border-radius: 20px;
+}
+
+tr td:nth-child(n+5),
+tr th:nth-child(n+5) {
+    border-radius: 0 .625rem .625rem 0;
+}
+
+tr td:nth-child(1),
+tr th:nth-child(1) {
+    border-radius: .625rem 0 0 .625rem;
 }
 
 // footer ul{

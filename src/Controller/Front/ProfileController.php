@@ -2,6 +2,7 @@
 
 namespace App\Controller\Front;
 
+use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,27 +43,26 @@ class ProfileController extends AbstractController
 
     #[Route('/avatar', name: "change_avatar", methods: ['POST'])]
     public function avatar(Request $request, UserRepository $userRepository){
-        $user = new User();
+        $user = $this->getUser();
         $form = $this->createForm(AvatarType::class, $user);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $tUser = $this->getUser();
+            $image = $form->get('avatar')->getData();
 
-            $image = $form['avatar']->getData();
+            $fileUploader = new FileUploader($this->getParameter('avatar'));
+            $newFilename = $fileUploader->upload($image);
+            if($newFilename) {
+                $user->setAvatar($newFilename);
 
-            $imageName = uniqid().'.'.$image->guessExtension();
+            } else {
+                $this->addFlash('danger', 'Une erreur est survenue lors de l\'upload de l\'image');
+            }
 
-            $image->move(
-                $this->getParameter('avatar'),
-                $imageName
-            );
-
-            $tUser->setAvatar($imageName);
-
-            $userRepository->save($tUser, true);
+            $userRepository->save($user, true);
             $this->addFlash("success", "Vous avez bien mis à jour votre profile !");
-        }else{
+        }else
+        {
             foreach ($form->getErrors(true) as $error) {
                 $erreur = $error->getMessage();
             }
@@ -79,22 +79,22 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $tUser = $this->getUser();
-            foreach($data as $key => $val){
-                $get = "get" . ucfirst($key);
-                if($tUser->$get() != $val){
-                    $set = "set" . ucfirst($key);
-                    $tUser->$set($val);
-                }
-            }
-            $userRepository->save($tUser, true);
-            $this->addFlash("success", "Vous avez bien mis à jour votre profile !");
+          $user = $this->getUser();
+            $user->setFirstName($form->get('firstname')->getData());
+            $user->setLastName($form->get('lastname')->getData());
+            $user->setPseudo($form->get('pseudo')->getData());
+
+            $userRepository->save($user, true);
+            $this->addFlash("success", "Votre profile a bien été mis à jour !");
         }else{
+
+            //retrieve error message
             foreach ($form->getErrors(true) as $error) {
-                $erreur = $error->getMessage();
+                $error = $error->getMessage();
             }
-            $this->addFlash("error", $erreur);
+            if(isset($error)){
+                $this->addFlash("error", $error);
+            }
         }
 
         return $this->redirectToRoute("front_profile");

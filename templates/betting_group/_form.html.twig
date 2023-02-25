@@ -2,5 +2,9 @@
 
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn m-0">{{ button_label|default('Créer') }}</button>
+<div class="flex">
+    <button class="btn btn-outline btn-primary">{{ button_label|default('Créer') }}</button>
+    {{ include('betting_group/_delete_form.html.twig') }}
+</div>
+
 {{ form_end(form) }}

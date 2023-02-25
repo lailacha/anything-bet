@@ -1,19 +1,16 @@
 {% extends 'base_front.html.twig' %}
+{% form_theme form 'tailwind_2_layout.html.twig' %}
 
 {% block title %}Betting group{% endblock %}
 
 
 
 {% block body %}
-    <h1>Create new Event</h1>
 
-    {% for label, messages in app.session.flashBag.all %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}">{{ message }}</div>
-        {% endfor %}
-    {% endfor %}
+    <div class="flex flex-col bg-white rounded-xl w-3/4 items-center p-3">
+        <h1>Create new Event</h1>
+        {{ include('event/_form.html.twig') }}
+    </div>
 
-    {{ include('event/_form.html.twig') }}
 
-    <a href="{{ path('front_app_event_index') }}">back to list</a>
 {% endblock %}

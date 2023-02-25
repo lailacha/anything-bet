@@ -2,9 +2,12 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\BettingGroup;
 use App\Entity\DailyRecompense;
+use App\Entity\Points;
 use App\Form\DailyRecompenseType;
 use App\Repository\DailyRecompenseRepository;
+use App\Repository\PointsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +36,30 @@ class DailyRecompenseController extends AbstractController
         return $this->render('daily_recompense/my-recompense.html.twig', [
             'betting_groups' => $hasNotAlreadyRecompenseToday,
         ]);
+    }
+
+    #[Route('/my/{id}', name: 'app_daily_recompense_my_daily_recompense_receive', methods: ['POST'])]
+    public function myDailyRecompenseReceive(DailyRecompenseRepository $dailyRecompenseRepository, BettingGroup $bettingGroup, PointsRepository $pointsRepository): Response
+    {
+        $dailyRecompenseRepository->receiveRecompense($this->getUser(), $bettingGroup->getId());
+
+        $points = $pointsRepository->findBy(['idUser' => $this->getUser(), 'idBettingGroup' => $bettingGroup]);
+
+        if($points === null || empty($points)){
+            $points = new Points();
+            $points->setUser($this->getUser());
+            $points->setBettingGroup($bettingGroup);
+            $points->setScore(100);
+            $pointsRepository->save($points, true);
+        }else{
+            $points[0]->setScore($points[0]->getScore() + 100);
+            $pointsRepository->save($points[0], true);
+        }
+
+
+
+
+        return $this->redirectToRoute('front_app_betting_group_by_user', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/new', name: 'app_daily_recompense_new', methods: ['GET', 'POST'])]

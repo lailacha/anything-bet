@@ -1,14 +1,12 @@
 {% form_theme form 'tailwind_2_layout.html.twig' %}
 {{ form_start(form) }}
 
-{{ form_errors(form) }}
-
-
 {{ form_row(form.name) }}
 {{ form_row(form.startAt) }}
 {{ form_row(form.finishAt) }}
 {{ form_row(form.coverImage) }}
-<div data-prototype="{{ form_widget(form.bets.vars.prototype)|e('html_attr') }}" class="row js-bets-wrapper"
+{{ form_row(form.betting_group) }}
+<div data-prototype="{{ form_widget(form.bets.vars.prototype)|e('html_attr') }}" class="row js-bets-wrapper w-full"
      data-index="{{ form.bets|length }}"
 >
     {% for bet in form.bets %}
@@ -21,7 +19,7 @@
         Add Another option
     </a>
 </div>
-<button class="btn">{{ button_label|default('Save') }}</button>
+<button class="btn btn-outline">{{ button_label|default('Save') }}</button>
 {% for genusScientistForm in form.bets %}
     <div class="col-xs-8">
         {{ form_errors(genusScientistForm) }}

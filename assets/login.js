@@ -2,7 +2,7 @@
 const email = document.getElementById("email");
 const password = document.getElementById("floating_standard password");
 
-email.addEventListener("keyup", function emailverif() {
+email?.addEventListener("keyup", function emailverif() {
     let emailval = email.value;
     const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     if (!regex.test(emailval)) {
@@ -15,7 +15,7 @@ email.addEventListener("keyup", function emailverif() {
     }
 });
 
-password.addEventListener("keyup", function passverif() {
+password?.addEventListener("keyup", function passverif() {
     let passwordval = password.value;
     if (passwordval == "") {
         password.classList.add("error");

@@ -4,9 +4,11 @@ namespace App\Controller\Front;
 
 use App\Entity\BettingGroup;
 use App\Entity\GroupRequest;
+use App\Entity\Points;
 use App\Form\GroupRequestType;
 use App\Repository\BettingGroupRepository;
 use App\Repository\GroupRequestRepository;
+use App\Repository\PointsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,7 +81,7 @@ class GroupRequestController extends AbstractController
     }
 
     #[Route('/{id}/accept', name: 'app_group_request_approve', methods: ['POST'])]
-    public function approve(Request $request, GroupRequest $groupRequest, GroupRequestRepository $groupRequestRepository, BettingGroupRepository $bettingGroupRepository): Response
+    public function approve(Request $request, GroupRequest $groupRequest, GroupRequestRepository $groupRequestRepository, BettingGroupRepository $bettingGroupRepository, PointsRepository $pointsRepository): Response
         {
 
             if (!$this->isCsrfTokenValid('approve'.$groupRequest->getId(), $request->request->get('_token'))) {
@@ -99,7 +101,13 @@ class GroupRequestController extends AbstractController
             }
 
             $group->addMember($groupRequest->getUser());
+            // create points for user
             $bettingGroupRepository->save($group, true);
+            $usersPoints = new Points();
+            $usersPoints->setUser($groupRequest->getUser());
+            $usersPoints->setBettingGroup($group);
+            $usersPoints->setScore(0);
+            $pointsRepository->save($usersPoints, true);
 
             return $this->redirectToRoute('front_app_group_request_index', [], Response::HTTP_SEE_OTHER);
         }

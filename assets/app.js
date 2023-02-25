@@ -11,7 +11,33 @@ import './js/profile.js';
 import './login.js';
 
 
-alert("test");
+
+// on document ready
+
+
+let notification = document?.getElementById("notification");
+let checdiv = document?.getElementById("chec-div");
+let flag3 = true;
+const notificationHandler = () => {
+    if (!flag3) {
+        notification.classList.add("translate-x-full");
+        notification.classList.remove("translate-x-0");
+        setTimeout(function () {
+            checdiv.classList.add("hidden");
+        }, 200);
+        flag3 = true;
+    } else {
+        setTimeout(function () {
+            notification.classList.remove("translate-x-full");
+            notification.classList.add("translate-x-0");
+        }, 200);
+        checdiv.classList.remove("hidden");
+        flag3 = false;
+    }
+};
+
+document.getElementById("notif-modal")?.addEventListener("click", () => notificationHandler(false));
+document.getElementById("close-modal")?.addEventListener("click", () => notificationHandler(false));
 
 // console.log("Hello Webpack Encore! Edit me in assets/app.js");
 // let icon1 = document.getElementById("icon1");

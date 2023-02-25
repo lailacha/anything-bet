@@ -1,0 +1,22 @@
+
+  .btn-outline {
+    width: 100%;
+    background-color: $white;
+    border: none;
+    color: $primary;
+    padding: 1rem 2rem;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 30px;
+    border: 1px solid $primary;
+  }
+
+    .btn-outline:hover {
+        background-color: $primary;
+        color: $white;
+    }
+

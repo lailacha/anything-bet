@@ -35,7 +35,7 @@ $gray: #F5F5F5;
          color: $primary;
      }
 
-     form input{
+     form input:not([type="file"]){
          border-bottom: 1px  solid $black;
          box-sizing: border-box;
         //  height: 2rem;
@@ -49,6 +49,12 @@ $gray: #F5F5F5;
          color: $black;
          border-radius: 0;
      }
+
+     form [type="file"]{
+         border-bottom: 0;
+         color: $black;
+     }
+
 
      form label[for="remember_me"]{
          font-weight: 300;
@@ -72,7 +78,8 @@ $gray: #F5F5F5;
          align-items: center;
      }
 
-     button[type="submit"]{
+     button[type="submit"]:not(.btn-outline)
+ {
          width: 100%;
          background-color: $primary;
          border: none;

@@ -9,7 +9,8 @@ services:
         SYMFONY_VERSION: ${SYMFONY_VERSION:-}
         STABILITY: ${STABILITY:-stable}
     depends_on:
-      - database
+      - caddy
+      - certbot
     restart: unless-stopped
     volumes:
       - php_socket:/var/run/php
@@ -18,6 +19,8 @@ services:
       timeout: 3s
       retries: 3
       start_period: 30s
+    expose:
+      - 9000
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-symfony}:${POSTGRES_PASSWORD:-ChangeMe}@database:5432/${POSTGRES_DB:-anythingbet}?serverVersion=${POSTGRES_VERSION:-13}
       # Run "composer require symfony/mercure-bundle" to install and configure the Mercure integration
@@ -29,17 +32,18 @@ services:
     build:
       context: .
       target: app_caddy
-    depends_on:
-      - php
     environment:
       SERVER_NAME: ${SERVER_NAME:-localhost, caddy:80}
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
     restart: unless-stopped
     volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
       - php_socket:/var/run/php
       - caddy_data:/data
       - caddy_config:/config
+      - certbot_data:/var/lib/certbot
+    command: caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
     ports:
       # HTTP
       - target: 80
@@ -53,6 +57,14 @@ services:
       - target: 443
         published: ${HTTP3_PORT:-443}
         protocol: udp
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot_data:/var/lib/certbot
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    command: certonly --webroot --webroot-path=/srv/app --email simon.farnault@gmail.com --agree-tos --no-eff-email -d www.anything-bet.fr
+    depends_on:
+      - caddy
 
   database:
     image: postgres:${POSTGRES_VERSION:-13}-alpine
@@ -67,6 +79,7 @@ services:
 ###< symfony/mercure-bundle ###
 volumes:
   php_socket:
+  certbot_data:
   caddy_data:
   caddy_config:
   ###> doctrine/doctrine-bundle ###

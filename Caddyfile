@@ -1,0 +1,16 @@
+{
+  email example@example.com
+  #acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+  # Comment the line above and uncomment the line below to use the production Let's Encrypt endpoint
+  acme_ca https://acme-v02.api.letsencrypt.org/directory
+}
+
+example.com {
+  root * /srv/app/public
+  file_server
+
+  # Enable automatic HTTPS
+  tls {
+    on_demand
+  }
+}

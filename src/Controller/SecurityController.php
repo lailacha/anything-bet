@@ -113,6 +113,14 @@ class SecurityController extends AbstractController
 
             $this->addFlash("success", 'Votre mot de passe a bien été modifié !');
             return $this->redirectToRoute("app_login");
+        }else{
+            //retrieve error message
+            foreach ($form->getErrors(true) as $error) {
+                $error = $error->getMessage();
+            }
+            if(isset($error)){
+                $this->addFlash("error", $error);
+            }
         }
         return $this->render('security/password_reset.html.twig', ["form" => $form->createView()]);
     }

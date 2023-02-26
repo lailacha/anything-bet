@@ -38,6 +38,10 @@ security:
         - { path: ^/forgotten-password, roles: PUBLIC_ACCESS }
         - { path: ^/change-password, roles: PUBLIC_ACCESS }
         - { path: ^/accueil, roles: PUBLIC_ACCESS }
+        - { path: ^/a_propos, roles: PUBLIC_ACCESS }
+        - { path: ^/contact, roles: PUBLIC_ACCESS }
+        - { path: ^/mention, roles: PUBLIC_ACCESS }
+        - { path: ^/reglement, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: ROLE_USER }
 
     role_hierarchy:

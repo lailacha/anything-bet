@@ -1,0 +1,40 @@
+{% extends 'base_home.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+
+{% block body %}
+
+    <div class="landing-page">
+    <header>
+    <div class="img-logo">
+      <a href="{{ path('front_default_index') }}"><img src="{{ asset('build/images/logo-betthings.png') }}" alt=""></a>
+    </div>
+            <nav>
+            <ul>
+                <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                <li><a href="/a_propos">À propos</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/mention">Mentions légales</a></li>
+                <li><a href="/reglement">Réglement</a></li>
+            </nav>
+        </header>
+        <main>
+        <div class="container" style="flex-direction: column;">
+            <h1>À propos</h1>
+            <p>
+                Bienvenue sur Bet-Anything, la plateforme de paris en ligne entre amis. Notre site vous permet de parier sur une variété d'événements sportifs, de compétitions de jeux vidéo, ou tout autre type de défi que vous et vos amis souhaitez organiser.<br>
+                <br>
+                Chez Bet-Anything, nous croyons que les paris entre amis sont une excellente façon d'ajouter du piquant et de l'excitation à toutes sortes d'activités. Que vous soyez un fan de sport, un joueur passionné ou simplement à la recherche d'un moyen amusant de passer du temps avec vos amis, notre plateforme est là pour vous aider à organiser vos paris en toute simplicité.<br>
+                <br>
+                Notre plateforme conviviale et facile à utiliser vous permet de créer vos propres paris personnalisés ou de rejoindre des défis lancés par d'autres membres. Vous pouvez également personnaliser vos profils et interagir avec la communauté de Bet-Anything grâce à nos fonctionnalités de messagerie et de discussion.<br>
+                <br>
+                Chez Bet-Anything, nous prenons la sécurité de vos données très au sérieux. Nous utilisons des protocoles de sécurité avancés pour garantir que vos informations personnelles et vos transactions sont toujours en sécurité.<br>
+                <br>
+                Rejoignez notre communauté dès maintenant et commencez à parier avec vos amis sur vos événements préférés. Nous sommes convaincus que vous passerez un moment inoubliable sur Bet-Anything !
+            </p>
+        </div>
+        </main>
+
+    </div>
+{% endblock %}

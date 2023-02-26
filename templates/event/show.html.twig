@@ -1,5 +1,6 @@
 {% extends 'base_front.html.twig' %}
 
+
 {% block title %}Betting group{% endblock %}
 
 
@@ -8,6 +9,11 @@
 
     <article class="event-card rounded-xl bg-white p-3 shadow-lg w-3/4 flex flex-col justify-center items-center">
 
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
         <div class="flex items-center mb-4">
             <div class="dropdown dropdown-left hover:text-violet-800">
                 <label tabindex="0" > <i class="mr-4 ml-2 fas fa-regular fa-cog"></i>
@@ -23,9 +29,20 @@
                                 <button class="text-sm m-0">Edit</button>
                             </div></a></li>
 
+                    <li><a class="text-yellow-400" href="{{ path('front_app_event_endevent', {'id': event.id}) }}">   <div class="flex items-center space-x-1.5 rounded-lg bg-yellow-500 px-4 py-1.5 text-white duration-100 hover:bg-yellow-600">
+
+                                <span class="fa fa-pen"></span>
+
+                                <button class="text-sm m-0">End event</button>
+                            </div></a></li>
+
+
                     {#{{ include('betting_group/_delete_form.html.twig') }}#}
                 </ul>
             </div>
+
+
+
             <h1>{{ event.name }}</h1>
 
 
@@ -37,7 +54,7 @@
                     <img src="https://picsum.photos/seed/picsum/200/300" alt="cover" class="w-3/4 object-cover h-96">
                 {% endif %}
 
-            <div class="mt-1 p-2 justify-center flex flex-col w-3/4 mx-auto">
+            <f class="mt-1 p-2 justify-center flex flex-col w-3/4 mx-auto">
                 <h2 class="text-slate-700">{{ event.name }}</h2>
                 <p class="mt-1 text-sm text-slate-400">Débute: {{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</p>
                 <p class="mt-1 text-sm text-slate-400">Fin: {{ event.finishAt ? event.finishAt|date('Y-m-d H:i:s') : '' }}</p>
@@ -46,12 +63,22 @@
                     <p class="mt-1 text-sm text-slate-500">Résultat: {{ event.result }}</p>
                 {% endif %}
                 {%  if event.bets is not null %}
-                    <div class="bets-box flex flex-wrap justify-between bg-white">
+                <form action="{{ path('front_app_event_bet') }}" method="post">
 
-                {% for bet in event.bets %}
-                    <label for="bet-modal" class="mt-1 text-sm text-slate-500 bets-item bg-white">{{ bet.label }}</label>
-                {% endfor %}
+                    <div class="flex-">
+                        {% for bet in event.bets %}
+                            <input type="radio" name="bet" value="{{ bet.id }}">
+                            <label for="bet-{{ bet.id }}" class="mt-1 text-sm text-slate-500 bets-item bg-white cursor-pointer transition-colors duration-200 hover:bg-gray-200 focus:bg-gray-200 rounded-md px-2 py-1 ">
+                                {{ bet.label }}
+                            </label>
+                        {% endfor %}
+                        <div>
+                            <label>Mise</label>
+                            <input type="number" name="somme">
+                        </div>
                     </div>
+                    <input class="" type="submit" value="Valider" />
+                </form>
 
                 {% endif %}
 
@@ -59,21 +86,45 @@
             </div>
     </article>
 
-    <input type="checkbox" id="bet-modal" class="modal-toggle" />
+{#    <input type="radio" id="bet-modal" class="modal-toggle" type="submit"/>
     <div class="modal">
         <div class="modal-box">
             <h3 class="font-bold text-lg">You want to bet ?</h3>
             <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
             <div class="modal-action">
+                <label for="bet-modal" class="btn btn-ghost">Cancel</label>
                 <label for="bet-modal" class="btn">Yay!</label>
             </div>
         </div>
-    </div>
+    </div>#}
 
     <a href="{{ path('front_app_event_index') }}">Retour à la liste</a>
 
 
 
 {% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        // Récupérez tous les éléments de label avec la classe "bets-item"
+        const labels = document.querySelectorAll(".bets-item");
+
+
+        // Pour chaque élément de label, ajoutez un événement de clic
+        labels.forEach(label => {
+            label.addEventListener('click', () => {
+                // Ajoutez la classe "text-red-500" qui rendra le texte rouge
+                label.classList.add('text-red-500');
+            });
+        });
+    </script>
+
+{% endblock %}
+
+
+
+
+
 
 

@@ -53,6 +53,7 @@ class BettingGroupRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+
 //    /**
 //     * @return BettingGroup[] Returns an array of BettingGroup objects
 //     */

@@ -1,4 +1,6 @@
+{#
 <form method="post" action="{{ path('front_app_betting_group_delete', {'id': betting_group.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ betting_group.id) }}">
     <button class="btn btn-outline btn-error">Delete</button>
 </form>
+#}

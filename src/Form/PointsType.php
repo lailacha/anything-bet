@@ -2,27 +2,25 @@
 
 namespace App\Form;
 
-use App\Entity\Betting;
+use App\Entity\Points;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BettingType extends AbstractType
+class PointsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('amount')
-            ->add('isWon')
+            ->add('score')
             ->add('idUser')
-            ->add('idBet')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Betting::class,
+            'data_class' => Points::class,
         ]);
     }
 }

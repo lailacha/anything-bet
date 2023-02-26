@@ -5,6 +5,12 @@
 {% block body %}
     <section class="py-10 bg-gray-100 custom-table-render flex flex-col items-center w-full">
 
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
         <div class="tabs w-full">
             <a href="{{ path('front_app_event_my_groups') }}" class="tab tab-lg tab-lifted {% if isPublic is not defined %} tab-active font-bold {% endif %} text-gray-400 text-xl w-1/2" >Mes groupes</a>
             <a href="{{ path('front_app_event_publics') }}"  class="tab tab-lg tab-lifted {% if isPublic is defined %} tab-active font-bold {% endif %} w-1/2 text-gray-400  text-xl"> Publiques </a>

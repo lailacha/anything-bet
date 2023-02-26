@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BettingGroupRepository;
+use Gedmo\Mapping\Annotation\Slug;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BettingGroupRepository::class)]
@@ -19,11 +20,11 @@ class BettingGroup
     #[ORM\Column]
     private ?int $userMax = null;
 
-    #@ORM\Column(type="text")
-    private string $description;
 
     #[ORM\Column(length: 128, nullable: true)]
     private ?string $cover = 'default-cover.svg';
+
+
 
 
     #[ORM\Column]
@@ -47,6 +48,13 @@ class BettingGroup
 
     #[ORM\OneToMany(mappedBy: 'bettingGroup', targetEntity: Event::class)]
     private $events = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 255)]
+    #[Slug(fields: ['name'], updatable: false, unique: true)]
+    private ?string $slug = null;
 
 
     public function __construct()
@@ -177,5 +185,17 @@ class BettingGroup
 
     public function __toString(){
         return $this->name;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 }

@@ -19,7 +19,7 @@ class DailyRecompense
 
 
     #[ORM\ManyToOne(targetEntity: BettingGroup::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private bettingGroup $bettingGroup;
 
     #[ORM\Column]

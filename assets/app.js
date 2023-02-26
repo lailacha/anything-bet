@@ -9,6 +9,8 @@
 import './styles/app.scss';
 import './js/profile.js';
 import './login.js';
+import './js/modal.js';
+import './js/copy.js';
 
 
 

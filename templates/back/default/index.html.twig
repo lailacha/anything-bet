@@ -5,7 +5,7 @@
 {% block body %}
     {# <div class="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-700 text-black dark:text-white"> #}
 
-     <div class="h-full ml-14 mt-14 mb-10 md:ml-64">
+     <div class="h-full ml-14 mt-14 mb-10">
 
       <!-- Statistics Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-4 gap-4">
@@ -68,7 +68,7 @@
                     <tr class="border-b border-gray-200 hover:bg-gray-100">
                         <td class="py-3 px-6 text-center">
                         <a href="#">
-                            <img class="w-20 h-20 rounded-full mx-auto my-0" src="{{ user.avatar }}" alt="image_profile" />
+                            <img class="w-20 h-20 rounded-full mx-auto my-0" src="/avatar/{{ user.avatar }}" alt="image_profile" />
                         </a>
                         </td>
                         <td class="py-3 px-6 text-center">

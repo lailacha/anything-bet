@@ -25,6 +25,7 @@ class Event
     private ?\DateTimeImmutable $finishAt = null;
 
     #[ORM\ManyToOne(targetEntity: BettingGroup::class, inversedBy: 'events')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?BettingGroup $bettingGroup = null;
 
     #[ORM\Column]

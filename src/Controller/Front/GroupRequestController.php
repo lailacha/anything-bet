@@ -2,6 +2,8 @@
 
 namespace App\Controller\Front;
 
+use \Mailjet\Resources;
+
 use App\Entity\BettingGroup;
 use App\Entity\GroupRequest;
 use App\Entity\Points;
@@ -9,19 +11,33 @@ use App\Form\GroupRequestType;
 use App\Repository\BettingGroupRepository;
 use App\Repository\GroupRequestRepository;
 use App\Repository\PointsRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Message;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/group/request')]
 class GroupRequestController extends AbstractController
 {
     #[Route('/', name: 'app_group_request_index', methods: ['GET'])]
-    public function index(GroupRequestRepository $groupRequestRepository): Response
+    public function index(MailerInterface $mailer, GroupRequestRepository $groupRequestRepository, Request $request, PaginatorInterface $paginator): Response
     {
+
+
+        $groupRequests = $groupRequestRepository->findBy(['isApproved' => false]);
+        $groupRequests = $paginator->paginate(
+            $groupRequests,
+            $request->query->getInt('page', 1),
+            10
+        );
+
         return $this->render('group_request/index.html.twig', [
-            'group_requests' => $groupRequestRepository->findAll(),
+            'group_requests' => $groupRequests,
         ]);
     }
 
@@ -80,8 +96,11 @@ class GroupRequestController extends AbstractController
         return $this->redirectToRoute('front_app_group_request_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     #[Route('/{id}/accept', name: 'app_group_request_approve', methods: ['POST'])]
-    public function approve(Request $request, GroupRequest $groupRequest, GroupRequestRepository $groupRequestRepository, BettingGroupRepository $bettingGroupRepository, PointsRepository $pointsRepository): Response
+    public function approve(MailerInterface $mailer,Request $request, GroupRequest $groupRequest, GroupRequestRepository $groupRequestRepository, BettingGroupRepository $bettingGroupRepository, PointsRepository $pointsRepository): Response
         {
 
             if (!$this->isCsrfTokenValid('approve'.$groupRequest->getId(), $request->request->get('_token'))) {
@@ -108,6 +127,36 @@ class GroupRequestController extends AbstractController
             $usersPoints->setBettingGroup($group);
             $usersPoints->setScore(0);
             $pointsRepository->save($usersPoints, true);
+
+
+
+            $mj = new \Mailjet\Client($_ENV['MAILJET_APIKEY'],$_ENV['MAILJET_SECRET_KEY'], true, ['version' => 'v3.1']);
+            $body = [
+                'Messages' => [
+                    [
+                        'From' => [
+                            'Email' => "laila.charaoui@outlook.fr",
+                            'Name' => "Registration is valid"
+                        ],
+                        'To' => [
+                            [
+                                'Email' => "blablagirl76@gmail.com",
+                                'Name' => "passenger 1"
+                            ]
+                        ],
+                        'TemplateLanguage' => true,
+                        'TemplateID' => 4612337,
+                        'Subject' => "Bienvenue sur Antything bet",
+                        'Variables' => json_decode('{
+                    "confirmation_link" : "http://localhost:8000/confirm/1"
+                    }', true, 512, JSON_THROW_ON_ERROR)
+
+                    ]
+                ]
+            ];
+
+            $response = $mj->post(Resources::$Email, ['body' => $body]);
+            $response->success() && var_dump($response->getData());
 
             return $this->redirectToRoute('front_app_group_request_index', [], Response::HTTP_SEE_OTHER);
         }

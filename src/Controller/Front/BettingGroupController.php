@@ -4,11 +4,13 @@ namespace App\Controller\Front;
 
 use App\Entity\BettingGroup;
 use App\Entity\GroupRequest;
+use App\Entity\Points;
 use App\Form\BettingGroupType;
 use App\Form\JoinBettingGroupType;
 use App\Repository\BettingGroupRepository;
 use App\Repository\DailyRecompenseRepository;
 use App\Repository\GroupRequestRepository;
+use App\Repository\PointsRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\GroupAdminVoter;
 use App\Service\FileUploader;
@@ -17,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/betting-group')]
 class BettingGroupController extends AbstractController
@@ -31,7 +34,7 @@ class BettingGroupController extends AbstractController
     }
 
     #[Route('/new', name: 'app_betting_group_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, BettingGroupRepository $bettingGroupRepository): Response
+    public function new(Request $request, BettingGroupRepository $bettingGroupRepository, PointsRepository $pointsRepository): Response
     {
         $bettingGroup = new BettingGroup();
         $form = $this->createForm(BettingGroupType::class, $bettingGroup);
@@ -57,6 +60,13 @@ class BettingGroupController extends AbstractController
             }
 
             $bettingGroupRepository->save($bettingGroup, true);
+
+            $points = new Points();
+            $points->setUser($this->getUser());
+            $points->setBettingGroup($bettingGroup);
+            $points->setScore(0);
+
+            $pointsRepository->save($points, true);
 
             return $this->redirectToRoute('front_app_betting_group_by_user', [], Response::HTTP_SEE_OTHER);
         }
@@ -85,6 +95,7 @@ class BettingGroupController extends AbstractController
         foreach($hasNotAlreadyRecompenseToday as $group) {
             $ids[] = $group['id'];
         }
+
 
         $pagination = $paginator->paginate(
             $scores,
@@ -177,7 +188,7 @@ class BettingGroupController extends AbstractController
         return $this->redirectToRoute('front_app', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/join', name: 'app_betting_group_join', methods: ['GET', 'POST'])]
+    #[Route('/{slug}/join', name: 'app_betting_group_join', methods: ['GET', 'POST'])]
     public function join(Request $request, BettingGroup $bettingGroup, GroupRequestRepository $groupRequestRepository): Response
     {
 
@@ -206,12 +217,12 @@ class BettingGroupController extends AbstractController
 
                 $groupRequestRepository->save($groupRequest, true);
 
-                $this->addFlash('success', 'You have joined the group');
+                $this->addFlash('success', 'Votre demande a bien été envoyée');
             } else {
-                $this->addFlash('error', 'The code is not correct');
+                $this->addFlash('error', 'Le code est incorrect');
             }
 
-            return $this->redirectToRoute('front_app_betting_group_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_app_betting_group_by_user', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('betting_group/join.html.twig', [
@@ -222,8 +233,10 @@ class BettingGroupController extends AbstractController
 
 
     #[Route('/group-requests/{id}', name: 'app_betting_group_group_requests', methods: ['GET'])]
-    public function getGroupRequests(BettingGroup $bettingGroup): Response
+    public function getGroupRequests(BettingGroup $bettingGroup, Request $request, PaginatorInterface $paginator): Response
     {
+
+        $this->denyAccessUnlessGranted(GroupAdminVoter::EDIT, $bettingGroup);
 
         $groupRequests = $bettingGroup->getGroupRequests();
 
@@ -231,6 +244,16 @@ class BettingGroupController extends AbstractController
             $groupRequests = $groupRequests->filter(function ($groupRequest) {
                 return $groupRequest->getIsApproved() === false;
             });
+
+            $groupRequests = $paginator->paginate(
+                $groupRequests,
+                $request->query->getInt('page', 1),
+                10
+            );
+
+            return $this->render('group_request/index.html.twig', [
+                'group_requests' => $groupRequests,
+            ]);
 
             if (!$bettingGroup->getAdministrators()->contains($this->getUser())) {
                 $this->addFlash('error', 'You are not an administrator of this group');
@@ -250,10 +273,18 @@ class BettingGroupController extends AbstractController
 
 
     #[Route('/members/{id}', name: 'app_betting_group_members', methods: ['GET'])]
-    public function getMembers(BettingGroup $bettingGroup): Response
+    public function getMembers(BettingGroup $bettingGroup, Request $request, PaginatorInterface $paginator): Response
     {
 
         $members = $bettingGroup->getMembers();
+
+        $this->denyAccessUnlessGranted(GroupAdminVoter::SHOW, $bettingGroup);
+
+        $members = $paginator->paginate(
+            $members,
+            $request->query->getInt('page', 1),
+            10
+        );
 
 
         if ($members) {
@@ -282,14 +313,12 @@ class BettingGroupController extends AbstractController
 
             if (!$bettingGroup->getAdministrators()->contains($this->getUser())) {
                 $this->addFlash('error', 'You are not an administrator of this group');
-                return new Response('You are not an administrator of this group', Response::HTTP_UNAUTHORIZED);
-
+                return $this->redirectToRoute('front_app_betting_group_members', ['id' => $bettingGroup->getId()]);
             }
 
             if ($bettingGroup->getAdministrators()->contains($user)) {
                 $this->addFlash('error', 'You cannot delete an administrator of the group');
-                return new Response('You cannot delete an administrator of the group', Response::HTTP_UNAUTHORIZED);
-
+                return $this->redirectToRoute('front_app_betting_group_members', ['id' => $bettingGroup->getId()]);
 
             }
 
@@ -315,6 +344,33 @@ class BettingGroupController extends AbstractController
                 'bettingGroup' => $bettingGroup,
             ]);
         }
+
+    }
+
+
+    /**
+     * @throws \JsonException
+     */
+    #[Route('/{id}/join-link', name: 'app_betting_group_join_link', methods: ['GET', 'POST'])]
+    public function getJoinLink(BettingGroup $bettingGroup): Response
+    {
+
+        if(!$bettingGroup)
+        {
+            return new Response('Betting group not found', Response::HTTP_NOT_FOUND);
+        }
+
+       $url = 'https://localhost/betting-group/' . $bettingGroup->getSlug() . '/join';
+
+        $code = $bettingGroup->getCode();
+
+         $json = json_encode(array('url' => $url, 'code' => $code), JSON_THROW_ON_ERROR);
+
+         if($json === false) {
+             return new Response('Error encoding json', Response::HTTP_INTERNAL_SERVER_ERROR);
+         }
+
+       return new Response($json, Response::HTTP_OK);
 
     }
 }

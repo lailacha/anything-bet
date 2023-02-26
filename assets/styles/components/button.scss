@@ -1,8 +1,6 @@
 
   .btn-outline {
-    width: 100%;
     background-color: $white;
-    border: none;
     color: $primary;
     padding: 1rem 2rem;
     font-style: normal;
@@ -12,8 +10,15 @@
     text-align: center;
     text-transform: uppercase;
     border-radius: 30px;
-    border: 1px solid $primary;
+
+    margin: 1rem auto;
+
+    &:not(.btn-error, .btn-success, .btn-warning){
+      border: 1px solid $primary;
+    }
   }
+
+
 
     .btn-outline:hover {
         background-color: $primary;

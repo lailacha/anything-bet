@@ -19,6 +19,7 @@ class Betting
     #[ORM\ManyToOne]
     private Bet $idBet;
 
+
     #[ORM\Column]
     private ?int $amount = null;
 

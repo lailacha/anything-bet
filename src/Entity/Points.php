@@ -20,6 +20,7 @@ class Points
     private ?User $idUser = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?BettingGroup $idBettingGroup = null;
 
     public function getId(): ?int

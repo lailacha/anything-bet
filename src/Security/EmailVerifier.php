@@ -3,6 +3,8 @@
 namespace App\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Mailjet\Client;
+use Mailjet\Resources;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -19,7 +21,7 @@ class EmailVerifier
     ) {
     }
 
-    public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user, TemplatedEmail $email): void
+    public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
@@ -27,15 +29,34 @@ class EmailVerifier
             $user->getEmail()
         );
 
-        $context = $email->getContext();
-        $context['signedUrl'] = $signatureComponents->getSignedUrl();
-        $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
-        $context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
+        $url = $signatureComponents->getSignedUrl();
 
-        $email->context($context);
+        $mj = new Client($_ENV['MAILJET_APIKEY'],$_ENV['MAILJET_SECRET_KEY'], true, ['version' => 'v3.1']);
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "laila.charaoui@outlook.fr",
+                        'Name' => "Registration is valid"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => $user->getEmail(),
+                            'Name' => $user->getFirstname()." ".$user->getLastname()
+                        ]
+                    ],
+                    'TemplateLanguage' => true,
+                    'TemplateID' => 4612337,
+                    'Subject' => "Bienvenue sur Antything bet",
+                    'Variables' => json_decode('{
+                        "confirmation_link": "' . $url . '"
+                    }', true, 512, JSON_THROW_ON_ERROR)
+            ]
+        ]
+        ];
 
-
-        $this->mailer->send($email);
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        $response->success() && var_dump($response->getData());
 
         // Mark your user as having requested an email verification (will be used to remove the warning in your template)
 

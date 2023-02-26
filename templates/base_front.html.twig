@@ -39,6 +39,11 @@
                 </a>
             </li>
         {% endif %}
+        <li>
+            <div class=" flex px-4 py-1 border border-white-600 rounded items-center">
+                {{ globals.points }} <i class=" ml-2 text-yellow-500 fas fa-regular fa-coins"></i>
+            </div>
+        </li>
     </ul>
     <ul>
 
@@ -46,14 +51,18 @@
         <li><a href="{{ path('front_app_event_my_groups') }}"><span class="material-icons-outlined"> no
                 </span></a></li>
         <li><a href="{{ path('front_app_event_my_groups') }}">Events</a></li>
-        <li><a href="{{ path('back_default_index') }}">Parier</a></li>
         <li><a href="{{ path('front_app_betting_group_by_user') }}">Groupes</a></li>
         <li><a href="{{ path('front_app_betting_my_bettings') }}">Mes paris</a></li>
         <li>
             <button class="flex">
                 <span   class="material-icons-outlined" id="notif-modal">notifications</span>
             </button>
+
         </li>
+        <li>
+
+        </li>
+
         <li class="profile">
             <div class="dropdown dropdown-left">
                 <label tabindex="0"> <i class="mr-4 ml-2 fas fa-regular fa-caret-down"></i>
@@ -67,11 +76,14 @@
             </div>
 
             <p>{{ app.user.firstName }}
-               {{ app.user.lastName }}</p>
+               {{ app.user.lastName }}
+          </p>
+
 
             <img src="/avatar/{{ app.user.avatar}}" alt="logo" class="w-20 h-20">
 
         </li>
+
     </ul>
 </nav>
 <div class="container">

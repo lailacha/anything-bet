@@ -21,6 +21,7 @@ $light-violet: #9747FF;
 @import "components/form_bet.scss";
 @import "components/event_card.scss";
 @import "components/bets.scss";
+@import "components/bet-item.scss";
 @import "back-admin.scss";
 
 @import "components/alert";
@@ -63,7 +64,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: #F5F5F5;
     color: $black;
-  height: 100vh;
+    height: 100%;
 
 }
 .login {

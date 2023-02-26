@@ -1,0 +1,22 @@
+{% extends 'base_front.html.twig' %}
+{% block body %}
+
+
+    <form class="flex flex-col justify-center items-center" method="post" action="{{ path('front_app_event_endevent', {'id': event.id}) }}">
+        {% if  event.bettingGroup.cover is defined %}
+            <img src="{{ asset('logos/' ~ event.bettingGroup.cover) }}"  class="w-48 h-49 mb-5" alt="Cover Image">
+        {% endif %}
+        <h1 class="my-auto">{{ event.name }}</h1>
+        <label for="select" class="text-gray-900 text-xl font-bold mr-12">Choisissez le pari gagnant: </label>
+        <select name="bet" id="select">
+
+            {% for bet in bets %}
+                <option value="{{ bet.id }}">{{ bet.label }}</option>
+            {% endfor %}
+</select>
+        <input type="hidden" name="_token" value="{{ csrf_token('end') }}">
+        <button class="btn btn-outline" type="submit" >Valider</button>
+
+    </form>
+{% endblock %}
+

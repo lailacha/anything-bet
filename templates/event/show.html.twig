@@ -9,13 +9,8 @@
 
     <article class="event-card rounded-xl bg-white p-3 shadow-lg w-3/4 flex flex-col justify-center items-center">
 
-        {% for type, messages in app.session.flashbag.all() %}
-            {% for message in messages %}
-                <div class="alert alert-{{ type }}">{{ message }}</div>
-            {% endfor %}
-        {% endfor %}
-        <div class="flex items-center mb-4">
-            <div class="dropdown dropdown-left hover:text-violet-800">
+        <div class="flex justify-center items-center mb-4 ">
+            <div class="dropdown  dropdown-left hover:text-violet-800">
                 <label tabindex="0" > <i class="mr-4 ml-2 fas fa-regular fa-cog"></i>
                 </label>
                 <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
@@ -28,22 +23,19 @@
 
                                 <button class="text-sm m-0">Edit</button>
                             </div></a></li>
+                    <li><a class="text-yellow-400" href="{{ path('front_app_event_end_show', {'id': event.id}) }}">   <div class="flex items-center space-x-1.5 rounded-lg bg-blue-900 px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
 
-                    <li><a class="text-yellow-400" href="{{ path('front_app_event_endevent', {'id': event.id}) }}">   <div class="flex items-center space-x-1.5 rounded-lg bg-yellow-500 px-4 py-1.5 text-white duration-100 hover:bg-yellow-600">
+                                <i class="fa-solid fa-check mr-2"></i>
 
-                                <span class="fa fa-pen"></span>
-
-                                <button class="text-sm m-0">End event</button>
+                                <button class="text-sm m-0">Marquer comme terminé</button>
                             </div></a></li>
 
-
-                    {#{{ include('betting_group/_delete_form.html.twig') }}#}
                 </ul>
             </div>
 
 
 
-            <h1>{{ event.name }}</h1>
+            <h1 class="w-3/4 text-xl">{{ event.name }}</h1>
 
 
         </div>
@@ -51,10 +43,10 @@
                 {% if  event.coverImage is not null %}
                     <img src="{{ asset('cover/' ~ event.coverImage) }}"  alt="Cover Image" class="w-3/4 object-cover h-96">
                 {% else %}
-                    <img src="https://picsum.photos/seed/picsum/200/300" alt="cover" class="w-3/4 object-cover h-96">
+                    <img  src="{{ asset('cover/default.png') }}" alt="cover" class="w-3/4 object-cover h-96">
                 {% endif %}
 
-            <f class="mt-1 p-2 justify-center flex flex-col w-3/4 mx-auto">
+            <div class="mt-1 p-2 justify-center flex flex-col w-3/4 mx-auto">
                 <h2 class="text-slate-700">{{ event.name }}</h2>
                 <p class="mt-1 text-sm text-slate-400">Débute: {{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</p>
                 <p class="mt-1 text-sm text-slate-400">Fin: {{ event.finishAt ? event.finishAt|date('Y-m-d H:i:s') : '' }}</p>
@@ -64,20 +56,21 @@
                 {% endif %}
                 {%  if event.bets is not null %}
                 <form action="{{ path('front_app_event_bet') }}" method="post">
+                    <input type="hidden" name="_token" value="{{ csrf_token('bet') }}"/>
 
-                    <div class="flex-">
-                        {% for bet in event.bets %}
-                            <input type="radio" name="bet" value="{{ bet.id }}">
-                            <label for="bet-{{ bet.id }}" class="mt-1 text-sm text-slate-500 bets-item bg-white cursor-pointer transition-colors duration-200 hover:bg-gray-200 focus:bg-gray-200 rounded-md px-2 py-1 ">
-                                {{ bet.label }}
-                            </label>
-                        {% endfor %}
-                        <div>
-                            <label>Mise</label>
-                            <input type="number" name="somme">
+                    <div class="flex flex-col w-full ">
+                        <div class="flex w-full">
+                            {% for bet in event.bets %}
+                                <label for="bet-{{ bet.id }}" class="{% if bet.id in alreadyBet %}  selected {% else%} hover:bg-gray-200 focus:bg-gray-200  {% endif%}  flex-wrap bet-event-item bets-item mt-1 text-sm bets-item bg-white cursor-pointer transition-colors duration-200 rounded-md px-2 py-1 ">
+                                    {%  if amount is not same as false and bet.id in alreadyBet %}
+                                        <span class="text-sm text-yellow-500 mr-4"> {{ amount }} <i class="fa-solid fa-coins"></i></span>
+                                    {% endif %}
+                                    <input type="radio" name="bet" value="{{ bet.id }}">
+                                    {{ bet.label }}
+                                </label>
+                            {% endfor %}
                         </div>
                     </div>
-                    <input class="" type="submit" value="Valider" />
                 </form>
 
                 {% endif %}
@@ -85,39 +78,142 @@
 
             </div>
     </article>
+    <div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal-bet">
+        <div class="relative w-auto my-6 mx-auto max-w-3xl">
+            <!--content-->
+            <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                <!--header-->
+                <div class="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                    <h3 class="text-3xl font-semibold">
+                       {{ event.name }}
+                    </h3>
+                    <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onclick="toggleModal('modal-id')">
+          <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
 
-{#    <input type="radio" id="bet-modal" class="modal-toggle" type="submit"/>
-    <div class="modal">
-        <div class="modal-box">
-            <h3 class="font-bold text-lg">You want to bet ?</h3>
-            <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
-            <div class="modal-action">
-                <label for="bet-modal" class="btn btn-ghost">Cancel</label>
-                <label for="bet-modal" class="btn">Yay!</label>
+          </span>
+                    </button>
+                </div>
+                <!--body-->
+                <div class="relative p-6 flex-auto">
+                    <p class="my-4 text-slate-500 text-lg leading-relaxed">
+                        Combien misez-vous sur <span id="text-bet"></span> ? </p>
+                    <div class="mt-5">
+                        <form action="{{ path('front_app_event_bet') }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('bet') }}"/>
+                            <label class="text-xl">Mise:
+                                <input type="number" name="somme">
+                            </label>
+                        </form>
+                    </div>
+                </div>
+                <!--footer-->
+                <div class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                    <button id="close-modal" class="btn btn-outline btn-error "type="button">
+                        Close
+                    </button>
+                    <button class="btn btn-outline" type="button"  id="submit-bet">
+                        Envoyer mon pari
+                    </button>
+                </div>
             </div>
         </div>
-    </div>#}
-
-    <a href="{{ path('front_app_event_index') }}">Retour à la liste</a>
-
-
+    </div>
+    <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-bet-backdrop"></div>
 
 {% endblock %}
 
 {% block javascripts %}
 
     <script>
-        // Récupérez tous les éléments de label avec la classe "bets-item"
-        const labels = document.querySelectorAll(".bets-item");
+
+        //on load de la page
+
+        window.addEventListener('load', () => {
+
+            const hasAlreadyBet =  {{ alreadyBet|json_encode|raw }};
+
+            const submit = document.getElementById('submit-bet');
+
+            submit.addEventListener('click', () => {
+                let bet = document.querySelector('input[name="bet"]:checked')?.value;
+                let somme = document.querySelector('input[name="somme"]')?.value;
+
+                // ajax request
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '{{ path('front_app_event_bet') }}', true);
+
+                // send json data
+                xhr.setRequestHeader('Content-type', 'application/json');
+                xhr.send(JSON.stringify({
+                    bet: bet,
+                    somme: somme,
+                    csrf_token: '{{ csrf_token('bet') }}'
+                }));
+
+                // on response
+                xhr.onload = function() {
+                    window.location.reload();
+                }
 
 
-        // Pour chaque élément de label, ajoutez un événement de clic
-        labels.forEach(label => {
-            label.addEventListener('click', () => {
-                // Ajoutez la classe "text-red-500" qui rendra le texte rouge
-                label.classList.add('text-red-500');
+
+            });
+
+
+            const toggle = () => {
+                modal.classList.toggle("hidden");
+                backdrop.classList.toggle("hidden");
+                modal.classList.toggle("flex");
+                document.getElementById("modal-bet" + "-backdrop").classList.toggle("flex");
+            }
+
+            const toggleModal = document.getElementById('toggle-modal');
+            const modal = document.getElementById('modal-bet');
+            const backdrop = document.getElementById('modal-bet-backdrop');
+            const closeModal = document.getElementById('close-modal');
+            const textBet = document.getElementById('text-bet');
+
+            //close modal
+            closeModal?.addEventListener('click', () => {
+               toggle();
+            });
+
+            //open modal
+
+
+            // Récupérez tous les éléments de label avec la classe "bets-item"
+            const labels = document.querySelectorAll(".bets-item");
+
+
+            // Pour chaque élément de label, ajoutez un événement de clic
+            labels.forEach(label => {
+                label?.addEventListener('click', () => {
+
+
+                    if(hasAlreadyBet){
+                        return;
+                    }
+                    //open modal
+
+                    toggle();
+
+                    textBet.innerHTML = label.innerText;
+
+                    //on click check le radio button correspondant
+                    label.querySelector('input').checked = true;
+
+
+                    //suprrime la classe "text-red-500" si elle existe pour tous les éléments de label
+                    labels.forEach(label => label.classList.remove('selected'));
+
+                    // Ajoutez la classe "text-red-500" qui rendra le texte rouge
+                    label.classList.add('selected');
+
+                    // suprrime
+                });
             });
         });
+
     </script>
 
 {% endblock %}

@@ -93,7 +93,7 @@ class BettingRepository extends ServiceEntityRepository
     public function findUsersByEvent(int $eventId, int $userId): array
     {
         $qb = $this->createQueryBuilder('b')
-            ->select('u.id, p.score, b.amount')
+            ->select('u.id, p.score, b.amount, bet.id as betId')
             ->innerJoin(Bet::class, 'bet', 'WITH', 'bet.id = b.idBet')
             ->innerJoin(Event::class, 'e', 'WITH', 'e.id = bet.event')
             ->innerJoin(User::class, 'u', 'WITH', 'u.id = b.idUser')

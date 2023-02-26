@@ -26,5 +26,5 @@ Les administrateurs de la plateforme peuvent supprimer un groupe, modifier un ut
 Les utilisateurs peuvent modifier leur profil, y compris leur photo et leur nom.
 # Notification : 
 Les utilisateurs peuvent accéder à des notifications, notamment quand un événement est ajouté au groupe.
-#Utilisation d’un service d’emailing : 
+# Utilisation d’un service d’emailing : 
 Utilisation de Mailjet pour envoyer des mails aux utilisateurs, notamment pour la registration

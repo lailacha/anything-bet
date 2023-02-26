@@ -3,8 +3,10 @@
 namespace App\Controller\Back;
 
 use App\Entity\User;
+use App\Form\SearchUserType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,11 +15,33 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/user')]
 class UserController extends AbstractController
 {
-    #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    #[Route('/', name: 'app_user_index', methods: ['GET', 'POST'])]
+    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
+
+        $form = $this->createForm(SearchUserType::class);
+        $form->handleRequest($request);
+
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $query = $userRepository->search($data);
+        } else {
+            $query = $userRepository->createQueryBuilder('u')
+                ->orderBy('u.id', 'DESC')
+                ->getQuery();
+        }
+
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+
         return $this->render('back/user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $pagination,
+            'form' => $form->createView()
         ]);
     }
 
@@ -36,7 +60,7 @@ class UserController extends AbstractController
         }
 
 
-        return $this->renderForm('user/new.html.twig', [
+        return $this->renderForm('back/user/new.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);
@@ -59,7 +83,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userRepository->save($user, true);
 
-            return $this->redirectToRoute('back_app_user_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'L\'utilisateur a bien été modifié');
         }
 
         return $this->renderForm('back/user/edit.html.twig', [

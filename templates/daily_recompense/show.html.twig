@@ -20,7 +20,7 @@
 
     <a href="{{ path('app_daily_recompense_index') }}">back to list</a>
 
-    <a href="{{ path('app_daily_recompense_edit', {'id': daily_recompense.id}) }}">edit</a>
+    <a href="{{ path('front_daily_recompense_edit', {'id': daily_recompense.id}) }}">edit</a>
 
     {{ include('daily_recompense/_delete_form.html.twig') }}
 {% endblock %}

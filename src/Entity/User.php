@@ -45,9 +45,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
 
-   #[ORM\Column(length: 128, nullable: true)]
-    private ?string $avatar = 'default.svg';
+    #[ORM\Column(length: 128, nullable: true)]
+    private ?string $avatar = 'default.png';
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $resetToken = null;
 
     #[ORM\ManyToMany(targetEntity: BettingGroup::class, mappedBy: 'administrators')]
     #[ORM\JoinTable(name: 'betting_group_administrators')]
@@ -59,6 +61,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: GroupRequest::class)]
     private ?\Doctrine\Common\Collections\Collection $groupRequests = null;
+
+    #[ORM\OneToMany(mappedBy: 'theUser', targetEntity: Participate::class)]
+    private ?\Doctrine\Common\Collections\Collection $participates = null;
+
+    #[ORM\OneToMany(mappedBy: 'idUser', targetEntity: Betting::class)]
+    private ?\Doctrine\Common\Collections\Collection $bets = null;
+
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Notification::class)]
+    private Collection $notifications;
+
+    public function __construct()
+    {
+        $this->notifications = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -204,6 +220,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+
 
     /**
      * @return Collection<int, Role>
@@ -211,6 +239,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRole(): Collection
     {
         return $this->role;
+    }
+
+
+    public function getParticipates(): Collection
+    {
+        return $this->participates;
+    }
+
+
+    public function getBets(): Collection
+    {
+        return $this->bets;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getPseudo();
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUserId() === $this) {
+                $notification->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 
 

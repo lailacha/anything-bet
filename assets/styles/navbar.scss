@@ -1,7 +1,7 @@
 
 .navbar {
 
-  background-color: $mainBlue;
+  background-color: $deep-primary;
   padding: 8px;
   color: white;
 
@@ -21,6 +21,13 @@
 
   }
 
+  .dropdown {
+    a {
+      color: $black;
+      font-weight: lighter;
+    }
+  }
+
   ul {
     display: flex;
     align-items: center;
@@ -36,6 +43,7 @@
 
   img {
     border-radius: 50%;
+    object-fit: cover;
   }
 
   .profile{
@@ -47,7 +55,7 @@
     background-color: white;
     padding: 8px;
     border-radius: 8px;
-    color: $mainBlue;
+    color: $deep-primary;
     margin-left: 2rem;
 
 

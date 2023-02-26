@@ -1,47 +1,68 @@
-<!DOCTYPE html>
+{% extends 'base_front.html.twig' %}
 
-<title>GroupRequest index</title>
 
 {% block body %}
-    <h1>GroupRequest index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>CreatedAt</th>
-                <th>IsApproved</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for group_request in group_requests %}
-            <tr>
-                <td>{{ group_request.id }}</td>
-                <td>{{ group_request.createdAt ? group_request.createdAt|date('Y-m-d') : '' }}</td>
-                <td>{{ group_request.isApproved ? 'Yes' : 'No' }}</td>
-                <td>
-{#                    <a href="{{ path('app_group_request_show', {'id': group_request.id}) }}">show</a>#}
-{#                    <a href="{{ path('app_group_request_edit', {'id': group_request.id}) }}">edit</a>#}
-                  <form action="{{ path('front_app_group_request_delete', {'id': group_request.id}) }}" method="post">
-                       <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ group_request.id) }}">
-                      <input type="submit" value="Delete">
-                  </form>
-                    <form action="{{ path('front_app_group_request_approve', {'id': group_request.id}) }}" method="post">
-                        <input type="hidden" name="_method" value="POST">
-                        <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ group_request.id) }}">
-                        <input type="submit" value="Approve">
-                    </form>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="flex items-center justify-center ">
+        <div class="col-span-12">
+            <div class="overflow-auto lg:overflow-visible ">
+                <table class="table text-gray-400 border-separate space-y-6 text-sm">
+                    <thead class="bg-gray-800 text-gray-500">
+                    <tr>
 
-{#    <a href="{{ path('app_group_request_new') }}">Create new</a>#}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for group_request in group_requests %}
+                        <tr class="bg-gray-800">
+                            <td class="p-3">
+                                <div class="flex items-center flex-col justify-center">
+                                    <img class="rounded-full h-12 w-12  object-cover" src="{{ asset('avatar/' ~ group_request.user.avatar) }}" alt="groupe cover">
+                                    <div class="mt-3">
+                                        <div class="text-gray-900">{{ group_request.user.pseudo }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-3">
+                                {{ group_request.user.email }}
+                            </td>
+                            <td class="p-3">
+                                {{ group_request.createdAt|date('d/m/Y H:i') }}
+                            </td>
+
+                            <td>
+                                {#                    <a href="{{ path('app_group_request_show', {'id': group_request.id}) }}">show</a>#}
+                                {#                    <a href="{{ path('app_group_request_edit', {'id': group_request.id}) }}">edit</a>#}
+                                <form action="{{ path('front_app_group_request_delete', {'id': group_request.id}) }}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ group_request.id) }}">
+                                    <input type="submit" value="Delete">
+                                </form>
+                                {% if group_request.isApproved == false%}
+                                    <form action="{{ path('front_app_group_request_approve', {'id': group_request.id}) }}" method="post">
+                                        <input type="hidden" name="_method" value="POST">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ group_request.id) }}">
+                                        <input type="submit" value="Approve">
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">Pas de requètes</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="bg-white rounded-lg">
+
+                    {{ knp_pagination_render(group_requests) }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {#    <a href="{{ path('app_group_request_new') }}">Create new</a>#}
 {% endblock %}

@@ -1,6 +1,5 @@
-<!DOCTYPE html>
+{% extends 'base_front.html.twig' %}
 
-<title>DailyRecompense index</title>
 
 {% block body %}
     <h1>DailyRecompense index</h1>
@@ -19,8 +18,8 @@
                 <td>{{ daily_recompense.id }}</td>
                 <td>{{ daily_recompense.date ? daily_recompense.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_daily_recompense_show', {'id': daily_recompense.id}) }}">show</a>
-                    <a href="{{ path('app_daily_recompense_edit', {'id': daily_recompense.id}) }}">edit</a>
+                    <a href="{{ path('front_daily_recompense_show', {'id': daily_recompense.id}) }}">show</a>
+                    <a href="{{ path('front_daily_recompense_edit', {'id': daily_recompense.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +30,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_daily_recompense_new') }}">Create new</a>
+    <a href="{{ path('front_daily_recompense_new') }}">Create new</a>
 {% endblock %}

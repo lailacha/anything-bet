@@ -67,24 +67,44 @@ class DailyRecompenseRepository extends ServiceEntityRepository
     /**
      * @throws \Doctrine\DBAL\Exception
      */
-    public function getGroupCanReceiveRecompenses(User $user)
+    public function getGroupCanReceiveRecompenses(User $user) : array
     {
         $conn = $this->getEntityManager()
             ->getConnection();
-
 
         //same but with query builder
         $qb = $conn->createQueryBuilder();
         $qb->select('DISTINCT *')
             ->from('betting_group')
             ->innerJoin('betting_group', 'betting_group_members', 'bgm', 'betting_group.id = bgm.betting_group_id')
-            ->where('NOT EXISTS (SELECT * FROM daily_recompense dr
-                   WHERE dr.date < NOW() and bgm.user_id = :user_id
+            ->where("NOT EXISTS (SELECT * FROM daily_recompense dr
+                WHERE bgm.user_id = :user_id AND dr.date >= DATE_TRUNC('day', now()) AND dr.date < now()
                      AND dr.betting_group_id = betting_group.id
-                     AND dr.id IS NOT NULL)');
+                     AND dr.id IS NOT NULL)")
+           ->andWhere('bgm.user_id = :user_id');
 
         $sql = $qb->getSQL();
         $stmt = $conn->prepare($sql);
-        return $stmt->executeQuery(['user_id' => 64])->fetchAllAssociative();
+        return $stmt->executeQuery(['user_id' => $user->getId()])->fetchAllAssociative();
+    }
+
+    public function receiveRecompense(?\Symfony\Component\Security\Core\User\UserInterface $getUser, $id)
+    {
+        $conn = $this->getEntityManager()
+            ->getConnection();
+
+        $qb = $conn->createQueryBuilder();
+        $qb->insert('daily_recompense')
+            ->values(
+                [
+                    'date' => 'NOW()',
+                    'betting_group_id' => ':betting_group_id',
+                    'user_id' => ':user_id',
+                ]
+            );
+
+        $sql = $qb->getSQL();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['betting_group_id' => $id, 'user_id' => $getUser->getId()]);
     }
 }

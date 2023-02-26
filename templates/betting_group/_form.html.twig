@@ -1,4 +1,9 @@
+{% form_theme form 'tailwind_2_layout.html.twig' %}
+
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Créer') }}</button>
+<div class="flex">
+    <button class="btn btn-outline btn-primary">{{ button_label|default('Créer') }}</button>
+</div>
+
 {{ form_end(form) }}

@@ -3,82 +3,45 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <style>
-        .avatar{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 200px;
-            height: 200px;
-            border-radius: 500px;
-            border: solid black 1px;
-            overflow: hidden;
-        }
-        .avatar > img{
-            width: 90%;
-        }
-        main{
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        main > * {
-            margin-bottom: 50px;
-        }
-        .form-control{
-            border: solid black 1px;
-            margin: 10px;
-        }
-        .top{
-            width: 45%;
-            display: flex;
-            justify-content: space-around;
-        }
-        .sep{
-            width: 30%;
-            height: 1px;
-            background-color: #090AE1;
-        }
-        main > #alert{
-            display: none;
-            background-color: red;
-            color: white;
-            font-weight: bold;
-        }
-    </style>
-    <main>
-        {% for message in app.session.flashBag.get('success')%}
-            <span class="alert">
-                <strong>Succès !</strong> {{message}}
-                <div class="load"></div>
-            </span>
-        {% endfor %}
-
-        {% for message in app.session.flashBag.get('error')%}
-            <span class="alert alert--error">
-                <strong>Succès !</strong> {{message}}
-                <div class="load load--error"></div>
-            </span>
-        {% endfor %}
-
-        <span id="alert">Merci de ne pas envoyer le formulaire si bous n'avez rien changé</span>
-        <h1>Profile</h1>
-        <section class="top">
-            <div class="avatar">
-                <img src="/avatar/{{ user.avatar }}" alt="">
-            </div>
-            {{ form_start(formUpdate)}}
+    <main class="login">
+        <section class="flex bg-white p-10 rounded-xl">
+            {%  if user.avatar is defined %}
+                <div class=" w-48 h-48  rounded-full border  border-gray-200 ml-5 ">
+                    <img src="/avatar/{{ user.avatar }}" alt="" class="object-cover w-full h-full rounded-full"  >
+                </div>
+            {% endif %}
+            <div class="flex flex-col items-center justify-center pl-24 pr-24">
+                {{ form_start(formUpdate)}}
+                {{ form_errors(formUpdate) }}
                 {{ form_widget(formUpdate) }}
-            {{ form_end(formUpdate) }}
+
+                {{ form_end(formUpdate) }}
+
+                <div class="sep"></div>
+                <h2 class=" mb-5">Changer l’avatar</h2>
+                {{ form_start(formAvatar)}}
+                {{ form_widget(formAvatar) }}
+                {{ form_end(formAvatar) }}
+            </div>
+
         </section>
-        <div class="sep"></div>
-        <h2>Changer l’avatar</h2>
-        {{ form_start(formAvatar)}}
-            {{ form_widget(formAvatar) }}
-        {{ form_end(formAvatar) }}
+
 
     </main>
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+
+        .login form {
+            padding-top: 0;
+        }
+
+        .login  button{
+            margin-left: auto;
+        }
+    </style>
 
 {% endblock %}

@@ -22,9 +22,10 @@ class GroupRequest
 
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'groupRequests')]
-    private $user = null;
+    private $user;
 
     #[ORM\ManyToOne(targetEntity: BettingGroup::class, inversedBy: 'groupRequests')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?BettingGroup $bettingGroup = null;
 
     /**

@@ -25,12 +25,13 @@ class Event
     private ?\DateTimeImmutable $finishAt = null;
 
     #[ORM\ManyToOne(targetEntity: BettingGroup::class, inversedBy: 'events')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?BettingGroup $bettingGroup = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $startAt = null;
 
-    #[ORM\Column(length: 255, nullable:true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $result = null;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Participate::class)]
@@ -39,9 +40,19 @@ class Event
     #[ORM\ManyToOne]
     private ?User $theUser = null;
 
+
+    //multiple bets for one event
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Bet::class, cascade: ['persist', 'remove'], fetch: 'EAGER')]
+    #[ORM\JoinTable(name: 'event_bets')]
+    private $bets;
+
+    #[ORM\Column(length: 128, nullable: true)]
+    private ?string $coverImage = null;
+
     public function __construct()
     {
         $this->participates = new ArrayCollection();
+        $this->bets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,14 +162,61 @@ class Event
         return $this;
     }
 
-    public function getBettingGroup(): ?BettingGroup
+
+    public function getBettingGroup()
     {
         return $this->bettingGroup;
     }
 
-    public function setBettingGroup(?BettingGroup $bettingGroup): self
+    public function setBettingGroup($bettingGroup): self
     {
         $this->bettingGroup = $bettingGroup;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bet>
+     */
+    public function getBets(): Collection
+    {
+        return $this->bets;
+    }
+
+    public function addBet($bet): void
+    {
+
+        if($this->bets->contains($bet)){
+            return;
+        }
+
+        $this->bets[] = $bet;
+    }
+
+    public function setBets($bets): void
+    {
+        $this->bets = $bets;
+    }
+
+    public function removeBet(Bet $bet): self
+    {
+        if ($this->bets->removeElement($bet)) {
+            // set the owning side to null (unless already changed)
+            if ($bet->getEvent() === $this) {
+                $bet->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCoverImage(): ?string
+    {
+        return $this->coverImage;
+    }
+
+    public function setCoverImage(?string $coverImage): self
+    {
+        $this->coverImage = $coverImage;
 
         return $this;
     }

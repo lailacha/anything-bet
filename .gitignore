@@ -54,3 +54,7 @@ ehthumbs_vista.db
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+/public/avatar
+/public/cover
+/public/logos
+/migrations

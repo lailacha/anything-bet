@@ -43,6 +43,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setEmail($form->get('email')->getData());
             $user->setRoles(['ROLE_USER']);
             $user->setFirstname($form->get('firstname')->getData());
             $user->setLastname($form->get('lastname')->getData());
@@ -66,6 +67,14 @@ class RegistrationController extends AbstractController
                 $authenticator,
                 $request
             );
+        }else{
+            //retrieve error message
+            foreach ($form->getErrors(true) as $error) {
+                $error = $error->getMessage();
+            }
+            if(isset($error)){
+                $this->addFlash("error", $error);
+            }
         }
 
         return $this->render('registration/register.html.twig', [

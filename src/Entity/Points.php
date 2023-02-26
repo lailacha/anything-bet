@@ -20,6 +20,7 @@ class Points
     private ?User $idUser = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?BettingGroup $idBettingGroup = null;
 
     public function getId(): ?int
@@ -39,24 +40,24 @@ class Points
         return $this;
     }
 
-    public function getIdUser(): ?User
+    public function getUser(): ?User
     {
         return $this->idUser;
     }
 
-    public function setIdUser(?User $idUser): self
+    public function setUser(?User $idUser): self
     {
         $this->idUser = $idUser;
 
         return $this;
     }
 
-    public function getIdBettingGroup(): ?BettingGroup
+    public function getBettingGroup(): ?BettingGroup
     {
         return $this->idBettingGroup;
     }
 
-    public function setIdBettingGroup(?BettingGroup $idBettingGroup): self
+    public function setBettingGroup(?BettingGroup $idBettingGroup): self
     {
         $this->idBettingGroup = $idBettingGroup;
 

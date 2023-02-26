@@ -1,42 +1,56 @@
-{#<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var formBetIndex = 0;
-        $('.addFormBet').click(function () {
-            formBetIndex++;
-            $('#formBetsContainer').append(
-                '<div class="formBet">' +
-                '{{ form_widget(formBet) }}' +
-                '</div>'
-            );
-        });
-    });
-</script>
-
-<div id="formBetsContainer">
-    <div class="formBet" style="display: none;">
-    </div>
-</div>
-
+{% form_theme form 'tailwind_2_layout.html.twig' %}
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-<h1>SEP</h1>
-<div id="formBetsContainer">
-    <div class="formBet" style="display: none;">
-    </div>
+
+{{ form_row(form.name) }}
+{{ form_row(form.startAt) }}
+{{ form_row(form.finishAt) }}
+{{ form_row(form.coverImage) }}
+{{ form_row(form.betting_group) }}
+<div data-prototype="{{ form_widget(form.bets.vars.prototype)|e('html_attr') }}" class="row js-bets-wrapper w-full"
+     data-index="{{ form.bets|length }}"
+>
+    {% for bet in form.bets %}
+
+        {{ form_label(bet.label) }}
+        {{ form_widget(bet.label) }}
+    {% endfor %}
+    <a href="#" class="js-bets-add mt-5">
+        <span class="fa fa-plus-circle"></span>
+        Add Another option
+    </a>
 </div>
-<button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
-<button class="addFormBet">Add Bet</button>#}
-
-{{ form_start(form) }}
-{{ form_widget(form) }}
-
-
-{% for bet in bets %}
-    {{ form_widget(bet.formBet) }}
+<button class="btn btn-outline">{{ button_label|default('Save') }}</button>
+{% for genusScientistForm in form.bets %}
+    <div class="col-xs-8">
+        {{ form_errors(genusScientistForm) }}
+    </div>
 {% endfor %}
-
-<button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
 
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const wrapper = document.querySelector('.js-bets-wrapper');
+
+            if (wrapper) {
+                wrapper.addEventListener('click', function(e) {
+                    const addLink = e.target.closest('.js-bets-add');
+                    if (addLink) {
+                        e.preventDefault();
+                        const prototype = wrapper.dataset.prototype;
+
+
+                        const index = wrapper.dataset.index;
+                        const newForm = prototype.replace(/__name__/g, index);
+                        wrapper.dataset.index = parseInt(index) + 1;
+                        addLink.insertAdjacentHTML('beforebegin', newForm);
+
+
+                    }
+                });
+            }
+        });
+
+    </script>
+{% endblock %}

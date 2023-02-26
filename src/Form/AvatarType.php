@@ -30,6 +30,9 @@ class AvatarType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider',
+                'attr' => [
+                    'class' => 'btn btn-outline mt-5',
+                ]
             ]);
     }
 }

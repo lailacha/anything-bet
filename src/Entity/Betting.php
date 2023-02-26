@@ -17,7 +17,8 @@ class Betting
     private ?User $idUser = null;
 
     #[ORM\ManyToOne]
-    private ?Bet $idBet = null;
+    private Bet $idBet;
+
 
     #[ORM\Column]
     private ?int $amount = null;
@@ -42,7 +43,7 @@ class Betting
         return $this;
     }
 
-    public function getIdBet(): ?Bet
+    public function getBet(): Bet
     {
         return $this->idBet;
     }
@@ -77,4 +78,5 @@ class Betting
 
         return $this;
     }
+
 }

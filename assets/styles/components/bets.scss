@@ -1,0 +1,20 @@
+.bets-box{
+
+  margin: 2rem 0;
+
+  .bets-item {
+    background-color: rgba(111, 61, 231, 0.84);
+    padding: 1rem;
+    color: #fff;
+    border-radius: 8px;
+    width: 135px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-color: rgba(111, 61, 231, 0.94);
+      transition: background-color 0.5s;
+    }
+  }
+}

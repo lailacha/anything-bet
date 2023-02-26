@@ -1,0 +1,68 @@
+form {
+
+
+
+  flex-direction: column;
+
+  width: 70%;
+  border-radius: 25px;
+
+  font-weight: lighter;
+  align-items: center;
+
+  input, select {
+    background-color: $white;
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 5px;
+  }
+
+  button {
+    margin: 2rem;
+  }
+
+
+
+}
+
+form:not(#delete_form){
+  padding: 2rem;
+}
+
+form:not(.search){
+  & > div.mb-6 {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin-top: 10px;
+  }
+}
+
+
+form.search {
+
+// div qui ont un input en children direct
+     div.mb-6 {
+       margin-right: 10px;
+    }
+
+
+}
+
+.custom-flex-wrapper {
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+
+
+.front form {
+  width: 100%;
+  background-color: $white;
+}

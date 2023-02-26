@@ -98,7 +98,7 @@
 
             {% endfor %}
         </ul>
-        <div class="logout">
+        <a href="/logout" class="logout">
             <svg width="31" height="38" viewBox="0 0 31 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_d_35_170)">
                     <path d="M24 0H25C26.1046 0 27 0.895431 27 2V28C27 29.1046 26.1046 30 25 30H24V0Z" fill="black"/>
@@ -126,7 +126,7 @@
                     </filter>
                 </defs>
             </svg>
-        </div>
+        </a>
 
 
     </div>
@@ -148,7 +148,6 @@
 
 <div class="w-full h-full bg-gray-800 bg-opacity-90 top-0 overflow-y-auto overflow-x-hidden hidden fixed sticky-0"
      id="chec-div">
-    <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ --->
     <div class="w-full absolute z-10 right-0 h-full overflow-x-hidden transform translate-x-0 transition ease-in-out duration-700"
          id="notification">
         <div class="2xl:w-4/12 bg-gray-50 h-screen overflow-y-auto p-8 absolute right-0">
@@ -194,7 +193,7 @@
 </div>
 
 <footer class="w-full p-4 bg-black shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800">
-    <ul>
+    <ul class="flex flex-row flex-wrap items-center mt-3 text-sm text-white-500 dark:text-white-400 sm:mt-0">
         <li><a href="{{ path('front_default_index') }}">Accueil</a></li>
         <li><a href="{{ path('front_default_index') }}">A propos</a></li>
         <li><a href="{{ path('front_default_index') }}">Contactez-nous</a></li>

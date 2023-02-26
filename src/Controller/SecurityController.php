@@ -33,7 +33,11 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-           return $this->redirectToRoute('front_default_index');
+            if($this->getUser()->getResetToken()){
+                return $this->redirectToRoute('front_default_index');
+            }else{
+                $this->addFlash("error", 'Votre email n\'a pas été vérifié.');
+            }
          }
 
         // get the login error if there is one

@@ -537,6 +537,8 @@ class EventController extends AbstractController
 
             $this->addFlash('succes','les gains ont été ajoutés au score de l\'utilisateur');
             $thisEvent->setFinishAt($now);
+            // set result
+            $thisEvent->setResult($bet);
             $eventRepository->save($thisEvent, true);
             $this->addFlash('success', 'L\'événement est terminé');
         }else{

@@ -38,7 +38,12 @@
             <h1 class="w-3/4 text-xl">{{ event.name }}</h1>
 
 
+
+
         </div>
+        {% if event.finishAt > date() %}
+
+        {% endif %}
 
                 {% if  event.coverImage is not null %}
                     <img src="{{ asset('cover/' ~ event.coverImage) }}"  alt="Cover Image" class="w-3/4 object-cover h-96">
@@ -48,12 +53,15 @@
 
             <div class="mt-1 p-2 justify-center flex flex-col w-3/4 mx-auto">
                 <h2 class="text-slate-700">{{ event.name }}</h2>
+                <p class="text-lg font-bold text-red-500">Cet évenement est terminé</p>
+
                 <p class="mt-1 text-sm text-slate-400">Débute: {{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</p>
                 <p class="mt-1 text-sm text-slate-400">Fin: {{ event.finishAt ? event.finishAt|date('Y-m-d H:i:s') : '' }}</p>
 
                 {% if event.result is not null %}
                     <p class="mt-1 text-sm text-slate-500">Résultat: {{ event.result }}</p>
                 {% endif %}
+
                 {%  if event.bets is not null %}
                 <form action="{{ path('front_app_event_bet') }}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token('bet') }}"/>

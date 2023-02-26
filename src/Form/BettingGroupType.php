@@ -23,6 +23,7 @@ class BettingGroupType extends AbstractType
                     "class" => "flex flex-column"
                 ]
             ])
+            ->add('scoreOnRegister')
 
         ;
     }

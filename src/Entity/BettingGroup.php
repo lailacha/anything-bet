@@ -56,6 +56,9 @@ class BettingGroup
     #[Slug(fields: ['name'], updatable: false, unique: true)]
     private ?string $slug = null;
 
+    #[ORM\Column]
+    private ?int $scoreOnRegister = null;
+
 
     public function __construct()
     {
@@ -195,6 +198,18 @@ class BettingGroup
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getScoreOnRegister(): ?int
+    {
+        return $this->scoreOnRegister;
+    }
+
+    public function setScoreOnRegister(int $scoreOnRegister): self
+    {
+        $this->scoreOnRegister = $scoreOnRegister;
 
         return $this;
     }

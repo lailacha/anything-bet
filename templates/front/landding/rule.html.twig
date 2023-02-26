@@ -20,15 +20,28 @@
             </nav>
         </header>
         <main>
-        <div class="container">
-            <div class="text">
-                <h1>Bet-Anythings</h1>
-                <p>Bienvenue sur Bet-Anythings ! Rejoignez notre communauté de parieurs passionnés et amusants. Avec notre plateforme simple et facile à utiliser, vous pouvez organiser des paris avec vos amis sur tout, des événements sportifs aux paris amicaux. Inscrivez-vous maintenant en cliquant sur le bouton ci-dessous pour accéder à toutes les fonctionnalités et commencer à parier avec vos amis dès aujourd'hui!</p>
-                <a href="{{ path('app_register') }}">Inscription</a>
-            </div>
-            <img src="{{ asset('build/images/ladding-img.png') }}" alt="">
+        <div class="container" style="flex-direction: column;">
+            <h1>Réglement</h1>
+            <p>
+                <b>Régle n°1 : </b>Soyez fair-play<br>
+                <br>
+                <b>Régle n°2 : </b>Ne trichez pas<br>
+                <br>
+                <b>Régle n°3 : </b>Amusez vous ;)<br>
+            </p>
         </div>
         </main>
 
     </div>
+    <style>
+        .link{
+            text-decoration: none;
+            color: #090AE1;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 20px;
+            margin: 0.5rem 0;
+        }
+    </style>
 {% endblock %}

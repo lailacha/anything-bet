@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -12,6 +12,12 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %} 
+        <!--BALISE SEO-->
+        <meta name="description" content="Jouez à des paris en ligne avec vos amis ou des inconnus sur anything-bet. Notre site de paris en ligne vous offre une expérience amusante et conviviale pour parier sur vos sports préférés et gagner de l'argent. Rejoignez notre communauté de parieurs dès maintenant !">
+        <meta name="author" content="lailacha, Ayman, Senex, Simon">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="/build/images/logo-betthings.png">
     </head>
     <body class="flex flex-col bg-gray">
     <div class="flex-grow">
@@ -19,7 +25,7 @@
     </div>
 
         <footer class="w-full p-4 bg-black shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800">
-    <ul class="flex flex-wrap items-center mt-3 text-sm text-white-500 dark:text-white-400 sm:mt-0">
+    <ul class="flex flex-row flex-wrap items-center mt-3 text-sm text-white-500 dark:text-white-400 sm:mt-0">
         <li>
             <a href="#" class="mr-4 hover:underline md:mr-6 ">Accueil</a>
         </li>
@@ -42,10 +48,10 @@
        {# <footer>
             <ul>
                 <li><a href="{{ path('front_default_index') }}">Accueil</a></li>
-                <li><a href="{{ path('front_default_index') }}">A propos</a></li>
-                <li><a href="{{ path('front_default_index') }}">Contactez-nous</a></li>
-                <li><a href="{{ path('front_default_index') }}">Mentions légales</a></li>
-                <li><a href="{{ path('front_default_index') }}">Politique de confidentialité</a></li>
+                <li><a href="/a_propos">A propos</a></li>
+                <li><a href="/contact">Contactez-nous</a></li>
+                <li><a href="/mention">Mentions légales</a></li>
+                <li><a href="/reglement">Politique de confidentialité</a></li>
             </ul>
             <p>© All Rights Reserved by Bet-Anythings</p>
         </footer> #}

@@ -20,7 +20,11 @@
                         <div class="flex items-center space-x-4">
                             <div class="flex-shrink-0">
                                 <a href="{{  path('front_app_event_show', {id :betting.bet.event.id} ) }}">
-                                <img class="w-8 h-8 rounded-full" src="{{ asset('cover/' ~ betting.bet.event.coverImage) }}" alt="Neil image">
+                                    {% if betting.bet.event.coverImage is not null %}
+                                <img class="w-8 h-8 rounded-full" src="{{ asset('cover/' ~ betting.bet.event.coverImage) }}" alt="Cover">
+                                    {% else %}
+                                        <img class="w-8 h-8 rounded-full" src="{{ asset('cover/default.png') }}" alt="Cover">
+                                    {% endif %}
                                 </a>
                             </div>
                             <div class="flex-1 min-w-0">

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="light">
+<html lang="fr" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
@@ -15,6 +15,12 @@
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
+    <!--BALISE SEO-->
+    <meta name="description" content="Jouez à des paris en ligne avec vos amis ou des inconnus sur anything-bet. Notre site de paris en ligne vous offre une expérience amusante et conviviale pour parier sur vos sports préférés et gagner de l'argent. Rejoignez notre communauté de parieurs dès maintenant !">
+    <meta name="author" content="lailacha, Ayman, Senex, Simon">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/build/images/logo-betthings.png">
 </head>
 <body class="front">
 <link
@@ -39,6 +45,11 @@
                 </a>
             </li>
         {% endif %}
+        <li>
+            <div class=" flex px-4 py-1 border border-white-600 rounded items-center">
+                {{ globals.points }} <i class=" ml-2 text-yellow-500 fas fa-regular fa-coins"></i>
+            </div>
+        </li>
     </ul>
     <ul>
 
@@ -46,14 +57,18 @@
         <li><a href="{{ path('front_app_event_my_groups') }}"><span class="material-icons-outlined"> no
                 </span></a></li>
         <li><a href="{{ path('front_app_event_my_groups') }}">Events</a></li>
-        <li><a href="{{ path('back_default_index') }}">Parier</a></li>
         <li><a href="{{ path('front_app_betting_group_by_user') }}">Groupes</a></li>
         <li><a href="{{ path('front_app_betting_my_bettings') }}">Mes paris</a></li>
         <li>
             <button class="flex">
                 <span   class="material-icons-outlined" id="notif-modal">notifications</span>
             </button>
+
         </li>
+        <li>
+
+        </li>
+
         <li class="profile">
             <div class="dropdown dropdown-left">
                 <label tabindex="0"> <i class="mr-4 ml-2 fas fa-regular fa-caret-down"></i>
@@ -67,11 +82,14 @@
             </div>
 
             <p>{{ app.user.firstName }}
-               {{ app.user.lastName }}</p>
+               {{ app.user.lastName }}
+          </p>
+
 
             <img src="/avatar/{{ app.user.avatar}}" alt="logo" class="w-20 h-20">
 
         </li>
+
     </ul>
 </nav>
 <div class="container">
@@ -92,7 +110,7 @@
 
             {% endfor %}
         </ul>
-        <div class="logout">
+        <a href="/logout" class="logout">
             <svg width="31" height="38" viewBox="0 0 31 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_d_35_170)">
                     <path d="M24 0H25C26.1046 0 27 0.895431 27 2V28C27 29.1046 26.1046 30 25 30H24V0Z" fill="black"/>
@@ -120,7 +138,7 @@
                     </filter>
                 </defs>
             </svg>
-        </div>
+        </a>
 
 
     </div>
@@ -142,7 +160,6 @@
 
 <div class="w-full h-full bg-gray-800 bg-opacity-90 top-0 overflow-y-auto overflow-x-hidden hidden fixed sticky-0"
      id="chec-div">
-    <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ --->
     <div class="w-full absolute z-10 right-0 h-full overflow-x-hidden transform translate-x-0 transition ease-in-out duration-700"
          id="notification">
         <div class="2xl:w-4/12 bg-gray-50 h-screen overflow-y-auto p-8 absolute right-0">
@@ -188,12 +205,12 @@
 </div>
 
 <footer class="w-full p-4 bg-black shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800">
-    <ul>
+    <ul class="flex flex-row flex-wrap items-center mt-3 text-sm text-white-500 dark:text-white-400 sm:mt-0">
         <li><a href="{{ path('front_default_index') }}">Accueil</a></li>
-        <li><a href="{{ path('front_default_index') }}">A propos</a></li>
-        <li><a href="{{ path('front_default_index') }}">Contactez-nous</a></li>
-        <li><a href="{{ path('front_default_index') }}">Mentions légales</a></li>
-        <li><a href="{{ path('front_default_index') }}">Politique de confidentialité</a></li>
+        <li><a href="/a_propos">A propos</a></li>
+        <li><a href="/contact">Contactez-nous</a></li>
+        <li><a href="/mention">Mentions légales</a></li>
+        <li><a href="/reglement">Politique de confidentialité</a></li>
     </ul>
     <p>© All Rights Reserved by Bet-Anythings</p>
 </footer>

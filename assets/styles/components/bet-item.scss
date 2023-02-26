@@ -1,0 +1,48 @@
+
+
+.bet-event-item{
+
+  background-color: #fff;
+  border-radius: 0.5rem;
+  border: 1px solid $deep-primary;
+  padding: 1em 1.5em;
+  margin: 0.5rem;
+font-weight: 400;
+
+  &.selected{
+    background-color: #4545b5;
+    color: #fff;
+  }
+
+}
+
+//on mobile
+@media only screen and (max-width: 1050px ) {
+  .bet-event-item{
+    padding: 1em 0.5em;
+  }
+}
+
+
+
+
+
+input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+}
+
+input[type="radio"] + label:before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  background-color: #fff;
+  border: 1px solid #000;
+}
+
+input[type="radio"]:checked + label:before {
+  background-color: #000;
+}

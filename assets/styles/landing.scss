@@ -71,6 +71,14 @@ $gray: #F1F1F1;
         align-items: center;
         padding: 2rem 5rem 5rem 5rem;
     }
+    .container-column {
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 5rem 5rem 5rem;
+    }
 
     .container .text {
         width: 50%;

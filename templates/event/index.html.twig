@@ -5,6 +5,12 @@
 {% block body %}
     <section class="py-10 bg-gray-100 custom-table-render flex flex-col items-center w-full">
 
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
         <div class="tabs w-full">
             <a href="{{ path('front_app_event_my_groups') }}" class="tab tab-lg tab-lifted {% if isPublic is not defined %} tab-active font-bold {% endif %} text-gray-400 text-xl w-1/2" >Mes groupes</a>
             <a href="{{ path('front_app_event_publics') }}"  class="tab tab-lg tab-lifted {% if isPublic is defined %} tab-active font-bold {% endif %} w-1/2 text-gray-400  text-xl"> Publiques </a>
@@ -16,14 +22,6 @@
                 <input type="text" name="search" value="{{ app.request.get('search') }}" class="w-full bg-white rounded-lg border border-gray-400 p-2" placeholder="Search ..." />
                 <button class="ml-2 rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600" type="submit">Search</button>
             </div>
-            <div class="flex">
-                <div class="form-control">
-                    <label class="cursor-pointer label">
-                        <span class="label-text">Uniquement mes évenements</span>
-                        <input type="checkbox" class="toggle toggle-accent ml-8" name="fromMyEvents" checked />
-                    </label>
-                </div>
-            </div>
         </form>
         <div class="mx-auto grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 bg-white w-full">
             {% for event in events %}
@@ -34,7 +32,7 @@
                             {% if  event.coverImage is not null %}
                                 <img src="{{ asset('cover/' ~ event.coverImage) }}"  alt="Cover Image" class="w-full h-64 object-cover">
                             {% else %}
-                                <img src="https://picsum.photos/seed/picsum/200/300" alt="cover" class="w-full h-64 object-cover">
+                                <img  src="{{ asset('cover/default.png') }}" alt="cover" class="w-full h-64 object-cover">
                             {% endif %}
                         </div>
 

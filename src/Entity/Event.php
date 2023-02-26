@@ -163,7 +163,7 @@ class Event
     }
 
 
-    public function getBettingGroup()
+    public function getBettingGroup(): ?BettingGroup
     {
         return $this->bettingGroup;
     }

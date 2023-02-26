@@ -33,6 +33,7 @@ class DailyRecompenseController extends AbstractController
     {
         $hasNotAlreadyRecompenseToday = $dailyRecompenseRepository->getGroupCanReceiveRecompenses($this->getUser());
 
+
         return $this->render('daily_recompense/my-recompense.html.twig', [
             'betting_groups' => $hasNotAlreadyRecompenseToday,
         ]);
@@ -55,9 +56,6 @@ class DailyRecompenseController extends AbstractController
             $points[0]->setScore($points[0]->getScore() + 100);
             $pointsRepository->save($points[0], true);
         }
-
-
-
 
         return $this->redirectToRoute('front_app_betting_group_by_user', [], Response::HTTP_SEE_OTHER);
     }

@@ -2,7 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Bet;
 use App\Entity\Betting;
+use App\Entity\Event;
+use App\Entity\Points;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -63,4 +67,22 @@ class BettingRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findUsersByEvent(int $eventId, int $betId): array
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->select('u.id, p.score')
+            ->innerJoin(Bet::class, 'bet', 'WITH', 'bet.id = b.idBet')
+            ->innerJoin(Event::class, 'e', 'WITH', 'e.id = bet.event')
+            ->innerJoin(User::class, 'u', 'WITH', 'u.id = b.idUser')
+            ->innerJoin(Points::class, 'p', 'WITH', 'p.idUser = u.id')
+            ->where('e.id = :event')
+            ->andWhere('bet.id = :bet')
+            ->setParameter('event', $eventId)
+            ->setParameter('bet', $betId)
+        ;
+
+
+
+        return $qb->getQuery()->getResult();
+    }
 }

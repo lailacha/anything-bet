@@ -18,6 +18,7 @@ class Bet
 
 
     #[ORM\ManyToOne(targetEntity: Event::class, cascade: ['persist'], inversedBy: 'bets')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private Event $event;
 
     public function getId(): ?int

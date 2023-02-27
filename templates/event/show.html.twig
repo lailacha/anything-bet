@@ -41,9 +41,7 @@
 
 
         </div>
-        {% if event.finishAt > date() %}
 
-        {% endif %}
 
                 {% if  event.coverImage is not null %}
                     <img src="{{ asset('cover/' ~ event.coverImage) }}"  alt="Cover Image" class="w-3/4 object-cover h-96">
@@ -53,7 +51,9 @@
 
             <div class="mt-1 p-2 justify-center flex flex-col w-3/4 mx-auto">
                 <h2 class="text-slate-700">{{ event.name }}</h2>
-                <p class="text-lg font-bold text-red-500">Cet évenement est terminé</p>
+                {% if event.finishAt < date() %}
+                    <p class="text-lg font-bold text-red-500">Cet évenement est terminé</p>
+                {% endif %}
 
                 <p class="mt-1 text-sm text-slate-400">Débute: {{ event.startAt ? event.startAt|date('Y-m-d H:i:s') : '' }}</p>
                 <p class="mt-1 text-sm text-slate-400">Fin: {{ event.finishAt ? event.finishAt|date('Y-m-d H:i:s') : '' }}</p>
@@ -88,20 +88,18 @@
     </article>
     <div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal-bet">
         <div class="relative w-auto my-6 mx-auto max-w-3xl">
-            <!--content-->
             <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                <!--header-->
                 <div class="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                     <h3 class="text-3xl font-semibold">
                        {{ event.name }}
                     </h3>
-                    <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onclick="toggleModal('modal-id')">
+                    <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none">
           <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+
 
           </span>
                     </button>
                 </div>
-                <!--body-->
                 <div class="relative p-6 flex-auto">
                     <p class="my-4 text-slate-500 text-lg leading-relaxed">
                         Combien misez-vous sur <span id="text-bet"></span> ? </p>
@@ -114,12 +112,11 @@
                         </form>
                     </div>
                 </div>
-                <!--footer-->
                 <div class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                     <button id="close-modal" class="btn btn-outline btn-error "type="button">
                         Close
                     </button>
-                    <button class="btn btn-outline" type="button"  id="submit-bet">
+                    <button class="btn btn-outline ml-5" type="button"  id="submit-bet">
                         Envoyer mon pari
                     </button>
                 </div>
@@ -139,7 +136,9 @@
         window.addEventListener('load', () => {
 
             const hasAlreadyBet =  {{ alreadyBet|json_encode|raw }};
+            const isFinished = {{ event.finishAt < date() ? 'true' : 'false' }};
 
+            console.log(hasAlreadyBet);
             const submit = document.getElementById('submit-bet');
 
             submit.addEventListener('click', () => {
@@ -198,10 +197,9 @@
                 label?.addEventListener('click', () => {
 
 
-                    if(hasAlreadyBet){
+                    if(hasAlreadyBet.length > 0 || isFinished) {
                         return;
                     }
-                    //open modal
 
                     toggle();
 

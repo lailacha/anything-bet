@@ -135,7 +135,7 @@ class GroupRequestController extends AbstractController
                 'Messages' => [
                     [
                         'From' => [
-                            'Email' => "laila.charaoui@outlook.fr",
+                            'Email' => $_ENV['SENDER_EMAIL'],
                             'Name' => "Registration is valid"
                         ],
                         'To' => [

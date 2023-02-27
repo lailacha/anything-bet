@@ -230,7 +230,7 @@ class EventController extends AbstractController
                                 'Messages' => [
                                     [
                                         'From' => [
-                                            'Email' => "laila.charaoui@outlook.fr",
+                                            'Email' => $_ENV['SENDER_EMAIL'],
                                             'Name' => "Un nouvel évenement a été créé dans le groupe " . $group->getName()
                                         ],
                                         'To' => [
@@ -242,7 +242,7 @@ class EventController extends AbstractController
                                         'TemplateLanguage' => true,
                                         'TemplateID' => 4612916,
                                         'Subject' => "Un nouvel évenement a été créé dans le groupe " . $group->getName(),
-                                        'Variables' => json_decode($jsonString, false, 512, JSON_THROW_ON_ERROR)
+                                        'Variables' => "$jsonString"
                             ]
                                 ]
                             ];

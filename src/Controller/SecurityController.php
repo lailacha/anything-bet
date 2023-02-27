@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Mailjet\Client;
+use Mailjet\Resources;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -75,16 +77,33 @@ class SecurityController extends AbstractController
 
             $url = $this->generateUrl('app_change_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('blablagirl76@gmail.com', 'AnythingBet'))
-                    ->to($user->getEmail())
-                    ->subject('Modification de mot de passe')
-                    ->htmlTemplate('security/change_password.html.twig')
-                    ->context([
-                        'url' => $url
-                    ])
-            );
+            $mj = new Client($_ENV['MAILJET_APIKEY'],$_ENV['MAILJET_SECRET_KEY'], true, ['version' => 'v3.1']);
+            $body = [
+                'Messages' => [
+                    [
+                        'From' => [
+                            'Email' => $_ENV['SENDER_EMAIL'],
+                            'Name' => "Forgot your password ?"
+                        ],
+                        'To' => [
+                            [
+                                'Email' => $user->getEmail(),
+                                'Name' => $user->getFirstname()." ".$user->getLastname()
+                            ]
+                        ],
+                        'TemplateLanguage' => true,
+                        'TemplateID' => 4612972,
+                        'Subject' => "Reset your password",
+                        'Variables' => json_decode('{
+                        "reset_link": "' . $url . '"
+                    }', true, 512, JSON_THROW_ON_ERROR)
+                    ]
+                ]
+            ];
+
+             $mj->post(Resources::$Email, ['body' => $body]);
+
+
             $this->addFlash("success", 'Vous allez recevoir un mail !');
             return $this->render('security/forgotten_password.html.twig',['form' => $form->createView()]);
         }

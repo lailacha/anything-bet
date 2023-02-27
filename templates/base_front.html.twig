@@ -78,6 +78,7 @@
                     <li><a class="text-gray-400" href="{{ path('front_app_betting_group_by_user_admin') }}">Administration
                             de mes groupes</a></li>
                     <li><a href="{{ path('front_app_betting_group_new') }}">Créer un groupe</a></li>
+                    <li><a href="{{ path('front_app_event_new') }}">Créer un pari public</a></li>
                 </ul>
             </div>
 
@@ -105,7 +106,9 @@
                     {% else %}
                         <img src="http://placehold.it/300x300" alt="Cover Image" class=" object-cover">
                     {% endif %}
+                    <a href="{{ path('front_app_event_show', {'id': event.id}) }}">
                     <p>{{ event.name }}</p>
+                    </a>
                 </li>
 
             {% endfor %}

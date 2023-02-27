@@ -21,7 +21,7 @@ class EmailVerifier
     ) {
     }
 
-    public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user): void
+    public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user,): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
@@ -36,7 +36,7 @@ class EmailVerifier
             'Messages' => [
                 [
                     'From' => [
-                        'Email' => "laila.charaoui@outlook.fr",
+                        'Email' => $_ENV['SENDER_EMAIL'],
                         'Name' => "Registration is valid"
                     ],
                     'To' => [
@@ -55,8 +55,7 @@ class EmailVerifier
         ]
         ];
 
-        $response = $mj->post(Resources::$Email, ['body' => $body]);
-        $response->success() && var_dump($response->getData());
+
 
         // Mark your user as having requested an email verification (will be used to remove the warning in your template)
 

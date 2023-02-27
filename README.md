@@ -28,3 +28,11 @@ Les utilisateurs peuvent modifier leur profil, y compris leur photo et leur nom.
 Les utilisateurs peuvent accéder à des notifications, notamment quand un événement est ajouté au groupe.
 # Utilisation d’un service d’emailing : 
 Utilisation de Mailjet pour envoyer des mails aux utilisateurs, notamment pour la registration
+
+## Auteurs
+
+
+* **Simon Farnault** _alias_ [@SimonBTSSio](https://github.com/SimonBTSSio)
+* **Antoine Chaberneaud** _alias_ [@senex127](https://github.com/senex127)
+* **Ayman Bedda** _alias_ [@Ayman-BEDDA](https://github.com/Ayman-BEDDA)
+* **Laila Charaoui** _alias_ [@lailacha](https://github.com/lailacha)
